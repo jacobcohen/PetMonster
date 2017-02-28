@@ -5,6 +5,7 @@
 // to get access to the User model.
 
 const User = require('./user')
+const Product = require('./product')
 const OAuth = require('./oauth')
 
 OAuth.belongsTo(User)
