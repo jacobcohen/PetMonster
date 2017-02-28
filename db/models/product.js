@@ -6,8 +6,8 @@ const db = require('APP/db')
 
 const Product = db.define('products', {
     name: { type: Sequelize.STRING, allowNull: false },
-    imageURLs: { type: Sequelize.ARRAY(Sequelize.STRING), defaultValue: 'http://www.illuminessensce.com/wp-content/uploads/2012/12/Image-Coming-Soon-Placeholder.png' },
-    price: { type: Sequelize.FLOAT, allowNull: false },
+    imageURLs: { type: Sequelize.ARRAY(Sequelize.STRING), defaultValue: ['http://www.illuminessensce.com/wp-content/uploads/2012/12/Image-Coming-Soon-Placeholder.png'] },
+    price: { type: Sequelize.DECIMAL(10, 2), allowNull: false },
     description: { type: Sequelize.TEXT, allowNull: false },
     stock: { type: Sequelize.INTEGER, allowNull: false }
 }, {
