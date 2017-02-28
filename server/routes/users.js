@@ -7,9 +7,16 @@ const {mustBeLoggedIn, forbidden} = require('../auth.filters')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
   .get('/', (req, res, next) => //add back forbidden('only admins can list users'),
-    User.findAll()
-      .then(users => res.json(users))
-      .catch(next))
+  {
+    console.log(User.findAll)
+     User.findAll()
+      .then(users => {
+        console.log(users)
+        res.json(users)
+        console.log('hello')
+      })
+      .catch(next)
+  })
   .post('/', (req, res, next) =>
     User.create(req.body)
       .then(user => res.status(201).json(user))
