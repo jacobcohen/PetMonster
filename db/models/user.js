@@ -7,13 +7,43 @@ const Sequelize = require('sequelize')
 const db = require('APP/db')
 
 const User = db.define('users', {
-  name: Sequelize.STRING,
+  firstName: Sequelize.STRING,
+  lastName: Sequelize.STRING,
   email: {
     type: Sequelize.STRING,
     validate: {
 			isEmail: true,
 			notEmpty: true,
-		}
+		},
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  streetAddress: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  city: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  state: {
+    type: Sequelize.STRING(2),
+    allowNull: false
+  },
+  zipCode: {
+    type: Sequelize.INTEGER(5),
+    allowNull: false
+  },
+
+  creditCard: {
+    type: Sequelize.BIGINT(16),
+    allowNull: false
+  },
+  cvc: {
+    type: Sequelize.INTEGER(3),
+    allowNull: false
   },
 
   // We support oauth, so users may or may not have passwords.
@@ -24,6 +54,14 @@ const User = db.define('users', {
   hooks: {
     beforeCreate: setEmailAndPassword,
     beforeUpdate: setEmailAndPassword,
+  },
+  getterMethods: {
+	  fullName: function() {
+	    return this.firstName + ' ' + this.lastName
+	  },
+    fullAddressWithName: function() {
+	    return this.fullName + '\n' + this.streetAddress + '\n' + this.city + ', ' + this.state + ' ' + this.zipCode
+    }
   },
   instanceMethods: {
     // This method is a Promisified bcrypt.compare
