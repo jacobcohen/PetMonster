@@ -12,8 +12,15 @@ const Review = require('./review')
 
 OAuth.belongsTo(User)
 User.hasOne(OAuth)
-User.belongsToMany(Product, { through: Review })
-Product.belongsToMany(User, { through: Review })
+
+User.belongsToMany(Product, {
+    as: 'productReviews',
+    through: Review
+})
+Product.belongsToMany(User, {
+    as: 'userReviews',
+    through: Review
+})
 
 
-module.exports = {User}
+module.exports = {User, Product, Review}

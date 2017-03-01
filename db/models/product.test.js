@@ -6,7 +6,7 @@ const {expect} = require('chai')
 
 describe('Product', () => {
   before('wait for the db', () => db.didSync)
-  
+
   var frankenstein, dracula
   beforeEach(function(){
     frankenstein = Product.build({

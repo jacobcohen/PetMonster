@@ -29,18 +29,20 @@ describe('Review', () => {
     .then(([user1, product1]) => {
       user = user1
       product = product1
-      return user
     })
-    .then((user) => {
-      return user.addReview(product, { through: { rating: 5, description: 'it was the best' }})
+    .then(() => {
+      return user.addProductReviews(product, { rating: 5, description: 'it was the best' });
     })
-    .then(review1 => { review = review1 })
+    .then(([createdReview]) => { review = createdReview[0] })
+    .catch((err) => {
+      console.log(err);
+    })
   })
 
   describe('newly added review', () => {
     it('has fields we expect', () => {
-      expect(review.userId).to.exist
-      expect(review.productId).to.exist
+      expect(review.user_id).to.equal(1)
+      expect(review.product_id).to.equal(1)
       expect(review.rating).to.equal(5)
       expect(review.description).to.equal('it was the best')
     })
