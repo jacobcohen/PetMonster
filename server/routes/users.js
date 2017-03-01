@@ -25,8 +25,8 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       .then(user => res.json(user))
       .catch(next))
   .put('/:id', (req, res, next) =>  //maybe add mustBeAdmin?
-    User.update(req.body, {where: {id:req.params.id}})
-      .then(user => res.json(user))
+    User.update(req.body, {where: {id:req.params.id}, returning: true})
+      .then(users => res.json(users))
       .catch(next))
   .delete('/:id', (req, res, next) => //must put back in mustBeLoggedIn
     User.destroy({where: {id: req.params.id}})
