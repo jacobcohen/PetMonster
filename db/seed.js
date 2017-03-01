@@ -20,13 +20,31 @@ const seedReviews = () => db.Promise.map([
   {rating: 1, description: "this was the worst Angie's List contractor I've ever seen. I wanted him to remodel my kitchen, and he was a monster!", user_id: 2, product_id: 1}
 ], review => db.model('reviews').create(review))
 
+const seedOrders = () => db.Promise.map([
+  {total: 10.00, status: "processing", user_id: 1},
+  {total: 15.00, status: "active", user_id: 2},
+  {total: 600.00, status: "completed", user_id: 2}
+], order => db.model('orders').create(order))
+
+const seedTransactions = () => db.Promise.map([
+  {sellingPrice: 1, quanity: 5, order_id: 1, product_id: 1},
+  {sellingPrice: 9001.00, quanity: 1, order_id: 1, product_id: 2},
+  {sellingPrice: 200.00, quanity: 2, order_id: 2, product_id: 1},
+  {sellingPrice: 207.00, quanity: 1, order_id: 3, product_id: 1},
+  {sellingPrice: 6787.00, quanity: 1, order_id: 3, product_id: 2}
+], transaction => db.model('transactions').create(transaction))
+
 db.didSync
-  .then(() => db.sync({force: false}))
+  .then(() => db.sync({force: true}))
   .then(seedUsers)
   .then(users => console.log(`Seeded ${users.length} users OK`))
   .then(seedProducts)
   .then(products => console.log(`Seeded ${products.length} products OK`))
   .then(seedReviews)
   .then(reviews => console.log(`Seeded ${reviews.length} reviews OK`))
+  .then(seedOrders)
+  .then(orders => console.log(`Seeded ${orders.length} orders OK`))
+  .then(seedTransactions)
+  .then(transactions => console.log(`Seeded ${transactions.length} transactions OK`))
   .catch(error => console.error(error))
   .finally(() => db.close())

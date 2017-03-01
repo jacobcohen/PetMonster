@@ -10,7 +10,7 @@ api
   .use('/products', require('./routes/products'))
   .use('/reviews', require('./routes/reviews'))
   .use('/transactions', require('./routes/transactions'))
-  .use('/orders', require('./routes/orders'))
+  //.use('/orders', require('./routes/orders'))
 
 // No routes matched? 404.
 api.use((req, res) => res.status(404).end())
