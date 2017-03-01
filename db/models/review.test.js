@@ -9,7 +9,7 @@ const {expect} = require('chai')
 describe('Review', () => {
   before('wait for the db', () => db.didSync)
 
-  let user, product, review;
+  let user, product, review
   before(function() {
     const userPromise = User.create({
       firstName: 'Jake',
@@ -41,8 +41,6 @@ describe('Review', () => {
 
   describe('newly added review', () => {
     it('has fields we expect', () => {
-      expect(review.user_id).to.equal(1)
-      expect(review.product_id).to.equal(1)
       expect(review.rating).to.equal(5)
       expect(review.description).to.equal('it was the best')
     })
