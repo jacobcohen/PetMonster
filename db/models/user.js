@@ -14,7 +14,7 @@ const User = db.define('users', {
     validate: {
 			isEmail: true,
 			notEmpty: true,
-		},
+		}
   },
   isAdmin: {
     type: Sequelize.BOOLEAN,
@@ -27,17 +27,29 @@ const User = db.define('users', {
     type: Sequelize.STRING
   },
   state: {
-    type: Sequelize.STRING(2)
+    type: Sequelize.STRING,
+    validate: {
+      len: 2
+    }
   },
   zipCode: {
-    type: Sequelize.INTEGER(5)
+    type: Sequelize.INTEGER,
+    validate: {
+      len: 5
+    }
   },
-
   creditCard: {
-    type: Sequelize.BIGINT(16)
+    type: Sequelize.BIGINT,
+    validate: {
+      len: 16
+    }
   },
   cvc: {
-    type: Sequelize.INTEGER(3)
+    type: Sequelize.INTEGER,
+    validate: {
+      len: 3
+    }
+
   },
 
   // We support oauth, so users may or may not have passwords.
