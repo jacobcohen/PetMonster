@@ -21,29 +21,23 @@ const User = db.define('users', {
     defaultValue: false
   },
   streetAddress: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   city: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   state: {
-    type: Sequelize.STRING(2),
-    allowNull: false
+    type: Sequelize.STRING(2)
   },
   zipCode: {
-    type: Sequelize.INTEGER(5),
-    allowNull: false
+    type: Sequelize.INTEGER(5)
   },
 
   creditCard: {
-    type: Sequelize.BIGINT(16),
-    allowNull: false
+    type: Sequelize.BIGINT(16)
   },
   cvc: {
-    type: Sequelize.INTEGER(3),
-    allowNull: false
+    type: Sequelize.INTEGER(3)
   },
 
   // We support oauth, so users may or may not have passwords.
