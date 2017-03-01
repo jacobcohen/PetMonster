@@ -1,7 +1,6 @@
 'use strict'; // eslint-disable-line semi
 
 const db = require('APP/db')
-const Review = require('./review')
 const Product = require('./product')
 const User = require('./user')
 const {expect} = require('chai')
@@ -31,11 +30,11 @@ describe('Review', () => {
       product = product1
     })
     .then(() => {
-      return user.addProductReviews(product, { rating: 5, description: 'it was the best' });
+      return user.addProductReview(product, { rating: 5, description: 'it was the best' })
     })
     .then(([createdReview]) => { review = createdReview[0] })
     .catch((err) => {
-      console.log(err);
+      console.log(err)
     })
   })
 
