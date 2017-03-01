@@ -5,8 +5,22 @@
 // to get access to the User model.
 
 const User = require('./user')
+const Product = require('./product')
 const OAuth = require('./oauth')
+const Review = require('./review')
+// const Transaction = require('./transaction')
 
 OAuth.belongsTo(User)
 User.hasOne(OAuth)
-module.exports = {User}
+
+User.belongsToMany(Product, {
+    as: 'productReviews',
+    through: Review
+})
+Product.belongsToMany(User, {
+    as: 'userReviews',
+    through: Review
+})
+
+
+module.exports = {User, Product, Review}
