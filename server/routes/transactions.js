@@ -10,6 +10,11 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     Transaction.findAll()
     .then(transactions => res.json(transactions))
     .catch(next))
+  .get('/orderTransactions/:orderId', (req, res, next) =>
+    Order.findById(req.params.orderId)
+    .then(order => order.getProduct())
+    .then(transactions => res.json(transactions))
+    .catch(next))
   .post('/:orderId/:productId/', (req, res, next) => {
       //order.addProduct
       const orderPromise = Order.findById(req.params.orderId).catch(next),

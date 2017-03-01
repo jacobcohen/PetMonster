@@ -34,9 +34,9 @@ describe('Product', () => {
       })
     })
     it('has a getter method that trims the decimal to two places', () => {
-      frankenstein.price = 12.3456
+      frankenstein.price = 12
       return frankenstein.save().then(function(result){
-        expect(result.get('price')).to.equal('12.35')
+        expect(result.get('price')).to.equal('12.00')
       })
     })
   })
