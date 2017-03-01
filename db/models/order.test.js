@@ -4,6 +4,7 @@ const db = require('APP/db')
 const Product = require('./product')
 const User = require('./user')
 const Order = require('./order')
+const Transaction = require('./transaction')
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 
@@ -15,23 +16,19 @@ describe('Review', () => {
   before('wait for the db', () => db.didSync)
 
   let user, product, order, transaction
-  before(function() {
-
+  beforeEach(function() {
     const productPromise = Product.create({
       name: 'CookieMonster',
       price: 200.00,
       description: 'I love cookies.',
       stock: 5
     })
-
     const userPromise = User.create({
       firstName: 'Maria',
       lastName: 'X',
       email: 'mx@gmail.com'
     })
-
     const orderPromise = Order.create({})
-
     return Promise.all([userPromise, productPromise, orderPromise])
     .then(([createdUser, createdProduct, createdOrder]) => {
         user = createdUser
@@ -40,6 +37,15 @@ describe('Review', () => {
         return user.addOrder(order)
     })
     .catch(console.error)
+  })
+
+  afterEach(function(){
+      return Promise.all([
+          Product.truncate({cascade: true}),
+          User.truncate({cascade: true}),
+          Order.truncate({cascade: true}),
+          Transaction.truncate({cascade: true})
+      ])
   })
 
   describe('newly created order', () => {
@@ -57,13 +63,23 @@ describe('Review', () => {
 
   describe('adding a transaction', () => {
 
-    before('associate the product to the order', () => {
+    beforeEach('associate the product to the order', () => {
         return order.addProduct(product, { quantity: 3 })
         .then(([createdTransaction]) => {
             transaction = createdTransaction[0]
             return order.save()
         })
+        .catch(console.error)
     })
+
+    afterEach(function(){
+        return Promise.all([
+          Product.truncate({cascade: true}),
+          Order.truncate({cascade: true}),
+          Transaction.truncate({cascade: true})
+      ])
+    })
+    
     it('creates a transaction in the transaction pivot table', () => {
         expect(transaction.quantity).to.equal(3)
     })
