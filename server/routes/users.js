@@ -20,7 +20,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     User.create(req.body)
       .then(user => res.status(201).json(user))
       .catch(next))
-  .get('/:id', (req, res, next) => //must put back in mustBeLoggedIn
+  .get('/:id', (req, res, next) => //must put back in mustBeLoggedIn -- don't forget!
     User.findById(req.params.id)
       .then(user => res.json(user))
       .catch(next))
