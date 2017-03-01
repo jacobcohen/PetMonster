@@ -17,6 +17,7 @@ describe('Review', () => {
 
   let user, product, order, transaction
   beforeEach(function() {
+
     const productPromise = Product.create({
       name: 'CookieMonster',
       price: 200.00,
@@ -79,7 +80,7 @@ describe('Review', () => {
           Transaction.truncate({cascade: true})
       ])
     })
-    
+
     it('creates a transaction in the transaction pivot table', () => {
         expect(transaction.quantity).to.equal(3)
     })
@@ -87,9 +88,43 @@ describe('Review', () => {
         expect(order.total).to.equal('600.00')
     })
     it('associates the transaction to the order', () => {
-        order.getProducts().then((products) => {
+        return order.getProducts().then((products) => {
             expect(products[0].name).to.equal('CookieMonster')
         })
     })
+
+    // before('set status of the order', () => {
+    //     order.status = 'created'
+    //     return order.save()
+    // })
+
+    // it('sets the selling price on a transaction', () => {
+    //   order.getProducts().then((products) => {
+    //     // console.log('TRANSACTION+++++++', transaction)
+    //     console.log('PRODUCTSSSSSSS', products[0].transactions.sellingPrice)
+    //     expect(products[0].transactions.sellingPrice).to.equal('200.00')
+    //   })
+    // })
   })
+
+//   describe('submitting an order', () => {
+
+//     // before('associate the product to the order', () => {
+//     //     return order.addProduct(product, { quantity: 3 })
+//     //     .then(([createdTransaction]) => {
+//     //         transaction = createdTransaction[0]
+//     //         return order.save()
+//     //     })
+//     // })
+
+//     before('set status of the order', () => {
+//         order.status = 'created'
+//         return order.save()
+//     })
+
+//     it('sets the selling price on a transaction', () => {
+//       expect(transaction.sellingPrice).to.equal('200.00')
+//     })
+
+//   })
 })
