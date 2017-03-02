@@ -9,8 +9,10 @@ const Transaction = db.define('transactions', {
     quantity: { type: Sequelize.INTEGER, defaultValue: 1 }
 }, {
     hooks: {
-        beforeUpdate: function(instance){
-            console.log('=======beforeUpdate in transaction')
+        beforeBulkCreate: function(params){
+            console.log(params)
+            console.log('=======beforeBulkCreate in transaction')
+            
         }
     },
     instanceMethods: {
