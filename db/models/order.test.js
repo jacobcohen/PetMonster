@@ -67,7 +67,7 @@ describe('Order model', () => {
   describe('adding a transaction to an active order (cart)', () => {
 
     before('add product to cart', () => {
-        return order.addToCart(product, { quantity: 3 })
+        return order.updateCart(product.id, { quantity: 3 })
         .then(([createdTransaction]) => {
             transaction = createdTransaction[0]
         })
@@ -90,7 +90,7 @@ describe('Order model', () => {
 
     describe('increasing the quantity of a product you already have', () => {
         it('should update the transaction quantity', () => {
-            return order.addToCart(product, {quantity: 1})
+            return order.updateCart(product.id, {quantity: 1})
                 .then(updatedTransaction => {
                     expect(updatedTransaction.quantity).to.equal(4)
                 })
