@@ -46,7 +46,6 @@ const Order = db.define('orders', {
                 })
                 .then(total => {
                     instance.total = total
-                    return instance.save()
                 })
             }
         }
