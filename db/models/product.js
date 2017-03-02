@@ -11,6 +11,9 @@ const Product = db.define('products', {
     description: { type: Sequelize.TEXT, allowNull: false },
     stock: { type: Sequelize.INTEGER, allowNull: false }
 }, {
+    /**
+     * Scope for in-stock products
+     */
     scopes: {
         inStock: {
             where: { stock: {$gt: 0} }
