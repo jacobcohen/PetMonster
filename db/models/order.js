@@ -4,6 +4,7 @@
 const Sequelize = require('sequelize')
 const db = require('APP/db')
 const Product = require('./product')
+const Transaction = require('./transaction')
 const Promise = require('bluebird')
 
 /**
@@ -49,6 +50,7 @@ const Order = db.define('orders', {
          * @return the new or updated transaction OR the number of items deleted (should always be 1)
          */
         updateCart: function(id, quantityObject){
+
             if (this.status !== 'active') {
                 throw Error('Cannot add to an old order.')
             }
@@ -81,6 +83,7 @@ const Order = db.define('orders', {
          * Purchase the active order (cart)
          * Sets this instance's status to 'created'
          * Loops through all transactions in that order to set selling price
+
          * Loops through all associated products to update quantity
          * @return updated order instance
          */
