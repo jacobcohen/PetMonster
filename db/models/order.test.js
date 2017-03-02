@@ -11,10 +11,9 @@ const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiAsPromised)
-
 const expect = chai.expect
 
-describe('Review', () => {
+describe('Order model', () => {
   before('wait for the db', () => db.didSync)
 
   let user, product, order, transaction
@@ -32,6 +31,7 @@ describe('Review', () => {
       email: 'mx@gmail.com'
     })
     const orderPromise = Order.create({})
+
     return Promise.all([userPromise, productPromise, orderPromise])
     .then(([createdUser, createdProduct, createdOrder]) => {
         user = createdUser
@@ -64,43 +64,53 @@ describe('Review', () => {
     })
   })
 
-  describe('adding a transaction', () => {
+  describe('adding a transaction to an active order (cart)', () => {
 
-    before('associate the product to the order', () => {
+    before('add product to cart', () => {
         return order.addToCart(product, { quantity: 3 })
         .then(([createdTransaction]) => {
-            console.log('createdTransaction up here', createdTransaction)
             transaction = createdTransaction[0]
         })
         .catch(console.error)
     })
 
-    it('creates a transaction in the transaction pivot table', () => {
-        expect(transaction.quantity).to.equal(3)
+    describe('adding a new product', () => {
+        it('should create a transaction in the transaction pivot table', () => {
+            expect(transaction.quantity).to.equal(3)
+        })
+        it('runs the beforeUpdate hook on the order, which updates the total', () => {
+            expect(order.total).to.equal(600)
+        })
+        it('associates the transaction to the order', () => {
+            return order.getProducts().then((products) => {
+                expect(products[0].name).to.equal('CookieMonster')
+            })
+        })
     })
-    it('runs the beforeUpdate hook on the order, which updates the total', () => {
-        expect(order.total).to.equal(600)
-    })
-    it('associates the transaction to the order', () => {
-        return order.getProducts().then((products) => {
-            expect(products[0].name).to.equal('CookieMonster')
+
+    describe('increasing the quantity of a product you already have', () => {
+        it('should update the transaction quantity', () => {
+            return order.addToCart(product, {quantity: 1})
+                .then(updatedTransaction => {
+                    expect(updatedTransaction.quantity).to.equal(4)
+                })
+                .catch(console.error)
         })
     })
   })
 
-  xdescribe('purchasing a cart', () => {
+  describe('purchasing a cart', () => {
 
+    let purchasedProducts
     before('purchase the order', () => {
         return order.purchase()
+        .then(updatedOrder => {
+            return updatedOrder.getProducts()
+        })
+        .then(([products]) => {
+            purchasedProducts = products
+        })
         .catch(console.error)
-    })
-
-    after(function(){
-        return Promise.all([
-            Product.truncate({cascade: true}),
-            Order.truncate({cascade: true}),
-            Transaction.truncate({cascade: true})
-        ])
     })
 
     it('sets the order status to CREATED', () => {
@@ -108,28 +118,13 @@ describe('Review', () => {
     })
 
     it('sets the selling price on a transaction', () => {
-        order.getProducts().then((products) => {
-            expect(products[0].transactions.sellingPrice).to.equal('200.00')
-        })
+        expect(purchasedProducts.transactions.sellingPrice).to.equal('200.00')
     })
 
     it('decreases the product stock by the amount purchased', () => {
-        order.getProducts().then((products) => {
-            expect(products[0].stock).to.equal(2)
-        })        
+        expect(purchasedProducts.stock).to.equal(1)
     })
 
   })
 
-  xdescribe('increasing the quantity of your order', () => {
-
-    before('add the same product to your order', () => {
-        return order.addToCart(product, { quantity: 1 })
-        .then(([createdTransaction]) => {
-            transaction = createdTransaction[0]
-            return order.save()
-        })
-        .catch(console.error)
-    })
-  })
 })
