@@ -105,6 +105,9 @@ const Order = db.define('orders', {
                 .catch(console.error.bind(console))
         }
     },
+    /**
+     * Scope for active carts
+     */
     scopes: {
         cart: {
             where: { status: 'active' }

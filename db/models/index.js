@@ -30,4 +30,8 @@ Product.belongsToMany(Order, { through: Transaction })
 Category.belongsToMany(Product, { through: 'ProductCategory' })
 Product.belongsToMany(Category, { through: 'ProductCategory' })
 
+/**
+ * 
+ */
+
 module.exports = {User, Product, Review, Order, Transaction, Category}
