@@ -24,7 +24,6 @@ const Order = db.define('orders', {
          * If it's already purchased, the total stays the same.
          */
         beforeUpdate: function(instance){
-            console.log('got to beforeUpdate')
             if (instance.status === 'active'){
                 return instance.getProducts()
                 .then(products => {
@@ -35,12 +34,9 @@ const Order = db.define('orders', {
                 .then(total => {
                     instance.total = total
                 })
-            } else {
-                return instance
-            }            
+            }
         },
         beforeBulkUpdate: function(instance){
-            console.log('got to beforebulkupdate')
             if (instance.status === 'active'){
                 return instance.getProducts()
                 .then(products => {
@@ -51,9 +47,7 @@ const Order = db.define('orders', {
                 .then(total => {
                     instance.total = total
                 })
-            } else {
-                return instance
-            }            
+            }
         }
     },
     instanceMethods: {
