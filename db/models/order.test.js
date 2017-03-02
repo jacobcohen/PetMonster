@@ -37,7 +37,7 @@ describe('Review', () => {
         order = createdOrder
         return user.addOrder(order)
     })
-    .catch(console.error)
+    // .catch(console.error)
   })
 
   afterEach(function(){
@@ -67,28 +67,29 @@ describe('Review', () => {
     beforeEach('associate the product to the order', () => {
         return order.addProduct(product, { quantity: 3 })
         .then(([createdTransaction]) => {
+            console.log('product added')
             transaction = createdTransaction[0]
-            return order.save()
         })
-        .catch(console.error)
+        // .catch(console.error)
     })
 
-    afterEach(function(){
-        return Promise.all([
-          Product.truncate({cascade: true}),
-          Order.truncate({cascade: true}),
-          Transaction.truncate({cascade: true})
-      ])
-    })
+    // afterEach(function(){
+    //     return Promise.all([
+    //       Product.truncate({cascade: true}),
+    //       Order.truncate({cascade: true}),
+    //       Transaction.truncate({cascade: true})
+    //   ])
+    // })
 
     it('creates a transaction in the transaction pivot table', () => {
         expect(transaction.quantity).to.equal(3)
     })
-    it('runs the beforeUpdate hook on the order, which updates the total', () => {
+    it.only('runs the beforeUpdate hook on the order, which updates the total', () => {
         expect(order.total).to.equal('600.00')
     })
     it('associates the transaction to the order', () => {
         return order.getProducts().then((products) => {
+          console.log('product.transactions', products[0].transactions)
             expect(products[0].name).to.equal('CookieMonster')
         })
     })
@@ -98,13 +99,13 @@ describe('Review', () => {
     //     return order.save()
     // })
 
-    // it('sets the selling price on a transaction', () => {
-    //   order.getProducts().then((products) => {
-    //     // console.log('TRANSACTION+++++++', transaction)
-    //     console.log('PRODUCTSSSSSSS', products[0].transactions.sellingPrice)
-    //     expect(products[0].transactions.sellingPrice).to.equal('200.00')
-    //   })
-    // })
+    it('sets the selling price on a transaction', () => {
+      return order.getProducts().then((products) => {
+        // console.log('TRANSACTION+++++++', transaction)
+        // console.log('PRODUCTSSSSSSS', products[0].transactions)
+        expect(products[0].transactions.sellingPrice).to.equal('200.00')
+      })
+    })
   })
 
 //   describe('submitting an order', () => {

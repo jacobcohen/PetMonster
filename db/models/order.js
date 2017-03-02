@@ -11,11 +11,15 @@ const Order = db.define('orders', {
 }, {
     hooks: {
         beforeUpdate: function(instance){
+          console.log('hhellllooooo')
             return instance.getProducts().then(products => {
+              console.log(instance.status)
               if (instance.status != 'active') {
+                console.log('also reached', products)
                 const updatedProducts = products.map(product => {
+                  // console.log('transactions are here:', product.transactions)
                   product.transactions.sellingPrice = product.transactions.sellingPrice || product.price
-                  console.log('THIS IS A PRODUCT', product.transactions.sellingPrice);
+                  console.log('THIS IS A PRODUCT', product.transactions.sellingPrice)
                   return product.save()
                 })
 
@@ -31,8 +35,10 @@ const Order = db.define('orders', {
             })
             .then(total => {
                 instance.total = total
-                return instance.save()
             })
+        },
+        beforeBulkUpdate: function (options) {
+          console.log('bulk updating order', options, this)
         }
     },
     scopes: {

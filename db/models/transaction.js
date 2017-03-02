@@ -11,6 +11,12 @@ const Transaction = db.define('transactions', {
     hooks: {
         beforeUpdate: function(instance){
             console.log('=======beforeUpdate in transaction')
+        },
+        beforeBulkUpdate: function () {
+          console.log('bulk updating transaction')
+        },
+        beforeBulkCreate: function (stuff) {
+          console.log('bulk creating transaction', stuff, this)
         }
     },
     instanceMethods: {
