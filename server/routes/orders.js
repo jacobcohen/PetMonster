@@ -42,8 +42,11 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   	})
   	.then(archivedCart => res.json(archivedCart))
 	.catch(next))
-  .put('/cart/:userId/updateCartStatus', (req, res, next) => //needs req.body.status
+  .put('/cart/:userId/emptyCart', (req, res, next) => //needs req.body.status
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
-	.then(order => order.update({status: req.body.status}))
-	.then(updatedCart => res.json(updatedCart))
+	.then(order => {
+		return order.setProducts([])
+		.then(() => order.update({'total': 0.00}))
+	})
+	.then(emptiedCart => res.json(emptiedCart))
 	.catch(next))

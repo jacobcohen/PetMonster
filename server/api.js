@@ -11,6 +11,7 @@ api
   .use('/reviews', require('./routes/reviews'))
   .use('/transactions', require('./routes/transactions'))
   .use('/orders', require('./routes/orders'))
+  .use('/categories', require('./routes/categories'))
 
 // No routes matched? 404.
 api.use((req, res) => res.status(404).end())

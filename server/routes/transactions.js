@@ -44,10 +44,6 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     })
     .catch(next)
   })
-  // .get('/:transactionId/reviews', (req, res, next) =>
-  //   req.transaction.getReviews()
-  //   .then(reviews => res.json(reviews))
-  //   .catch(next))
   .delete('/:orderId/:productId/', (req, res, next) => //must put back in mustBeLoggedIn
     Transaction.destroy({where: {order_id: req.params.orderId, product_id: req.params.productId}})
       .then(user => res.json(user))

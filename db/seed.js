@@ -1,6 +1,7 @@
 'use strict'; // eslint-disable-line semi
 
 const db = require('APP/db')
+const Product = db.model('products')
 
 const seedUsers = () => db.Promise.map([
   {firstName: 'Gabe', lastName: 'Lebec', email: 'ILikeSwords@aol.com', isAdmin: false, streetAddress: '3 Javascript Lane', city: 'New York', state: 'NY', zipCode: 10001, creditCard: 1234567890123456, cvc: 123},
@@ -34,6 +35,13 @@ const seedTransactions = () => db.Promise.map([
   {sellingPrice: 6787.00, quantity: 1, order_id: 3, product_id: 2}
 ], transaction => db.model('transactions').create(transaction))
 
+const seedCategories = () => db.Promise.map([
+  {name: "Scary"},
+  {name: "Spooky"},
+  {name: "Pocket"},
+  {name: "Energy Drink"}
+], category => db.model('categories').create(category))
+
 db.didSync
   .then(() => db.sync({force: true}))
   .then(seedUsers)
@@ -46,5 +54,11 @@ db.didSync
   .then(orders => console.log(`Seeded ${orders.length} orders OK`))
   .then(seedTransactions)
   .then(transactions => console.log(`Seeded ${transactions.length} transactions OK`))
+  .then(seedCategories)
+  .then(categories => console.log(`Seeded ${categories.length} categories OK`))
+  .then(() => Product.findById(1))
+  .then((product) => product.addCategories([1, 2]))
+  .then(() => Product.findById(2))
+  .then((product) => product.addCategories([1, 3, 4]))
   .catch(error => console.error(error))
   .finally(() => db.close())
