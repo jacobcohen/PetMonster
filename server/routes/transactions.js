@@ -6,16 +6,16 @@ const Order = db.model('orders')
 const Product = db.model('products')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
-  .get('/all', (req, res, next) =>
+  .get('/all', (req, res, next) => //get all transactions for everyone
     Transaction.findAll()
     .then(transactions => res.json(transactions))
     .catch(next))
-  .get('/orderTransactions/:orderId', (req, res, next) =>
+  .get('/orderTransactions/:orderId', (req, res, next) => //get all transactions for one order
     Order.findById(req.params.orderId)
     .then(order => order.getProducts())
     .then(transactions => res.json(transactions))
     .catch(next))
-  .post('/:orderId/:productId/', (req, res, next) => {
+  .post('/:orderId/:productId/', (req, res, next) => { //create specific transaction for one order
       //order.addProduct
       const orderPromise = Order.findById(req.params.orderId).catch(next),
             prodPromise = Product.findById(req.params.productId).catch(next)  
@@ -24,7 +24,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       .then(([transaction]) => res.status(201).json(transaction))
       .catch(next)
     })
-  .put('/:orderId/:productId/', (req, res, next) => {
+  .put('/:orderId/:productId/', (req, res, next) => { //update specific transaction from one order
       const orderPromise = Order.findById(req.params.orderId).catch(next),
             prodPromise = Product.findById(req.params.productId).catch(next)  
       Promise.all([orderPromise, prodPromise])
@@ -32,7 +32,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       .then(([transaction]) => res.status(201).json(transaction))
       .catch(next)
     })
-  .get('/:orderId/:productId/', (req, res, next) => {
+  .get('/:orderId/:productId/', (req, res, next) => { //get specific transaction for one order
     Transaction.findOne({where: {order_id: req.params.orderId, product_id: req.params.productId}})
     .then(transaction => {
       if (!transaction) {
