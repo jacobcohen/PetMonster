@@ -3,7 +3,7 @@
 
 const Sequelize = require('sequelize')
 const db = require('APP/db')
-const Transaction = require('./transaction')
+const Product = require('./product')
 const Promise = require('bluebird')
 
 /**
@@ -41,31 +41,38 @@ const Order = db.define('orders', {
     },
     instanceMethods: {
         /**
-         * Adds or updates a product item on the active order (cart)
+         * Adds/updates/removes a product item on the active order (cart)
          * If the product is already a line-item in the order, it updates the quantity
          * If it's not there, it is added as a new transaction associated to the order
-         * @return the new or updated transaction
+         * @param product id
+         * @param an object with a property 'quantity'
+         * @return the new or updated transaction OR the number of items deleted (should always be 1)
          */
-        addToCart: function(product, quantityObject){
+        updateCart: function(id, quantityObject){
             if (this.status !== 'active') {
                 throw Error('Cannot add to an old order.')
             }
             return this.getProducts({
-                where: {
-                    id: product.id
-                }
+                where: {id}
             })
-            .then((foundProducts) => {
+            .then(foundProducts => {
                 if (!foundProducts.length) {
-                    return this.addProduct(product, quantityObject)
+                    return Product.findById(id)
+                    .then(productToAdd => this.addProduct(productToAdd, quantityObject))
                 } else {
                     foundProducts[0].transactions.quantity += quantityObject.quantity
-                    return foundProducts[0].transactions.save()
+                    if (!foundProducts[0].transactions.quantity){
+                        return this.removeProduct(foundProducts[0])
+                    } else {
+                        return foundProducts[0].transactions.save()
+                    }
                 }
             })
             .then((newOrUpdatedTransaction) => { 
-                // this.save calls beforeUpdate which updates the total.
-                // return the updated transaction (NOT PRODUCT), to be consistent with Sequelize addAssociation.
+                /** this.save() runs beforeUpdate hook which updates the total.
+                 * @return the updated transaction (NOT PRODUCT)
+                 *         to be consistent with Sequelize addAssociation.
+                */
                 return this.save().then(() => newOrUpdatedTransaction)
             })
             .catch(console.error.bind(console))
@@ -73,7 +80,7 @@ const Order = db.define('orders', {
         /**
          * Purchase the active order (cart)
          * Sets this instance's status to 'created'
-         * Loops through all transactions in that order to get selling price
+         * Loops through all transactions in that order to set selling price
          * Loops through all associated products to update quantity
          * @return updated order instance
          */
