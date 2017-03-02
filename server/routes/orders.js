@@ -26,7 +26,9 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   .post('/cart/:userId', (req, res, next) =>
   	User.findById(req.params.userId)
   	.then(user => user.createOrder({}))
-  	.then(cart => res.json(cart))
+  	.then(cart => {
+  		res.json(cart)
+  		return cart})
 	.catch(next))
   .put('/cart/:userId/purchased', (req, res, next) => // dependent on other branch to be merged to master
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
@@ -36,11 +38,12 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   .put('/cart/:userId/updateCartQuantity', (req, res, next) =>  //needs req.body.toUpdate which is an array of keyValue pairs {prodId, quantity}
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
   	.then(order => {
-  		 req.body.toUpdate.forEach((updateTransaction) => order.updateCart(updateTransaction.prodId, updateTransaction.quantity))
+  		 req.body.toUpdate.forEach((updateTransaction) => order.updateCart(updateTransaction.prodId, {quantity: updateTransaction.quantity}))
   	})
   	.then(archivedCart => res.json(archivedCart))
 	.catch(next))
   .put('/cart/:userId/updateCartStatus', (req, res, next) => //needs req.body.status
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
 	.then(order => order.update({status: req.body.status}))
+	.then(updatedCart => res.json(updatedCart))
 	.catch(next))

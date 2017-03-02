@@ -62,7 +62,7 @@ const Order = db.define('orders', {
                     return Product.findById(id)
                     .then(productToAdd => this.addProduct(productToAdd, quantityObject))
                 } else {
-                    foundProducts[0].transactions.quantity += quantityObject.quantity
+                    foundProducts[0].transactions.quantity = quantityObject.quantity
                     if (!foundProducts[0].transactions.quantity){
                         return this.removeProduct(foundProducts[0])
                     } else {
