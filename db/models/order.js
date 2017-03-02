@@ -34,9 +34,21 @@ const Order = db.define('orders', {
                 .then(total => {
                     instance.total = total
                 })
-            } else {
-                return instance
-            }            
+            }
+        },
+        beforeBulkUpdate: function(instance){
+            if (instance.status === 'active'){
+                return instance.getProducts()
+                .then(products => {
+                    return products.reduce((acc, product) => {
+                        return acc + product.price * product.transactions.quantity
+                    }, 0)
+                })
+                .then(total => {
+                    instance.total = total
+                    return instance.save()
+                })
+            }
         }
     },
     instanceMethods: {
