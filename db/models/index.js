@@ -24,10 +24,18 @@ Product.belongsToMany(User, {
     through: Review
 })
 
-User.belongsToMany(Order, { through: 'UserOrder' })
+User.hasMany(Order)
 Order.belongsToMany(Product, { through: Transaction })
 Product.belongsToMany(Order, { through: Transaction })
 Category.belongsToMany(Product, { through: 'ProductCategory' })
 Product.belongsToMany(Category, { through: 'ProductCategory' })
+
+/**
+ * how to add an association to instances:
+ * user {addOrder, getOrder}
+ * order {addProduct(s), getProduct(s)}
+ * product {addCategory/ies, getCategory/ies}
+ * category {addProduct(s), getProduct(s)}
+ */
 
 module.exports = {User, Product, Review, Order, Transaction, Category}
