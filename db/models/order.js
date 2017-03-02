@@ -48,7 +48,7 @@ const Order = db.define('orders', {
          * @param an object with a property 'quantity'
          * @return the new or updated transaction OR the number of items deleted (should always be 1)
          */
-        updateCart: function(id, quantityObject){
+        updateCart: function(id, quantity){
             if (this.status !== 'active') {
                 throw Error('Cannot add to an old order.')
             }
@@ -58,12 +58,12 @@ const Order = db.define('orders', {
             .then(foundProducts => {
                 if (!foundProducts.length) {
                     return Product.findById(id)
-                    .then(productToAdd => this.addProduct(productToAdd, quantityObject))
+                    .then(productToAdd => this.addProduct(productToAdd, {quantity}))
                 } else {
-                    foundProducts[0].transactions.quantity += quantityObject.quantity
-                    if (!foundProducts[0].transactions.quantity){
+                    if (!quantity){
                         return this.removeProduct(foundProducts[0])
                     } else {
+                        foundProducts[0].transactions.quantity = quantity
                         return foundProducts[0].transactions.save()
                     }
                 }
