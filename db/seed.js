@@ -27,11 +27,11 @@ const seedOrders = () => db.Promise.map([
 ], order => db.model('orders').create(order))
 
 const seedTransactions = () => db.Promise.map([
-  {sellingPrice: 1, quanity: 5, order_id: 1, product_id: 1},
-  {sellingPrice: 9001.00, quanity: 1, order_id: 1, product_id: 2},
-  {sellingPrice: 200.00, quanity: 2, order_id: 2, product_id: 1},
-  {sellingPrice: 207.00, quanity: 1, order_id: 3, product_id: 1},
-  {sellingPrice: 6787.00, quanity: 1, order_id: 3, product_id: 2}
+  {sellingPrice: 1, quantity: 5, order_id: 1, product_id: 1},
+  {sellingPrice: 9001.00, quantity: 1, order_id: 1, product_id: 2},
+  {sellingPrice: 200.00, quantity: 2, order_id: 2, product_id: 1},
+  {sellingPrice: 207.00, quantity: 1, order_id: 3, product_id: 1},
+  {sellingPrice: 6787.00, quantity: 1, order_id: 3, product_id: 2}
 ], transaction => db.model('transactions').create(transaction))
 
 db.didSync
