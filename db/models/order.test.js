@@ -66,7 +66,7 @@ describe('Order model', () => {
     })
 
     it('has fields we expect', () => {
-        expect(order.total).to.equal('0.00')
+        expect(order.total).to.equal(0)
         expect(order.status).to.equal('active')
     })
     it('is associated to the user', () => {
@@ -118,6 +118,29 @@ describe('Order model', () => {
                     expect(updatedTransaction.quantity).to.equal(1)
                 })
                 .catch(console.error)
+        })
+    })
+
+    describe('removing the quantity of a product you already have', () => {
+        it('should delete the product', () => {
+            return order.updateCart(cookieMonster.id, 0)
+                .then(deleted => {
+                    expect(deleted).to.equal(1)
+                })
+                .catch(console.error)
+        })
+    })
+
+    describe('emptyCart instance method', () => {
+        it('should set the total to zero', () => {
+            return order.updateCart(cookieMonster.id, 1)
+            .then(newTransaction => {
+                return order.emptyCart()
+            })
+            .then(updatedOrder => {
+                expect(updatedOrder.total).to.equal(0)
+            })
+            .catch(console.error)
         })
     })
   })

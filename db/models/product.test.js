@@ -24,6 +24,9 @@ describe('Product', () => {
       stock: 0
     })
   })
+  afterEach(function(){
+    return Product.truncate({cascade: true})
+  })
 
   describe('price attribute', () => {
     it('cannot be null', () => {
@@ -36,8 +39,28 @@ describe('Product', () => {
     it('has a getter method that trims the decimal to two places', () => {
       frankenstein.price = 12
       return frankenstein.save().then(function(result){
-        expect(result.price).to.equal('12.00')
+        expect(result.price).to.equal(12)
       })
     })
+  })
+
+  describe('instance methods', () => {
+
+    describe('addPicture', () => {
+        it('adds a new picture', () => {
+          return frankenstein.addPicture('three').then(function(updatedFrank){
+            expect(updatedFrank.imageURLs[2]).to.equal('three')
+          })
+        })
+      })
+
+    describe('setDefaultPicture', () => {
+      it('moves the nth picture to the front', () => {
+        return frankenstein.setDefaultPicture(1).then(function(updatedFrank){
+          expect(updatedFrank.imageURLs[0]).to.equal('two')
+        })
+      })
+    })
+
   })
 })
