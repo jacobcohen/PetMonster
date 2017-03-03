@@ -72,7 +72,7 @@ const Order = db.define('orders', {
                     }
                 }
             })
-            .then((newOrUpdatedTransaction) => {
+            .then((newOrUpdatedTransaction) => { 
                 /** this.save() runs beforeUpdate hook which updates the total.
                  * @return the updated transaction (NOT PRODUCT)
                  *         to be consistent with Sequelize addAssociation.
