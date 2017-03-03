@@ -26,10 +26,6 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   .get('/:productId', (req, res, next) => {
     res.send(req.product)
   })
-  // .get('/:productId/reviews', (req, res, next) =>
-  //   req.product.getReviews()
-  //   .then(reviews => res.json(reviews))
-  //   .catch(next))
   .delete('/:productId', (req, res, next) => //must put back in mustBeLoggedIn
     //Product.destroy({where: {id: req.params.productId}})
     req.product.destroy()
