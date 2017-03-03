@@ -65,7 +65,7 @@ describe('Order model', () => {
     })
 
     it('has fields we expect', () => {
-        expect(order.total).to.equal('0.00')
+        expect(order.total).to.equal(0)
         expect(order.status).to.equal('active')
     })
     it('is associated to the user', () => {
@@ -130,17 +130,14 @@ describe('Order model', () => {
         })
     })
 
-    describe('clearing your cart', () => {
+    describe('emptyCart instance method', () => {
         it('should set the total to zero', () => {
             return order.updateCart(cookieMonster.id, 1)
-            .then((newTransaction) => {
-                return order.setProducts([])
+            .then(newTransaction => {
+                return order.emptyCart()
             })
-            .then(() => {
-                return order.save()
-            })
-            .then(() => {
-                expect(+order.total).to.equal(0)
+            .then(updatedOrder => {
+                expect(updatedOrder.total).to.equal(0)
             })
             .catch(console.error)
         })
