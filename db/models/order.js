@@ -6,16 +6,34 @@ const db = require('APP/db')
 const Product = require('./product')
 const Promise = require('bluebird')
 
+/** util functions */
+function getTotal(order) {
+    if (order.status === 'active'){
+        return order.getProducts()
+        .then(products => {
+            return products.reduce((acc, product) => {
+                return acc + product.price * product.transactions.quantity
+            }, 0)
+        })
+        .then(total => {
+            order.total = total
+        })
+    }
+}
+
 /**
  * Order model
  * FIELDS: id, total, status, [user_id], [created_at], [updated_at]
  * hooks: beforeUpdate (updates the order total every time you add an order to your cart or you change the status of your order)
  * instanceMethods:
- *      addToCart
- *      purchase
+ *      addToCart(productId, quantity)
+ *      purchase()
+ *      emptyCart()
+ * associationMethods:
+ *      add/get/set Product
  */
 const Order = db.define('orders', {
-    total: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
+    total: { type: Sequelize.INTEGER, defaultValue: 0 },
     status: { type: Sequelize.ENUM('active', 'created', 'processing', 'completed', 'cancelled'), defaultValue: 'active' }
 }, {
     hooks: {
@@ -23,38 +41,8 @@ const Order = db.define('orders', {
          * On each update, the order will update its own total if it's a cart.
          * If it's already purchased, the total stays the same.
          */
-        beforeUpdate: function(instance){
-            console.log('got to beforeUpdate')
-            if (instance.status === 'active'){
-                return instance.getProducts()
-                .then(products => {
-                    return products.reduce((acc, product) => {
-                        return acc + product.price * product.transactions.quantity
-                    }, 0)
-                })
-                .then(total => {
-                    instance.total = total
-                })
-            } else {
-                return instance
-            }            
-        },
-        beforeBulkUpdate: function(instance){
-            console.log('got to beforebulkupdate')
-            if (instance.status === 'active'){
-                return instance.getProducts()
-                .then(products => {
-                    return products.reduce((acc, product) => {
-                        return acc + product.price * product.transactions.quantity
-                    }, 0)
-                })
-                .then(total => {
-                    instance.total = total
-                })
-            } else {
-                return instance
-            }            
-        }
+        beforeUpdate: getTotal,
+        beforeBulkUpdate: getTotal
     },
     instanceMethods: {
         /**
@@ -65,19 +53,18 @@ const Order = db.define('orders', {
          * @param an object with a property 'quantity'
          * @return the new or updated transaction OR the number of items deleted (should always be 1)
          */
-        updateCart: function(id, quantity){
+        updateCart: function(productId, quantity){
             if (this.status !== 'active') {
-                throw Error('Cannot add to an old order.')
-            }
+                return Promise.reject(new Error('Cannot add to an old order.'))
+            } 
             return this.getProducts({
-                where: {id}
+                where: { id: productId }
             })
             .then(foundProducts => {
                 if (!foundProducts.length) {
-                    return Product.findById(id)
-                    .then(productToAdd => this.addProduct(productToAdd, {quantity}))
+                    return this.addProduct(productId, {quantity})
                 } else {
-                    if (!quantity){
+                    if (quantity === 0){
                         return this.removeProduct(foundProducts[0])
                     } else {
                         foundProducts[0].transactions.quantity = quantity
@@ -85,14 +72,13 @@ const Order = db.define('orders', {
                     }
                 }
             })
-            .then((newOrUpdatedTransaction) => { 
+            .then((newOrUpdatedTransaction) => {
                 /** this.save() runs beforeUpdate hook which updates the total.
                  * @return the updated transaction (NOT PRODUCT)
                  *         to be consistent with Sequelize addAssociation.
                 */
                 return this.save().then(() => newOrUpdatedTransaction)
             })
-            .catch(console.error.bind(console))
         },
         /**
          * Purchase the active order (cart)
@@ -103,7 +89,7 @@ const Order = db.define('orders', {
          */
         purchase: function(){
             if (this.status !== 'active') {
-                throw Error('Cannot purchase an old order.')
+                return Promise.reject(new Error('Cannot purchase an old order.'))
             }
             return this.getProducts()
                 .then(products => {
@@ -127,6 +113,15 @@ const Order = db.define('orders', {
                     return this.save()
                 })
                 .catch(console.error.bind(console))
+        },
+        /** Removes all items from cart, then updates the total by calling 'save' 
+         *  @return the cart
+        */
+        emptyCart: function(){
+            if (this.status !== 'active') {
+                return Promise.reject(new Error('Cannot empty an old order.'))
+            }
+            return this.setProducts([]).then(() => this.save())
         }
     },
     /**
