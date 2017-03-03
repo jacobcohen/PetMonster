@@ -5,7 +5,7 @@ const Product = db.model('products')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
   .get('/', (req, res, next) =>
-    Product.findAll()
+    Product.findAll({ include: [Category] })
     .then(products => res.json(products))
     .catch(next))
   .post('/', (req, res, next) =>
@@ -31,6 +31,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   //   .then(reviews => res.json(reviews))
   //   .catch(next))
   .delete('/:productId', (req, res, next) => //must put back in mustBeLoggedIn
-    Product.destroy({where: {id: req.params.productId}})
-      .then(user => res.json(user))
-      .catch(next))
+    //Product.destroy({where: {id: req.params.productId}})
+    req.product.destroy()
+      .then(() => res.send('product deleted'))
+      .catch((err) => console.error(err)))

@@ -10,7 +10,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     Review.findAll()
     .then(reviews => res.json(reviews))
     .catch(next))
-  .post('/:userId/:prodId', (req, res, next) =>
+  .post('/user/:userId/product/:prodId', (req, res, next) =>
     {   
       const userPromise = User.findById(req.params.userId).catch(next),
             prodPromise = Product.findById(req.params.prodId).catch(next)
