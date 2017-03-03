@@ -95,10 +95,10 @@ describe('Product', () => {
       it('returns the average rating of all reviews on the product', () => {
         return frankenstein.save()
         .then(() => {
-          return happyUser.addProductReview(frankenstein, { rating: 5, description: 'it was the best' })
+          return happyUser.addProductReview(frankenstein, { rating: 5, description: 'loved it' })
         })
         .then(() => {
-          return grumpyUser.addProductReview(frankenstein, { rating: 1, description: 'it was the worst' })
+          return grumpyUser.addProductReview(frankenstein, { rating: 1, description: 'hated it' })
         })
         .then(() => {
           expect(frankenstein.getAverageRating()).to.eventually.equal(3)
