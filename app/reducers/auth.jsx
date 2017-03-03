@@ -37,4 +37,9 @@ export const logout = () =>
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
 
+// export const signup = () =>
+//   dispatch =>
+//     axios.post('api/users/',
+//       {firstName, lastName, username, password})
+
 export default reducer

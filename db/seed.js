@@ -1,6 +1,7 @@
 'use strict'; // eslint-disable-line semi
 
 const db = require('APP/db')
+const Product = db.model('products')
 
 const seedUsers = () => db.Promise.map([
   {firstName: 'Gabe', lastName: 'Lebec', email: 'ILikeSwords@aol.com', isAdmin: false, streetAddress: '3 Javascript Lane', city: 'New York', state: 'NY', zipCode: 10001, creditCard: 1234567890123456, cvc: 123},
@@ -20,13 +21,44 @@ const seedReviews = () => db.Promise.map([
   {rating: 1, description: "this was the worst Angie's List contractor I've ever seen. I wanted him to remodel my kitchen, and he was a monster!", user_id: 2, product_id: 1}
 ], review => db.model('reviews').create(review))
 
+const seedOrders = () => db.Promise.map([
+  {total: 10.00, status: "processing", user_id: 1},
+  {total: 15.00, status: "active", user_id: 2},
+  {total: 600.00, status: "completed", user_id: 2}
+], order => db.model('orders').create(order))
+
+const seedTransactions = () => db.Promise.map([
+  {sellingPrice: 1, quantity: 5, order_id: 1, product_id: 1},
+  {sellingPrice: 9001.00, quantity: 1, order_id: 1, product_id: 2},
+  {sellingPrice: 200.00, quantity: 2, order_id: 2, product_id: 1},
+  {sellingPrice: 207.00, quantity: 1, order_id: 3, product_id: 1},
+  {sellingPrice: 6787.00, quantity: 1, order_id: 3, product_id: 2}
+], transaction => db.model('transactions').create(transaction))
+
+const seedCategories = () => db.Promise.map([
+  {name: "Scary"},
+  {name: "Spooky"},
+  {name: "Pocket"},
+  {name: "Energy Drink"}
+], category => db.model('categories').create(category))
+
 db.didSync
-  .then(() => db.sync({force: false}))
+  .then(() => db.sync({force: true}))
   .then(seedUsers)
   .then(users => console.log(`Seeded ${users.length} users OK`))
   .then(seedProducts)
   .then(products => console.log(`Seeded ${products.length} products OK`))
   .then(seedReviews)
   .then(reviews => console.log(`Seeded ${reviews.length} reviews OK`))
+  .then(seedOrders)
+  .then(orders => console.log(`Seeded ${orders.length} orders OK`))
+  .then(seedTransactions)
+  .then(transactions => console.log(`Seeded ${transactions.length} transactions OK`))
+  .then(seedCategories)
+  .then(categories => console.log(`Seeded ${categories.length} categories OK`))
+  .then(() => Product.findById(1))
+  .then((product) => product.addCategories([1, 2]))
+  .then(() => Product.findById(2))
+  .then((product) => product.addCategories([1, 3, 4]))
   .catch(error => console.error(error))
   .finally(() => db.close())

@@ -24,12 +24,13 @@ const Landing = class Layout extends Component {
               <ul className="nav navbar-nav">
                 <li><a href="/">Home</a></li>
                 <li><Link to="products">Products</Link></li>
+                <li><Link to="cart">Cart</Link></li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="container content jumbotron">
-          <nav>{this.props.user ? <WhoAmI /> : <Login />}</nav>
+        <div className="container content">
+          <nav>{this.props.user ? <WhoAmI /> : <Login className="jumbotron" />}</nav>
           { this.props.children }
         </div>
         <hr />

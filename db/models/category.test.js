@@ -2,25 +2,25 @@
 
 const db = require('APP/db')
 const Product = require('./product')
-const {expect} = require('chai')
+const Category = require('./category')
+const { expect } = require('chai')
 
-describe('Product', () => {
+describe('Category', () => {
   before('wait for the db', () => db.didSync)
 
   var frankenstein, dracula
   beforeEach(function(){
     frankenstein = Product.build({
-      name: 'Frankenstein',
-      imageURLs: ['one', 'two'],
+      name: 'Frankensteins Monster',
       price: 100.00,
-      description: 'Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster.',
-      stock: 1
+      description: 'wassup doc',
+      stock: 10
     })
     dracula = Product.build({
       name: 'Dracula',
       imageURLs: ['one', 'two'],
       price: 200.00,
-      description: 'dracula description.',
+      description: 'hey girl',
       stock: 0
     })
   })
