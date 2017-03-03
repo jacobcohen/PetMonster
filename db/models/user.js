@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs')
 const Sequelize = require('sequelize')
 const db = require('APP/db')
 
+//const Transaction = require('./transaction')
+const Product = require('./product')
+
 const User = db.define('users', {
   firstName: Sequelize.STRING,
   lastName: Sequelize.STRING,
@@ -20,12 +23,8 @@ const User = db.define('users', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
-  streetAddress: {
-    type: Sequelize.STRING
-  },
-  city: {
-    type: Sequelize.STRING
-  },
+  streetAddress: Sequelize.STRING,
+  city: Sequelize.STRING,
   state: {
     type: Sequelize.STRING,
     validate: {
@@ -78,6 +77,19 @@ const User = db.define('users', {
           else resolve(result)
         })
       )
+    },
+    verifyPurchase (productId) {
+      return this.getOrders({
+        where: {
+          status: { $ne: 'active' }
+        },
+        include: [Product]
+      })
+      .then(foundOrders => {
+          return foundOrders.some(order => {
+            return order.products.some(product => product.id === productId)
+          })
+      })
     }
   }
 })
