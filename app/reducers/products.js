@@ -4,8 +4,8 @@ const RECEIVE_PRODS = 'RECEIVE_PRODS'
 const RECEIVE_PROD = 'RECEIVE_PROD'
 
 const fakeProds = [
-  {id: 1, name: 'product1'},
-  {id: 2, name: 'product2'}
+  {id: 1, name: 'product1', price: 2, imageURLs: ['http://www.illuminessensce.com/wp-content/uploads/2012/12/Image-Coming-Soon-Placeholder.png']},
+  {id: 2, name: 'product2', price: 5, imageURLs: ['http://www.illuminessensce.com/wp-content/uploads/2012/12/Image-Coming-Soon-Placeholder.png']}
 ]
 
 const initialProductsState = {

@@ -31,6 +31,7 @@ describe('Order model', () => {
       email: 'mx@gmail.com'
     })
 
+
     return Promise.all([creatingUser, creatingCookieMonster])
     .then(([newUser, newMonster]) => {
         user = newUser
@@ -48,7 +49,7 @@ describe('Order model', () => {
       ])
   })
 
-  describe('newly created orders', () => {
+  describe('newly created order', () => {
 
     let order
     before('create an order', () => {
@@ -76,7 +77,7 @@ describe('Order model', () => {
     })
   })
 
-  describe('updateCart instance method', () => {
+  describe('adding a transaction to an active order (cart)', () => {
 
     let order, transaction
     before('create an order', () => {
@@ -96,7 +97,7 @@ describe('Order model', () => {
         order.destroy()
     })
 
-    describe('adding a transaction to an active order (cart)', () => {
+    describe('adding a new product', () => {
         it('should create a transaction in the transaction pivot table', () => {
             expect(transaction.quantity).to.equal(2)
         })
@@ -144,20 +145,11 @@ describe('Order model', () => {
     })
   })
 
-  describe('purchase instance method', () => {
+  describe('purchasing a cart', () => {
 
-    let order, purchasedProducts
+    let purchasedProducts
     before('purchase the order', () => {
-
-        return Order.create({})
-        .then(createdOrder => {
-            order = createdOrder
-            return user.addOrder(order)
-        })
-        .then(updatedUser => order.updateCart(cookieMonster.id, 4))
-        .then(() => {
-            return order.purchase()
-        })        
+        return order.purchase()
         .then(updatedOrder => {
             return updatedOrder.getProducts()
         })
@@ -165,10 +157,6 @@ describe('Order model', () => {
             purchasedProducts = products
         })
         .catch(console.error)
-    })
-
-    after(() => {
-        order.destroy()
     })
 
     it('sets the order status to CREATED', () => {
@@ -181,49 +169,6 @@ describe('Order model', () => {
 
     it('decreases the product stock by the amount purchased', () => {
         expect(purchasedProducts.stock).to.equal(1)
-    })
-
-  })
-
-  describe('two orders on the same product', () => {
-
-    // firstOrder will have 3 cookiemonsters, secondOrder will have 1
-    let firstOrder, secondOrder
-    before('create two orders', () => {
-
-        let creatingOrder1 = Order.create({})
-        let creatingOrder2 = Order.create({})
-
-        return Promise.all([creatingOrder1, creatingOrder2])
-        .then(([createdOrder1, createdOrder2]) => {
-            firstOrder = createdOrder1
-            secondOrder = createdOrder2
-        })
-        .then(() => {
-            return Promise.all(
-                [
-                    firstOrder.updateCart(cookieMonster.id, 2),
-                    secondOrder.updateCart(cookieMonster.id, 1)
-                ])
-        })
-        .catch(console.error)
-    })
-
-    it('should set the order status to ACTIVE on both orders', () => {
-        expect(firstOrder.status).to.equal('active')
-        expect(secondOrder.status).to.equal('active')
-    })
-
-    it('should set firstOrder transaction quantity to be 2', () => {
-        return firstOrder.getProducts().then(([products]) => {
-            expect(products.transactions.quantity).to.equal(2)
-        })
-    })
-
-    it('should set secondOrder transaction quantity to be 1', () => {
-        return secondOrder.getProducts().then(([products]) => {
-            expect(products.transactions.quantity).to.equal(1)
-        })
     })
 
   })

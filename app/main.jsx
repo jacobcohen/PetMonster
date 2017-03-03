@@ -10,6 +10,7 @@ import Landing from './components/Landing'
 import Products from './components/Products'
 import Product from './components/Product'
 import Users from './components/Users'
+import Cart from './components/Cart'
 
 import { receiveProducts, getProductById } from './reducers/products'
 import { receiveUsers } from './reducers/users'
@@ -33,6 +34,11 @@ const onProductEnter = (nextRouterState) => {
   store.dispatch(getProductById(id))
 }
 
+const onCartEnter = (nextRouterState) => {
+  const id = nextRouterState.params.productId
+  store.dispatch(getProductById(id))
+}
+
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
@@ -40,6 +46,7 @@ render(
         <IndexRedirect to="/products" />
         <Route path="/products" component={Products} onEnter={onAppEnter} />
         <Route path="/products/:productId" component={Product} onEnter={onProductEnter} />
+        <Route path="/cart" component={Cart} />
         <Route path="/users" component={Users} />
       </Route>
     </Router>
