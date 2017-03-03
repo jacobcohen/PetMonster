@@ -34,11 +34,13 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
   	.then(order => order.purchase())
   	.then(archivedCart => res.json(archivedCart))
+  	.then(() => User.findById(req.params.userId))
+  	.then(user => user.createOrder({}))
 	.catch(next))
-  .put('/cart/:userId/updateCartQuantity', (req, res, next) =>  //needs req.body.toUpdate which is an array of keyValue pairs {prodId, quantity}
+  .put('/cart/:userId/updateCartQuantity', (req, res, next) =>  // Use this to add things to cart. Needs req.body.toUpdate which is an array of keyValue pairs {prodId, quantity}
   	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
   	.then(order => {
-  		 req.body.toUpdate.forEach((updateTransaction) => order.updateCart(updateTransaction.prodId, {quantity: updateTransaction.quantity}))
+  		 req.body.toUpdate.forEach((updateTransaction) => order.updateCart(updateTransaction.prodId, updateTransaction.quantity))
   	})
   	.then(archivedCart => res.json(archivedCart))
 	.catch(next))
