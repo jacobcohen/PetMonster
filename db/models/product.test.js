@@ -1,14 +1,20 @@
 'use strict'; // eslint-disable-line semi
 
+const chai = require('chai')
+const chaiAsPromised = require('chai-as-promised')
+chai.use(chaiAsPromised)
+const expect = chai.expect
+
 const db = require('APP/db')
 const Product = require('./product')
-const {expect} = require('chai')
+const User = require('./user')
 
 describe('Product', () => {
   before('wait for the db', () => db.didSync)
 
-  var frankenstein, dracula
+  var frankenstein, dracula, happyUser, grumpyUser
   beforeEach(function(){
+
     frankenstein = Product.build({
       name: 'Frankenstein',
       imageURLs: ['one', 'two'],
@@ -16,6 +22,7 @@ describe('Product', () => {
       description: 'Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster.',
       stock: 1
     })
+
     dracula = Product.build({
       name: 'Dracula',
       imageURLs: ['one', 'two'],
@@ -23,22 +30,44 @@ describe('Product', () => {
       description: 'dracula description.',
       stock: 0
     })
+
+    let creatingFirstUser = User.create({
+      firstName: 'Happy',
+      lastName: 'GoLucky',
+      email: 'heehee@gmail.com'
+    })
+
+    let creatingSecondUser = User.create({
+      firstName: 'Grumpy',
+      lastName: 'McGrumps',
+      email: 'muttermutter@gmail.com'
+    })
+
+    return Promise.all([creatingFirstUser, creatingSecondUser])
+    .then(([firstUser, secondUser]) => {
+      happyUser = firstUser
+      grumpyUser = secondUser
+    })
   })
+
   afterEach(function(){
-    return Product.truncate({cascade: true})
+    return Promise.all([
+      Product.truncate({cascade: true}),
+      User.truncate({cascade: true})
+    ])
   })
 
   describe('price attribute', () => {
     it('cannot be null', () => {
       frankenstein.price = null
-      return frankenstein.validate().then(function(result){
+      return frankenstein.validate().then(result => {
         expect(result).to.be.an.instanceOf(Error)
         expect(result.message).to.contain('notNull Violation')
       })
     })
     it('has a getter method that trims the decimal to two places', () => {
       frankenstein.price = 12
-      return frankenstein.save().then(function(result){
+      return frankenstein.save().then(result => {
         expect(result.price).to.equal(12)
       })
     })
@@ -62,5 +91,21 @@ describe('Product', () => {
       })
     })
 
+    describe('getAverageRating', () => {
+      it('returns the average rating of all reviews on the product', () => {
+        return frankenstein.save()
+        .then(() => {
+          return happyUser.addProductReview(frankenstein, { rating: 5, description: 'it was the best' })
+        })
+        .then(() => {
+          return grumpyUser.addProductReview(frankenstein, { rating: 1, description: 'it was the worst' })
+        })
+        .then(() => {
+          expect(frankenstein.getAverageRating()).to.eventually.equal(3)
+        })
+      })
+    })
+
   })
+
 })
