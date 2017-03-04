@@ -27,6 +27,9 @@ const Product = db.define('products', {
                 this.imageURLs.unshift(newDefault)
                 return this.save()
             }            
+        },
+        checkAgainstStock: function(requestedAmount){
+            return this.stock >= requestedAmount
         }
     },
     /**

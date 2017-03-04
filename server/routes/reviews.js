@@ -10,14 +10,17 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     Review.findAll()
     .then(reviews => res.json(reviews))
     .catch(next))
-  .post('/user/:userId/product/:prodId', (req, res, next) =>      // post a new review. Checks to see if user is a verified purchaser. add mustBeLoggedIn
-    {   
+  .post('/user/:userId/product/:prodId', (req, res, next) => {  
+    // Post a new review.
+    // Expects req.body json object to be {"rating": INTEGER, "description": "STRING"}
+    // Checks to see if user is a verified purchaser.
+    // need to add mustBeLoggedIn again
       const userPromise = User.findById(req.params.userId).catch(next),
             prodPromise = Product.findById(req.params.prodId).catch(next)
       
       Promise.all([userPromise, prodPromise])
       .then(([user, prod]) => {
-        user.verifyPurchase(req.params.prodId)
+        return user.verifyPurchase(+req.params.prodId)
         .then(verified => {
           if (verified){
             return [user, prod]
@@ -25,7 +28,9 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
           else {return Promise.reject(new Error('the user is an unverified purchaser'))}
         })
       })
-      .then(([user, prod]) => {return user.addProductReviews(prod, req.body)})
+      .then(([user, prod]) => {
+        console.log([user, prod])
+        return user.addProductReviews(prod, req.body)})
       .then(([review]) => res.status(201).json(review))
       .catch(next)
     })
@@ -53,7 +58,20 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     //req.review.getReviews()
     .then(reviews => res.json(reviews))
     .catch(next))
+  .get('/byProd/:prodId/averageScore', (req, res, next) => {// get average review score for a product id
+    let average = 0
+    return Review.findAll({where: {product_id: req.params.prodId}})
+    //req.review.getReviews()
+    .then(reviews => {
+      reviews.forEach((review) => {average += review.rating})
+      average /= reviews.length
+      res.json(average)
+    })
+    .catch(next)})
   .delete('/:reviewId', (req, res, next) => // delete a review.  must put back in mustBeLoggedIn
     User.destroy({where: {id: req.params.reviewId}})
       .then(user => res.json(user))
       .catch(next))
+
+
+
