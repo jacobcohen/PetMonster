@@ -38,9 +38,19 @@ module.exports = app
     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
   }))
 
+  .use((req, res, next) => {
+    console.log('before bodyParser')
+    next()
+  })
+
   // Body parsing middleware
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
+
+  .use((req, res, next) => {
+    console.log('after bodyParser', req.body)
+    next()
+  })
 
   // Authentication middleware
   .use(passport.initialize())

@@ -24,10 +24,10 @@ export const whoami = () =>
       })
       .catch(() => dispatch(authenticated(null)))
 
-export const login = (username, password) =>
+export const login = (email, password) =>
   dispatch =>
     axios.post('/api/auth/login/local',
-      {username, password})
+      {email, password})
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
 
@@ -37,9 +37,11 @@ export const logout = () =>
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
 
-// export const signup = () =>
-//   dispatch =>
-//     axios.post('api/users/',
-//       {firstName, lastName, username, password})
+export const signup = (firstName, lastName, email, password) =>
+  dispatch =>
+    axios.post('api/users/',
+      {firstName, lastName, email, password})
+      .then(() => dispatch(login(email, password)))
+      .catch(() => dispatch(login(email, password))) // ?? may need to be tweaked
 
 export default reducer
