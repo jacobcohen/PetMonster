@@ -85,7 +85,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(
   (id, done) => {
     debug('will deserialize user.id=%d', id)
-    console.log(id)
     User.findById(id)
       .then(user => {
         if (!user) {

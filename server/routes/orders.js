@@ -17,8 +17,10 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .catch(next))
   .get('/cart/:userId', (req, res, next) => //get cart for specific user
     // anyone can in order to log in
-    Order.findOne({where: {user_id: req.params.userId, status: 'active'}})
-    .then(order => res.json(order))
+    Order.findOne({where: {user_id: req.params.userId, status: 'active'}, include: [Product] })
+    .then(order => {
+      res.json(order)
+    })
     .catch(next))
   .get('/:orderId', mustBeAdmin, (req, res, next) => //get specific cart
     // Admin can access specific cart
