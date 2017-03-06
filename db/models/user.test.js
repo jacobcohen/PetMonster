@@ -52,14 +52,13 @@ describe('User', () => {
           order = newOrder
         })
         .then(() => {
-          let addingThingToCart = order.updateCart(theThing.id, 5)
-          let addingCookieMonsterToCart = order.updateCart(cookieMonster.id, 2)
-          let userGettingCart = user.addOrder(order)
-          return Promise.all([addingThingToCart, addingCookieMonsterToCart, userGettingCart])
+          return Promise.all([
+            order.updateCart(theThing.id, 5),
+            order.updateCart(cookieMonster.id, 2),
+            user.addOrder(order)
+          ])
         })
-        .then(() => {
-          return order.purchase()
-        })
+        .then(() => order.purchase())
         .catch(console.error)
     })
 
@@ -67,9 +66,9 @@ describe('User', () => {
 
     it('returns true if the user has purchased the product', () => {
       return Promise.all([user.verifyPurchase(1), user.verifyPurchase(2)])
-        .then(arrayOfBooleans => arrayOfBooleans.reduce((acc, bool) => acc || bool, false))
-        .then(bool => {
-          expect(bool).to.equal(true)
+        .then(verifications => verifications.reduce((acc, verified) => acc || verified, false))
+        .then(bothVerified => {
+          expect(bothVerified).to.equal(true)
         })
     })
     it('returns false if the user has not purchased the product', () => {

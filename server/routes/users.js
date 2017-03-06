@@ -10,9 +10,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   {
      User.findAll()
       .then(users => {
-        console.log(users)
         res.json(users)
-        console.log('hello')
       })
       .catch(next)
   })

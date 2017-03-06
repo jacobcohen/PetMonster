@@ -26,10 +26,16 @@ const Product = db.define('products', {
                 let [newDefault] = this.imageURLs.splice(indexOfPicture, 1)
                 this.imageURLs.unshift(newDefault)
                 return this.save()
-            }            
+            }
         },
-        checkAgainstStock: function(requestedAmount){
-            return this.stock >= requestedAmount
+        getAverageRating: function(){
+            return this.getUserReviews().then(users => {
+                let reviews = []
+                users.forEach(user => {
+                    reviews = reviews.concat(user.reviews)
+                })
+                return average(reviews.map(review => review.rating))
+            })
         }
     },
     /**
@@ -41,5 +47,9 @@ const Product = db.define('products', {
         }
     }
 })
+
+function average(arr){
+    return arr.reduce((acc, curr) => acc + curr) / arr.length
+}
 
 module.exports = Product
