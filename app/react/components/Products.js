@@ -34,23 +34,27 @@ export const Products = (props) => (
     <Sidebar />
 
     <div className="col-lg-9 col-sm-12">
-        {props.products && props.products.map(product => (
-          <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
-            <div className="productbox">
-              <div className="imgthumb img-responsive">
-                <img src={product.imageURLs[0]} height="160" width="160" />
-              </div>
-              <div className="caption">
-                <Link to={`/products/${product.id}`}>{product.name}</Link>
-              </div>
-              <div className="caption">
-                <Link to={`/products/${product.id}`}>${formatPrice(product.price)}</Link>
-                <button type="button" className="btn btn-secondary" key={product.id} onClick={() => props.addProdToCart(product, props.user, props.cart)}>+</button>
+        {
+          props.products && props.products.map(product => (
+            <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
+              <div className="productbox">
+                <Link to={`/products/${product.id}`}>
+                  <div className="imgthumb img-responsive">
+                    <img src={product.imageURLs[0]} />
+                  </div>
+                  <div className="caption">
+                    {product.name}
+                  </div>
+                </Link>
+                <div className="caption">
+                  <Link to={`/products/${product.id}`}>${formatPrice(product.price)}</Link>
+                  <button type="button" className="btn btn-secondary" key={product.id} onClick={() => props.addProdToCart(product, props.user, props.cart)}>+</button>
+                </div>
               </div>
             </div>
-          </div>
+            )
           )
-        )}
+        }
     </div>
   </div>
 )

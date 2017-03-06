@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 import { showModal } from '../../reducers/modals'
+import { logout } from '../../reducers/auth'
 
 class Nav extends React.Component {
 
@@ -18,6 +19,7 @@ class Nav extends React.Component {
     }    
 
     render(){
+        console.log('bool', this.props.isLoggedIn)
          return (
             <div className="navbar navbar-fixed-top navbar-inverse" role="navigation">
                 <div className="container">
@@ -38,9 +40,17 @@ class Nav extends React.Component {
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                     <li>
+
+                    { this.props.isLoggedIn ?
+                        <a href="#" onClick={this.props.logout}>
+                            <span className="glyphicon glyphicon-log-out" />&nbsp;&nbsp;Logout
+                        </a>
+                        :
                         <a href="#" onClick={this.showLogin}>
                             <span className="glyphicon glyphicon-log-in" />&nbsp;&nbsp;Login / Signup
                         </a>
+                    }
+
                     </li>
                     </ul>
                 </div>
@@ -50,8 +60,13 @@ class Nav extends React.Component {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    showModal: modalType => dispatch(showModal(modalType))
+const mapStateToProps = state => ({
+    isLoggedIn: Boolean(state.auth)
 })
 
-export default connect(null, mapDispatchToProps)(Nav)
+const mapDispatchToProps = dispatch => ({
+    showModal: modalType => dispatch(showModal(modalType)),
+    logout: () => dispatch(logout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav)
