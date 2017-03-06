@@ -17,6 +17,8 @@ import { receiveProducts, getProductById, fetchProductsByCategory } from './redu
 import { receiveUsers } from './reducers/users'
 import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCartItems } from './reducers/cart'
+import { getReviewsByProdId } from './reducers/reviews'
+
 
 const onAppEnter = () => {
 
@@ -47,6 +49,7 @@ const onAppEnter = () => {
 const onProductEnter = (nextRouterState) => {
   const id = nextRouterState.params.productId
   store.dispatch(getProductById(id))
+  store.dispatch(getReviewsByProdId(id))
 }
 
 const onCategoryEnter = (nextRouterState) => {
