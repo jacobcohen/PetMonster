@@ -39,7 +39,7 @@ export const logout = () =>
 
 export const signup = (firstName, lastName, email, password) =>
   dispatch =>
-    axios.post('api/users/',
+    axios.post('/api/users',
       {firstName, lastName, email, password})
       .then(() => dispatch(login(email, password)))
       .catch(() => dispatch(login(email, password))) // ?? may need to be tweaked

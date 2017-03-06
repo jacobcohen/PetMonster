@@ -20,7 +20,7 @@ import { receiveCartItems } from './reducers/cart'
 const onAppEnter = () => {
 
   const pProducts = axios.get('/api/products')
-  const pUsers = axios.get('api/users')
+  const pUsers = axios.get('/api/users')
   // const pOrder = axios.get('api/orders')
   let cart
 
