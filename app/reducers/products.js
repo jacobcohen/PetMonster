@@ -30,6 +30,8 @@ const reducer = (state = initialProductsState, action) => {
   return newState
 }
 
+/** Action creators */
+
 export const receiveProducts = products => ({
   type: RECEIVE_PRODS, products
 })
@@ -38,11 +40,22 @@ export const receiveProduct = product => ({
   type: RECEIVE_PROD, product
 })
 
+/** Thunked action creators */
+
 export const getProductById = id => {
   return dispatch => {
     axios.get(`/api/products/${id}`)
     .then(res => {
       dispatch(receiveProduct(res.data))
+    })
+  }
+}
+
+export const fetchProductsByCategory = id => {
+  return dispatch => {
+    axios.get(`/api/categories/${id}`)
+    .then(res => {
+      dispatch(receiveProducts(res.data.products))
     })
   }
 }

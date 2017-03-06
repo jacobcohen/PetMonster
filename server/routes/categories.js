@@ -14,7 +14,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(categories => res.json(categories))
     .catch(next))
   .param('categoryId', (req, res, next, categoryId) =>  // just a little 'ol param-a-ram-ram
-    Category.findById(categoryId)
+    Category.findById(categoryId, {include: [Product]})
     .then(category => {
       if (!category) {
         next(new Error('failed to load category'))

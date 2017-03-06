@@ -1,10 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { Link } from 'react-router'
+import Sidebar from './Sidebar'
 
 export const Products = (props) => (
   <div>
-    <div className="row">
+
+    <Sidebar />
+
+    <div className="col-lg-9 col-sm-12">
         {props.products && props.products.map(product => (
           <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
             <div className="productbox">
@@ -27,7 +31,7 @@ export const Products = (props) => (
 )
 
 const mapStateToProps = state => ({
-  products: state.products.list
+  products: state.products.list,
 })
 
 export default connect(mapStateToProps)(Products)
