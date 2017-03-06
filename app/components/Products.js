@@ -63,7 +63,7 @@ const mapDispatchToProps = dispatch => ({
     let newCart, updatedProduct
 
     const isLoggedIn = user.email ? true : false
-    console.log('FUCK', foundProduct)
+    console.log('here', foundProduct)
 
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
