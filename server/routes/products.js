@@ -14,7 +14,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(product => res.status(201).json(product))
     .catch(next))
   .param('productId', (req, res, next, productId) =>
-    Product.findById(req.params.productId)
+    Product.findById(productId)
     .then(product => {
       if (!product) {
         next(new Error('failed to load product'))

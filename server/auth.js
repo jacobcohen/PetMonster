@@ -69,7 +69,7 @@ OAuth.setupStrategy({
   strategy: require('passport-github2').Strategy,
   config: {
     clientID: env.GITHUB_CLIENT_ID,
-    clientSecrets: env.GITHUB_CLIENT_SECRET,
+    clientSecret: env.GITHUB_CLIENT_SECRET,
     callbackURL: `${app.baseUrl}/api/auth/login/github`,
   },
   passport
@@ -124,7 +124,7 @@ passport.use(new (require('passport-local').Strategy)(
               debug('authenticate user(email: "%s") did fail: bad password')
               return done(null, false, { message: 'Login incorrect' })
             }
-            debug('authenticate user(email: "%s") did ok: user.id=%d', user.id)
+            debug('authenticate user(email: "%s") did ok: user.id=%d', email, user.id)
             done(null, user)
           })
       })
