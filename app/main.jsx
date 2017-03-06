@@ -13,13 +13,15 @@ import Users from './components/Users'
 import Cart from './components/Cart'
 import Login from './components/Login'
 
-import { receiveProducts, getProductById } from './reducers/products'
+import { receiveProducts, getProductById, fetchProductsByCategory } from './reducers/products'
 import { receiveUsers } from './reducers/users'
+import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCartItems } from './reducers/cart'
 
 const onAppEnter = () => {
 
   const pProducts = axios.get('/api/products')
+  const pCategories = axios.get('/api/categories/all')
   const pUsers = axios.get('/api/users')
   // const pOrder = axios.get('api/orders')
   let cart
@@ -32,10 +34,11 @@ const onAppEnter = () => {
   }
 
   return Promise
-    .all([pProducts, pUsers])
-    .then(responses => responses.map(r => r.data))
-    .then(([products, users]) => {
+    .all([pProducts, pCategories, pUsers])
+    .then(responses => responses.map(res => res.data))
+    .then(([products, categories, users]) => {
       store.dispatch(receiveProducts(products))
+      store.dispatch(receiveCategories(categories))
       store.dispatch(receiveUsers(users))
       store.dispatch(receiveCartItems(cart))
     })
@@ -44,6 +47,12 @@ const onAppEnter = () => {
 const onProductEnter = (nextRouterState) => {
   const id = nextRouterState.params.productId
   store.dispatch(getProductById(id))
+}
+
+const onCategoryEnter = (nextRouterState) => {
+  const id = nextRouterState.params.categoryId
+  store.dispatch(fetchCategory(id))
+  store.dispatch(fetchProductsByCategory(id))
 }
 
 const onCartEnter = (nextRouterState) => {
@@ -59,7 +68,8 @@ render(
     <Router history={browserHistory}>
       <Route path="/" component={Landing} onEnter={onAppEnter} >
         <IndexRedirect to="/products" />
-        <Route path="/products" component={Products} />
+        <Route path="/products" component={Products} onEnter={onAppEnter} />
+          <Route path="/products/category/:categoryId" component={Products} onEnter={onCategoryEnter} />
         <Route path="/products/:productId" component={Product} onEnter={onProductEnter} />
         <Route path="/login" component={Login} />
         <Route path="/cart" component={Cart} onEnter={onCartEnter} />

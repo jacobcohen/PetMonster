@@ -3,7 +3,6 @@
 const db = require('APP/db')
 const Product = db.model('products')
 const Category = db.model('categories')
-
 const {mustBeAdmin} = require('../auth.filters')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
