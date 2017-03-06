@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Reviews} from './Reviews.js'
+import {Reviews} from '../components/Reviews.js'
 
 function formatPrice(price) {
   let dPrice = price / 100

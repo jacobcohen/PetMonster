@@ -5,6 +5,7 @@ import categories from './categories'
 import users from './users'
 import cart from './cart'
 import reviews from './reviews'
+import modals from './modals'
 
 const rootReducer = combineReducers({
   auth: auth,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   categories: categories,
   users: users,
   cart: cart,
-  reviews: reviews
+  reviews: reviews,
+  modals: modals
 })
 
 export default rootReducer

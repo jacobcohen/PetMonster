@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import Sidebar from './Sidebar'
 import axios from 'axios'
 
-import { receiveCartItems } from '../reducers/cart'
+import { receiveCartItems } from '../../reducers/cart'
 
 function formatPrice(price) {
   let dPrice = price / 100
