@@ -69,6 +69,8 @@ const mapDispatchToProps = dispatch => ({
 
     const isLoggedIn = user.email ? true : false
 
+
+
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
       updatedProduct.quantity++
