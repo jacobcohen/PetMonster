@@ -59,6 +59,8 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
   	let product = Product.findById(req.body.prodId)
   					.then((prod) => {
   						if (prod.stock >= req.body.quantity){
+                let newStock = prod.stock - req.body.quantity
+                prod.update({'stock': newStock})
   							return true
   						}
   						else {return false}
