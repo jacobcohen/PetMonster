@@ -88,15 +88,9 @@ passport.deserializeUser(
     console.log(id)
     User.findById(id)
       .then(user => {
-        if (!user) {
-          let err = new Error('User unexpectedly not in db anymore.')
-          debug('deserialize did fail err=%s', err)
-          done(null, {id})
-        }
-        else {
-          debug('deserialize did ok user.id=%d', user.id)
-          done(null, user)
-        }
+        if (!user) debug('deserialize retrieved null user for id=%d', id)
+        else debug('deserialize did ok user.id=%d', id)
+        done(null, user)
       })
       .catch(err => {
         debug('deserialize did fail err=%s', err)
