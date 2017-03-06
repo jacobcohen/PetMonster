@@ -16,6 +16,8 @@ import Login from './components/Login'
 import { receiveProducts, getProductById } from './reducers/products'
 import { receiveUsers } from './reducers/users'
 import { receiveCartItems } from './reducers/cart'
+import { getReviewsByProdId } from './reducers/reviews'
+
 
 const onAppEnter = () => {
 
@@ -44,6 +46,7 @@ const onAppEnter = () => {
 const onProductEnter = (nextRouterState) => {
   const id = nextRouterState.params.productId
   store.dispatch(getProductById(id))
+  store.dispatch(getReviewsByProdId(id))
 }
 
 const onCartEnter = (nextRouterState) => {

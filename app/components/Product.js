@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Reviews} from './Reviews.js'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -32,11 +33,15 @@ export const Product = (props) => (
     </div>
     <hr />
     <p>{props.product && props.product.description}</p>
+    <hr />
+    <Reviews reviews={props.reviews}/>
   </div>
 )
 
 const mapStateToProps = state => ({
-  product: state.products.selected
+  product: state.products.selected,
+  reviews: state.reviews
 })
+
 
 export default connect(mapStateToProps)(Product)
