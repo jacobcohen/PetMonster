@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { Link } from 'react-router'
-import { getCartItems, receiveCartItems } from '../reducers/cart'
+import { getCartItems, receiveCartItems } from '../../reducers/cart'
 
 import axios from 'axios'
 
