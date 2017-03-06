@@ -56,7 +56,7 @@ const Order = db.define('orders', {
         updateCart: function(productId, quantity){
             if (this.status !== 'active') {
                 return Promise.reject(new Error('Cannot add to an old order.'))
-            } 
+            }
             return this.getProducts({
                 where: { id: productId }
             })
@@ -72,7 +72,7 @@ const Order = db.define('orders', {
                     }
                 }
             })
-            .then((newOrUpdatedTransaction) => { 
+            .then((newOrUpdatedTransaction) => {
                 /** this.save() runs beforeUpdate hook which updates the total.
                  * @return the updated transaction (NOT PRODUCT)
                  *         to be consistent with Sequelize addAssociation.
@@ -80,6 +80,33 @@ const Order = db.define('orders', {
                 return this.save().then(() => newOrUpdatedTransaction)
             })
         },
+        addToCart: function(productId, quantity){
+        if (this.status !== 'active') {
+          return Promise.reject(new Error('Cannot add to an old order.'))
+        }
+        return this.getProducts({
+          where: { id: productId }
+        })
+          .then(foundProducts => {
+            if (!foundProducts.length) {
+              return this.addProduct(productId, {quantity})
+            } else {
+              if (quantity === 0){
+                return this.removeProduct(foundProducts[0])
+              } else {
+                foundProducts[0].transactions.quantity += quantity
+                return foundProducts[0].transactions.save()
+              }
+            }
+          })
+          .then((newOrUpdatedTransaction) => {
+            /** this.save() runs beforeUpdate hook which updates the total.
+             * @return the updated transaction (NOT PRODUCT)
+             *         to be consistent with Sequelize addAssociation.
+             */
+            return this.save().then(() => newOrUpdatedTransaction)
+          })
+      },
         /**
          * Purchase the active order (cart)
          * Sets this instance's status to 'created'
@@ -114,7 +141,7 @@ const Order = db.define('orders', {
                 })
                 .catch(console.error.bind(console))
         },
-        /** Removes all items from cart, then updates the total by calling 'save' 
+        /** Removes all items from cart, then updates the total by calling 'save'
          *  @return the cart
         */
         emptyCart: function(){
