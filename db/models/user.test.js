@@ -7,7 +7,9 @@ const Order = require('./order')
 const {expect} = require('chai')
 
 describe('User', () => {
-  before('wait for the db', () => db.didSync)
+
+  before('Await database sync', () => db.didSync)
+  afterEach('Clear the tables', () => db.truncate({ cascade: true }))
 
   describe('authenticate(plaintext: String) ~> Boolean', () => {
     it('resolves true if the password matches', () =>
