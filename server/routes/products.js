@@ -2,6 +2,7 @@
 
 const db = require('APP/db')
 const Product = db.model('products')
+const Category = db.model('categories')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
   .get('/', (req, res, next) =>

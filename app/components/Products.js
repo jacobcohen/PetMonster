@@ -5,6 +5,27 @@ import axios from 'axios'
 
 import { receiveCartItems } from '../reducers/cart'
 
+function formatPrice(price) {
+  let dPrice = price / 100
+  let sdPrice = '' + dPrice
+
+  if (dPrice > 1000000) {
+    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
+  } else if (dPrice > 100000) {
+    sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
+  } else if (dPrice > 10000) {
+    sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
+  } else if (dPrice > 1000) {
+    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
+  }
+
+  if (dPrice % 1 === 0) {
+    return sdPrice + '.00'
+  } else {
+    return sdPrice
+  }
+}
+
 export const Products = (props) => (
   <div>
     <div className="row">
@@ -18,7 +39,7 @@ export const Products = (props) => (
                 <Link to={`/products/${product.id}`}>{product.name}</Link>
               </div>
               <div className="caption">
-                <Link to={`/products/${product.id}`}>${product.price}</Link>
+                <Link to={`/products/${product.id}`}>${formatPrice(product.price)}</Link>
                 <button type="button" className="btn btn-secondary" key={product.id} onClick={() => props.addProdToCart(product, props.user, props.cart)}>+</button>
               </div>
             </div>

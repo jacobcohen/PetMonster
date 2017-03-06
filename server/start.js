@@ -39,7 +39,6 @@ module.exports = app
   }))
 
   .use((req, res, next) => {
-    console.log('before bodyParser')
     next()
   })
 
@@ -48,7 +47,6 @@ module.exports = app
   .use(bodyParser.json())
 
   .use((req, res, next) => {
-    console.log('after bodyParser', req.body)
     next()
   })
 

@@ -5,7 +5,33 @@ import { getCartItems, receiveCartItems } from '../reducers/cart'
 
 import axios from 'axios'
 
-export const Products = (props) => (
+function formatPrice(price) {
+  let dPrice = price
+  let sdPrice = '' + dPrice
+
+  if (dPrice > 1000000) {
+    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
+  } else if (dPrice > 100000) {
+    sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
+  } else if (dPrice > 10000) {
+    sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
+  } else if (dPrice > 1000) {
+    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
+  }
+
+  if (dPrice % 1 === 0) {
+    return sdPrice + '.00'
+  } else {
+    return sdPrice
+  }
+}
+
+function calcAndFormat(q, p) {
+  let newP = q * p
+  return formatPrice(newP)
+}
+
+export const Cart = (props) => (
   <div>
     <h3>Cart</h3>
     <div>
@@ -15,8 +41,9 @@ export const Products = (props) => (
       {props.cart && props.cart.map(item => (
         <div key={item.product_id}>
           <h3>{item.product.name}</h3>
+          <img src={item.product.imageURLs[0]} height="80" width="80" />
           <p>quantity: {item.quantity}</p>
-          <p>${+item.quantity * +item.product.price}</p>
+          <p>${calcAndFormat(+item.quantity, +item.product.price)}</p>
           <button type="button" className="btn btn-secondary" onClick={() => props.addProdToCart(item.product, props.user, props.cart)}>+</button>
           <button type="button" className="btn btn-secondary" onClick={() => props.removeProdFromCart(item.product, props.user, props.cart)}>-</button>
         </div>
@@ -77,4 +104,4 @@ const mapDispatchToProps = dispatch => ({
 //   }
 // })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Products)
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)
