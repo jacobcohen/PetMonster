@@ -50,13 +50,13 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(addedProductCategory => res.json(addedProductCategory))
     .catch(next)
   })
-  .delete('/:categoryId', (req, res, next) => 
+  .delete('/:categoryId', (req, res, next) =>
   // Admin can access only
   // delete a category from the category database
     req.category.destroy()
       .then(category => res.json(category))
       .catch(next))
-  .delete('/category/:categoryId/product/:productId', (req, res, next) => {   
+  .delete('/category/:categoryId/product/:productId', (req, res, next) => {
   // remove a category association from a product
   // Admin can access only
     Product.findById(+req.params.productId)

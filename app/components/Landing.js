@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import {connect} from 'react-redux'
-import Login from './Login'
 import WhoAmI from './WhoAmI'
 
 const Landing = class Layout extends Component {
@@ -11,10 +10,13 @@ const Landing = class Layout extends Component {
       <div>
         <Nav />
         <div className="container content">
-          <nav>
-            { this.props.user ? <WhoAmI /> : <Login className="jumbotron" /> }
-          </nav>
-
+        <nav>
+          {
+            this.props.user ?
+              <WhoAmI /> :
+              <button><Link to="login">Login</Link></button> 
+          }
+        </nav>
           { this.props.children }
 
         </div>
@@ -31,9 +33,9 @@ const Nav = () => (
       <div className="navbar-header">
         <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#nav-items">
           <span className="sr-only">Toggle navigation</span>
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
+          <span className="icon-bar" />
+          <span className="icon-bar" />
+          <span className="icon-bar" />
         </button>
         <Link className="navbar-brand" to="/">Pet Monster</Link>
       </div>
@@ -44,8 +46,8 @@ const Nav = () => (
           <li><Link to="cart">Cart</Link></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
-          <li><a href="#"><span className="glyphicon glyphicon-user"></span> Sign Up</a></li>
-          <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li><a href="#"><span className="glyphicon glyphicon-user" /> Sign Up</a></li>
+          <li><a href="#"><span className="glyphicon glyphicon-log-in" /> Login</a></li>
         </ul>
       </div>
     </div>

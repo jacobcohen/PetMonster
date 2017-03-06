@@ -85,6 +85,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(
   (id, done) => {
     debug('will deserialize user.id=%d', id)
+    console.log(id)
     User.findById(id)
       .then(user => {
         if (!user) debug('deserialize retrieved null user for id=%d', id)
@@ -100,6 +101,9 @@ passport.deserializeUser(
 
 // require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(new (require('passport-local').Strategy)(
+  {
+    usernameField: 'email'
+  },
   (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
     User.findOne({where: {email}})
