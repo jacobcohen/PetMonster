@@ -81,31 +81,31 @@ const Order = db.define('orders', {
             })
         },
         addToCart: function(productId, quantity){
-        if (this.status !== 'active') {
-          return Promise.reject(new Error('Cannot add to an old order.'))
-        }
-        return this.getProducts({
-          where: { id: productId }
-        })
-          .then(foundProducts => {
-            if (!foundProducts.length) {
-              return this.addProduct(productId, {quantity})
-            } else {
-              if (quantity === 0){
-                return this.removeProduct(foundProducts[0])
+          if (this.status !== 'active') {
+            return Promise.reject(new Error('Cannot add to an old order.'))
+          }
+          return this.getProducts({
+            where: { id: productId }
+          })
+            .then(foundProducts => {
+              if (!foundProducts.length) {
+                return this.addProduct(productId, {quantity})
               } else {
-                foundProducts[0].transactions.quantity += quantity
-                return foundProducts[0].transactions.save()
+                if (quantity === 0){
+                  return this.removeProduct(foundProducts[0])
+                } else {
+                  foundProducts[0].transactions.quantity += quantity
+                  return foundProducts[0].transactions.save()
+                }
               }
-            }
-          })
-          .then((newOrUpdatedTransaction) => {
-            /** this.save() runs beforeUpdate hook which updates the total.
-             * @return the updated transaction (NOT PRODUCT)
-             *         to be consistent with Sequelize addAssociation.
-             */
-            return this.save().then(() => newOrUpdatedTransaction)
-          })
+            })
+            .then((newOrUpdatedTransaction) => {
+              /** this.save() runs beforeUpdate hook which updates the total.
+               * @return the updated transaction (NOT PRODUCT)
+               *         to be consistent with Sequelize addAssociation.
+               */
+              return this.save().then(() => newOrUpdatedTransaction)
+            })
       },
         /**
          * Purchase the active order (cart)
