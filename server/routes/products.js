@@ -5,8 +5,6 @@ const Product = db.model('products')
 const Category = db.model('categories')
 const {mustBeAdmin} = require('../auth.filters')
 
-const {mustBeAdmin} = require('../auth.filters')
-
 module.exports = require('express').Router() // eslint-disable-line new-cap
   .get('/', (req, res, next) => //get all products. anyone can do it
     Product.findAll({ include: [Category] })

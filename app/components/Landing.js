@@ -14,7 +14,7 @@ const Landing = class Layout extends Component {
           {
             this.props.user ?
               <WhoAmI /> :
-              <button><Link to="login">Login</Link></button> 
+              <button><Link to="login">Login</Link></button>
           }
         </nav>
           { this.props.children }
