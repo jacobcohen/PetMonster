@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import {connect} from 'react-redux'
-import Login from './Login'
 import WhoAmI from './WhoAmI'
 
 const Landing = class Layout extends Component {
@@ -30,7 +29,7 @@ const Landing = class Layout extends Component {
           </div>
         </div>
         <div className="container content">
-          <nav>{this.props.user ? <WhoAmI /> : <Login className="jumbotron" />}</nav>
+          <nav>{this.props.user ? <WhoAmI /> : <button><Link to="login">Login</Link></button> }</nav>
           { this.props.children }
         </div>
         <hr />
