@@ -6,3 +6,9 @@ body {
 a {
     color: #00B7FF;
 }
+
+sidebar li {
+    list-style-type: none;
+    padding: 5px;
+    border-bottom: 1px solid lightgray
+}

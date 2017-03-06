@@ -1,6 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { Link } from 'react-router'
+
+import Sidebar from './Sidebar'
 import axios from 'axios'
 
 import { receiveCartItems } from '../reducers/cart'
@@ -28,7 +30,10 @@ function formatPrice(price) {
 
 export const Products = (props) => (
   <div>
-    <div className="row">
+
+    <Sidebar />
+
+    <div className="col-lg-9 col-sm-12">
         {props.products && props.products.map(product => (
           <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
             <div className="productbox">
