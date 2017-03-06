@@ -1,22 +1,27 @@
 import React from 'react'
 
-export const Login = ({ login }) => (
+export const Login = ({ login, signup }) => (
   <div>
     <h3>Login</h3>
     <form onSubmit={evt => {
       evt.preventDefault()
-      login(evt.target.username.value, evt.target.password.value)
+      console.log(evt.target.email.value, evt.target.password.value)
+      login(evt.target.email.value, evt.target.password.value)
     } }>
-      <input name="username" type="username" placeholder="username" />
+      <input name="email" type="email" placeholder="email" />
       <input name="password" type="password" placeholder="password" />
       <input type="submit" value="Login" />
     <hr />
     <h3>Or, Sign Up!</h3>
     </form>
-    <form onSubmit={evt => {} }>
+    <form onSubmit={evt => {
+      evt.preventDefault()
+
+      signup(evt.target.firstName.value, evt.target.lastName.value, evt.target.email.value, evt.target.password.value)
+    } }>
       <input name="firstName" type="firstName" placeholder="first name" />
       <input name="lastName" type="lastName" placeholder="last name" />
-      <input name="username" type="username" placeholder="username" />
+      <input name="email" type="email" placeholder="email" />
       <input name="password" type="password" placeholder="password" />
       <input type="submit" value="Submit" />
     </form>
@@ -26,10 +31,10 @@ export const Login = ({ login }) => (
   </div>
 )
 
-import {login} from 'APP/app/reducers/auth'
+import {login, signup} from 'APP/app/reducers/auth'
 import {connect} from 'react-redux'
 
 export default connect(
   null,
-  {login},
+  {login, signup},
 )(Login)
