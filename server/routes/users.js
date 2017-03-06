@@ -3,10 +3,10 @@
 const db = require('APP/db')
 const User = db.model('users')
 
-const {mustBeLoggedIn, forbidden} = require('../auth.filters')
+const {mustBeLoggedIn, mustBeAdmin, selfOnly, selfOrAdmin} = require('../auth.filters')
 
 module.exports = require('express').Router() // eslint-disable-line new-cap
-  .get('/', (req, res, next) => //add back forbidden('only admins can list users'),
+  .get('/', (req, res, next) => //get all users.
   {
      User.findAll()
       .then(users => {
@@ -14,19 +14,19 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       })
       .catch(next)
   })
-  .post('/', (req, res, next) =>
+  .post('/', (req, res, next) => //make a new user
     User.create(req.body)
       .then(user => res.status(201).json(user))
       .catch(next))
-  .get('/:id', (req, res, next) => //must put back in mustBeLoggedIn -- don't forget!
+  .get('/:id', (req, res, next) => //getting user by ID
     User.findById(req.params.id)
       .then(user => res.json(user))
       .catch(next))
-  .put('/:id', (req, res, next) =>  //maybe add mustBeAdmin?
+  .put('/:id', selfOrAdmin, (req, res, next) =>  //modifying user. Must be that user or admin
     User.update(req.body, {where: {id:req.params.id}, returning: true})
       .then(users => res.json(users))
       .catch(next))
-  .delete('/:id', (req, res, next) => //must put back in mustBeLoggedIn
+  .delete('/:id', selfOrAdmin, (req, res, next) => //deleting a user. Must be that user or admin
     User.destroy({where: {id: req.params.id}})
       .then(user => res.json(user))
       .catch(next))
