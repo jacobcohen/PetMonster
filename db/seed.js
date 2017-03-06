@@ -63,7 +63,6 @@ const seedProducts = () => db.Promise.map([
   {name: 'Xenomporph', imageURLs: ['/img/Xenomporph.jpg'], price: 560000000, description: 'From the movie Alien', stock: 10},
   {name: 'Count Orlok', imageURLs: ['/img/CountOrlok.jpg'], price: 5000, description: 'From the movie Nosferatu', stock: 10},
   {name: 'Frankensteins Monster', imageURLs: ['/img/FrankensteinsMonster.jpg'], price: 600000, description: 'From the movie Frankenstein', stock: 10}
-
 ], product => db.model('products').create(product))
 
 const seedReviews = () => db.Promise.map([
@@ -73,17 +72,17 @@ const seedReviews = () => db.Promise.map([
 ], review => db.model('reviews').create(review))
 
 const seedOrders = () => db.Promise.map([
-  {total: 10.00, status: "processing", user_id: 1},
-  {total: 15.00, status: "active", user_id: 2},
-  {total: 600.00, status: "completed", user_id: 2}
+  {total: 1000, status: "processing", user_id: 1},
+  {total: 1500, status: "active", user_id: 2},
+  {total: 60000, status: "completed", user_id: 2}
 ], order => db.model('orders').create(order))
 
 const seedTransactions = () => db.Promise.map([
-  {sellingPrice: 1, quantity: 5, order_id: 1, product_id: 1},
-  {sellingPrice: 9001.00, quantity: 1, order_id: 1, product_id: 2},
-  {sellingPrice: 200.00, quantity: 2, order_id: 2, product_id: 1},
-  {sellingPrice: 207.00, quantity: 1, order_id: 3, product_id: 1},
-  {sellingPrice: 6787.00, quantity: 1, order_id: 3, product_id: 2}
+  {sellingPrice: 100, quantity: 5, order_id: 1, product_id: 1},
+  {sellingPrice: 900100, quantity: 1, order_id: 1, product_id: 2},
+  {sellingPrice: 20000, quantity: 2, order_id: 2, product_id: 1},
+  {sellingPrice: 20700, quantity: 1, order_id: 3, product_id: 1},
+  {sellingPrice: 678700, quantity: 1, order_id: 3, product_id: 2}
 ], transaction => db.model('transactions').create(transaction))
 
 const seedCategories = () => db.Promise.map([
