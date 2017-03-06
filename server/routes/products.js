@@ -4,12 +4,14 @@ const db = require('APP/db')
 const Product = db.model('products')
 const Category = db.model('categories')
 
+const {mustBeAdmin} = require('../auth.filters')
+
 module.exports = require('express').Router() // eslint-disable-line new-cap
-  .get('/', (req, res, next) =>
+  .get('/', (req, res, next) => //get all products. anyone can do it
     Product.findAll({ include: [Category] })
     .then(products => res.json(products))
     .catch(next))
-  .post('/', (req, res, next) =>
+  .post('/', mustBeAdmin, (req, res, next) => //post a product, only admin
     Product.create(req.body)
     .then(product => res.status(201).json(product))
     .catch(next))
@@ -24,10 +26,10 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       }
     })
     .catch(next))
-  .get('/:productId', (req, res, next) => {
+  .get('/:productId', (req, res, next) => { //get specific product. anyone can do it
     res.send(req.product)
   })
-  .delete('/:productId', (req, res, next) => //must put back in mustBeLoggedIn
+  .delete('/:productId', mustBeAdmin, (req, res, next) => //deletes product. only admin
     //Product.destroy({where: {id: req.params.productId}})
     req.product.destroy()
       .then(() => res.send('product deleted'))
