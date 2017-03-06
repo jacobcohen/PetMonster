@@ -8,7 +8,6 @@ a {
 }
 
 img {
-    position: absolute;
     display: block;
     max-width:160px;
     max-height: 160px;
