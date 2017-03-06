@@ -85,11 +85,18 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(
   (id, done) => {
     debug('will deserialize user.id=%d', id)
+    console.log(id)
     User.findById(id)
       .then(user => {
-        if (!user) debug('deserialize retrieved null user for id=%d', id)
-        else debug('deserialize did ok user.id=%d', id)
-        done(null, user)
+        if (!user) {
+          let err = new Error('User unexpectedly not in db anymore.')
+          debug('deserialize did fail err=%s', err)
+          done(null, {id})
+        }
+        else {
+          debug('deserialize did ok user.id=%d', user.id)
+          done(null, user)
+        }
       })
       .catch(err => {
         debug('deserialize did fail err=%s', err)
@@ -100,6 +107,9 @@ passport.deserializeUser(
 
 // require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(new (require('passport-local').Strategy)(
+  {
+    usernameField: 'email'
+  },
   (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
     User.findOne({where: {email}})
