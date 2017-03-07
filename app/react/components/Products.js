@@ -5,13 +5,10 @@ import axios from 'axios'
 
 import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
-
-import { receiveCartItems } from '../../reducers/cart'
-import {addToCart} from '../../reducers/cart'
+import { receiveCartItems, addToCart } from '../../reducers/cart'
 
 // TODO: move this function to the store. It's used in several places.
 // There's a native helper function for formatting currency
-
 function formatPrice(price) {
   let dPrice = price / 100
   let sdPrice = '' + dPrice
@@ -38,18 +35,26 @@ export const Products = (props) => (
 
     <Sidebar />
 
-    <div className="col-lg-9 col-sm-12">
+    <div className="landing-display col-lg-10">
         {
           props.products && props.products.map(product => (
-            <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
-              <div className="productbox">
-                  <ProductButton product={product} handleSubmit={props.addToCart} userId={props.user.id}/>
-              </div>
-            </div>
+            <Link key={product.id} to={`/products/${product.id}`}>
+              <div
+                  className="landing-image"
+                  style={{
+                      backgroundImage: `url(${product.imageURLs ? product.imageURLs[0] : ''})`,
+                      backgroundPosition: 'center',
+                      width: 300,
+                      height: 300
+                  }}
+              />
+            </Link>
             )
           )
         }
     </div>
+
+  </div>
   )
 
 const mapStateToProps = state => ({
@@ -70,11 +75,11 @@ const mapDispatchToProps = dispatch => ({
 
     const isLoggedIn = user.email ? true : false
 
-
     // TODO:
     // No nested Promise chaining
     // axios calls belong in thunked action creators, not here
     // a lot of this logic is implemented on the back-end
+
 
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
@@ -83,12 +88,10 @@ const mapDispatchToProps = dispatch => ({
         return axios.get(`api/orders/cart/${user.id}`)
         .then(res => res.data)
         .then(cart => {
-
           if (cart === null) {
             return axios.post(`api/orders/cart/${user.id}`)
             .then(res => res.data)
             .then(newOrder => {
-
               return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
                 sellingPrice: null,
                 quantity: 1,

@@ -3,9 +3,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 import { showModal } from '../../reducers/modals'
-
 import { logout } from '../../reducers/auth'
-
 
 class Nav extends React.Component {
 
@@ -17,7 +15,7 @@ class Nav extends React.Component {
     showLogin(event){
         event.preventDefault()
         this.props.showModal('LOGIN')
-    }    
+    }
 
     render(){
          return (
@@ -34,16 +32,21 @@ class Nav extends React.Component {
                 </div>
                 <div id="nav-items" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
-
-                    <li><Link to="/">Home</Link></li>
-
                     <li><Link to="products">Products</Link></li>
                     <li><Link to="cart">Cart</Link></li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                     <li>
-
-                    { this.props.isLoggedIn ?
+                    {
+                        this.props.isAdmin &&
+                        <Link to="/admin">
+                            <span>Admin</span>
+                        </Link>
+                    }
+                    </li>
+                    <li>
+                    {
+                        this.props.isLoggedIn ?
                         <a href="#" onClick={this.props.logout}>
                             <span className="glyphicon glyphicon-log-out" />&nbsp;&nbsp;Logout
                         </a>
@@ -52,7 +55,6 @@ class Nav extends React.Component {
                             <span className="glyphicon glyphicon-log-in" />&nbsp;&nbsp;Login / Signup
                         </a>
                     }
-
                     </li>
                     </ul>
                 </div>
@@ -62,9 +64,9 @@ class Nav extends React.Component {
     }
 }
 
-
 const mapStateToProps = state => ({
-    isLoggedIn: Boolean(state.auth)
+    isLoggedIn: Boolean(state.auth),
+    isAdmin: Boolean(state.auth ? state.auth.isAdmin : false)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -73,4 +75,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav)
-
