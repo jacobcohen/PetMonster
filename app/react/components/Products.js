@@ -50,6 +50,8 @@ export const Products = (props) => (
           )
         }
     </div>
+
+  </div>
   )
 
 const mapStateToProps = state => ({
