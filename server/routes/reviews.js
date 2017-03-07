@@ -28,7 +28,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       })
       .catch(next)
   })
-  .post('/user/:userId/product/:prodId', mustBeLoggedIn, (req, res, next) => {
+  .post('/user/:userId/product/:prodId', (req, res, next) => {
     // Post a new review.
     // Expects req.body json object to be {"rating": INTEGER, "description": "STRING"}
     // Checks to see if user is a verified purchaser.
@@ -41,6 +41,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         return user.verifyPurchase(+req.params.prodId)
         .then(verified => {
           if (verified){
+            console.log('VERYFIEID', user, prod)
             return [user, prod]
           }
           else {
@@ -50,11 +51,17 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         })
       })
       .then(([user, prod]) => {
-        if(!user) return [false]
+        if(!user) {
+          return [false]
+        }
+        req.body.returning = true
         return user.addProductReviews(prod, req.body)})
       .then(([review]) => {
-        if(!review) return res.status(201).send(false)
-        return res.status(201).json(review)
+        if(!review[1]) {
+          return res.status(201).send(false)
+        }
+        res.status(201).json(review[1])
+        return review[1]
       })
       .catch(next)
     })
