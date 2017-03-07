@@ -39,7 +39,6 @@ export const Product = (props) => {
   )
 }
 
-
 const mapStateToProps = state => ({
   product: state.products.selected,
   reviews: state.reviews,

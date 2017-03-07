@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { showModal } from './modals'
+
 const RECEIVE_CART_ITEMS = 'RECEIVE_CART_ITEMS'
 const ADD_CART_ITEM = 'ADD_CART_ITEM'
 
@@ -138,7 +140,8 @@ export const addToCart = (productId, quantity, userId) => {
           sellingPrice: item.transactions.sellingPrice
         }
       })
-      return dispatch(receiveCartItems(repackagedTransactions))
+      dispatch(receiveCartItems(repackagedTransactions))
+      dispatch(showModal('CART'))
     })
     .catch(console.error)
   }

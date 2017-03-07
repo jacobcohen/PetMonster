@@ -10,7 +10,7 @@ export const ProductButton = props => {
     return (
         <div id='product-button'>
             <Link to={`/products/${product.id}`}>
-            <div className="imgthumb img-responsive">
+            <div className="img-responsive">
                 <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
             </div>
             </Link>

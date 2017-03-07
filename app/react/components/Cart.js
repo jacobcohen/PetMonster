@@ -1,10 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { getCartItems, receiveCartItems } from '../../reducers/cart'
-import { CartProductButton } from './CartProductButton'
-import { updateCart } from '../../reducers/cart'
-
 import axios from 'axios'
+
+import { getCartItems, receiveCartItems, updateCart } from '../../reducers/cart'
+import { CartProductButton } from './CartProductButton'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -40,8 +39,7 @@ export const Cart = (props) => (
     </div>
     <div>
       {props.cart && props.cart.map(item => (
-        <div key={item.product_id}>
-          <h3>{item.product.name}</h3>
+        <div className="row" key={item.product_id}>
           <CartProductButton
               item={item}
               product={item.product}
@@ -62,33 +60,35 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateCart: function(productId, quantity, userId){
     dispatch(updateCart(+productId, +quantity, +userId))
-  },
-  addProdToCart: (product, user, currentCart) => {
-    let foundProduct = currentCart.filter(item => item.product_id === product.id)
-    let otherProducts = currentCart.filter(item => item.product_id !== product.id)
-    let newCart
-
-    let updatedProduct = foundProduct[0]
-    updatedProduct.quantity++
-    newCart = otherProducts.concat([updatedProduct])
-    dispatch(receiveCartItems(newCart))
-    localStorage.cart = JSON.stringify(newCart)
-  },
-  removeProdFromCart: (product, user, currentCart) => {
-    let foundProduct = currentCart.filter(item => item.product_id === product.id)
-    let otherProducts = currentCart.filter(item => item.product_id !== product.id)
-    let newCart
-
-    let updatedProduct = foundProduct[0]
-    updatedProduct.quantity--
-    if (updatedProduct.quantity === 0) {
-      newCart = otherProducts
-    } else {
-      newCart = otherProducts.concat([updatedProduct])
-    }
-    dispatch(receiveCartItems(newCart))
-    localStorage.cart = JSON.stringify(newCart)
   }
+
+
+  // addProdToCart: (product, user, currentCart) => {
+  //   let foundProduct = currentCart.filter(item => item.product_id === product.id)
+  //   let otherProducts = currentCart.filter(item => item.product_id !== product.id)
+  //   let newCart
+
+  //   let updatedProduct = foundProduct[0]
+  //   updatedProduct.quantity++
+  //   newCart = otherProducts.concat([updatedProduct])
+  //   dispatch(receiveCartItems(newCart))
+  //   localStorage.cart = JSON.stringify(newCart)
+  // },
+  // removeProdFromCart: (product, user, currentCart) => {
+  //   let foundProduct = currentCart.filter(item => item.product_id === product.id)
+  //   let otherProducts = currentCart.filter(item => item.product_id !== product.id)
+  //   let newCart
+
+  //   let updatedProduct = foundProduct[0]
+  //   updatedProduct.quantity--
+  //   if (updatedProduct.quantity === 0) {
+  //     newCart = otherProducts
+  //   } else {
+  //     newCart = otherProducts.concat([updatedProduct])
+  //   }
+  //   dispatch(receiveCartItems(newCart))
+  //   localStorage.cart = JSON.stringify(newCart)
+  // }
 })
 
 // const mapDispatchToProps = dispatch => ({

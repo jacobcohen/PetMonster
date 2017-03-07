@@ -37,14 +37,20 @@ export const Products = (props) => (
 
     <Sidebar />
 
-    <div className="col-lg-9 col-sm-12">
+    <div className="landing-display col-lg-10">
         {
           props.products && props.products.map(product => (
-            <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
-              <div className="productbox">
-                  <ProductButton product={product} handleSubmit={props.addToCart} userId={props.user.id}/>
-              </div>
-            </div>
+            <Link key={product.id} to={`/products/${product.id}`}>
+              <div
+                  className="landing-image"
+                  style={{
+                      backgroundImage: `url(${product.imageURLs ? product.imageURLs[0] : ''})`,
+                      backgroundPosition: 'center',
+                      width: 300,
+                      height: 300
+                  }}
+              />
+            </Link>
             )
           )
         }
