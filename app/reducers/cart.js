@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { showModal } from './modals'
+
 const RECEIVE_CART_ITEMS = 'RECEIVE_CART_ITEMS'
 const ADD_CART_ITEM = 'ADD_CART_ITEM'
 
@@ -60,8 +62,7 @@ export const getCartItems = userId => {
     axios.get(`/api/orders/cart/${userId}`)
     .then(response => {
       const cart = response.data
-      const items = cart.products
-      console.log(JSON.parse(localStorage.cart))
+      const items = cart ? cart.products : JSON.parse(localStorage.cart)
 
       let repackagedTransactions = items.map(item => {
         let transactionObj = {
@@ -138,7 +139,8 @@ export const addToCart = (productId, quantity, userId) => {
           sellingPrice: item.transactions.sellingPrice
         }
       })
-      return dispatch(receiveCartItems(repackagedTransactions))
+      dispatch(receiveCartItems(repackagedTransactions))
+      dispatch(showModal('CART'))
     })
     .catch(console.error)
   }
