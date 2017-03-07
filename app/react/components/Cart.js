@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+
 import { getCartItems, receiveCartItems } from '../../reducers/cart'
 import { CartProductButton } from './CartProductButton'
 import { updateCart } from '../../reducers/cart'
@@ -71,6 +72,8 @@ const mapDispatchToProps = dispatch => ({
     let updatedProduct = foundProduct[0]
     updatedProduct.quantity++
     newCart = otherProducts.concat([updatedProduct])
+
+    console.log(newCart)
     dispatch(receiveCartItems(newCart))
     localStorage.cart = JSON.stringify(newCart)
   },
@@ -85,6 +88,7 @@ const mapDispatchToProps = dispatch => ({
       newCart = otherProducts
     } else {
       newCart = otherProducts.concat([updatedProduct])
+      console.log(newCart)
     }
     dispatch(receiveCartItems(newCart))
     localStorage.cart = JSON.stringify(newCart)

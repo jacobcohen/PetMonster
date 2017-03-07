@@ -3,7 +3,9 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 import { showModal } from '../../reducers/modals'
+
 import { logout } from '../../reducers/auth'
+
 
 class Nav extends React.Component {
 
@@ -32,7 +34,9 @@ class Nav extends React.Component {
                 </div>
                 <div id="nav-items" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
+
                     <li><Link to="/">Home</Link></li>
+
                     <li><Link to="products">Products</Link></li>
                     <li><Link to="cart">Cart</Link></li>
                     </ul>
@@ -58,6 +62,7 @@ class Nav extends React.Component {
     }
 }
 
+
 const mapStateToProps = state => ({
     isLoggedIn: Boolean(state.auth)
 })
@@ -68,3 +73,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav)
+

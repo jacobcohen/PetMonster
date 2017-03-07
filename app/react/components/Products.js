@@ -11,6 +11,7 @@ import {addToCart} from '../../reducers/cart'
 
 // TODO: move this function to the store. It's used in several places.
 // There's a native helper function for formatting currency
+
 function formatPrice(price) {
   let dPrice = price / 100
   let sdPrice = '' + dPrice
@@ -70,10 +71,12 @@ const mapDispatchToProps = dispatch => ({
 
     const isLoggedIn = user.email ? true : false
 
+
     // TODO:
     // No nested Promise chaining
     // axios calls belong in thunked action creators, not here
     // a lot of this logic is implemented on the back-end
+
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
       updatedProduct.quantity++
@@ -81,10 +84,12 @@ const mapDispatchToProps = dispatch => ({
         return axios.get(`api/orders/cart/${user.id}`)
         .then(res => res.data)
         .then(cart => {
+
           if (cart === null) {
             return axios.post(`api/orders/cart/${user.id}`)
             .then(res => res.data)
             .then(newOrder => {
+
               return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
                 sellingPrice: null,
                 quantity: 1,
