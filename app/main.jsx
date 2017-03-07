@@ -6,18 +6,18 @@ import {Provider} from 'react-redux'
 import axios from 'axios'
 
 import store from './store'
-import Landing from './components/Landing'
-import Products from './components/Products'
-import Product from './components/Product'
-import Users from './components/Users'
-import Cart from './components/Cart'
-import Login from './components/Login'
+import Landing from './react/containers/Landing'
+import Products from './react/components/Products'
+import Product from './react/containers/SingleProductContainer'
+import Users from './react/components/Users'
+import Cart from './react/components/Cart'
+import Login from './react/components/Login'
 
 import { receiveProducts, getProductById, fetchProductsByCategory } from './reducers/products'
 import { receiveUsers } from './reducers/users'
 import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCartItems } from './reducers/cart'
-import { getReviewsByProdId } from './reducers/reviews'
+import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
 
 
 const onAppEnter = () => {
@@ -47,7 +47,9 @@ const onAppEnter = () => {
 }
 
 const onProductEnter = (nextRouterState) => {
+  //console.log(store.getState().auth)
   const id = nextRouterState.params.productId
+  //const userId = store.getState().auth ? store.getState().auth.id : null
   store.dispatch(getProductById(id))
   store.dispatch(getReviewsByProdId(id))
 }
