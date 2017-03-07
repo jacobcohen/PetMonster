@@ -26,7 +26,6 @@ function formatPrice(price) {
   }
 }
 
-
 function getAvgReviews(reviews) {
   let avg = 0;
   reviews.list.forEach(review => {

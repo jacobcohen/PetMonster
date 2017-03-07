@@ -7,8 +7,9 @@ import axios from 'axios'
 
 import store from './store'
 import Landing from './react/containers/Landing'
+import AdminContainer from './react/containers/AdminContainer'
 import Products from './react/components/Products'
-import Product from './react/containers/SingleProductContainer'
+import SingleProductContainer from './react/containers/SingleProductContainer'
 import Users from './react/components/Users'
 import Cart from './react/components/Cart'
 import Login from './react/components/Login'
@@ -64,8 +65,6 @@ const onCartEnter = (nextRouterState) => {
   // const id = nextRouterState.params.productId
   // store.dispatch(getProductById(id))
   // console.log(nextRouterState.params)
-
-
 }
 
 render(
@@ -75,10 +74,11 @@ render(
         <IndexRedirect to="/products" />
         <Route path="/products" component={Products} onEnter={onAppEnter} />
           <Route path="/products/category/:categoryId" component={Products} onEnter={onCategoryEnter} />
-        <Route path="/products/:productId" component={Product} onEnter={onProductEnter} />
+        <Route path="/products/:productId" component={SingleProductContainer} onEnter={onProductEnter} />
         <Route path="/login" component={Login} />
         <Route path="/cart" component={Cart} onEnter={onCartEnter} />
         <Route path="/users" component={Users} />
+        <Route path="/admin" component={AdminContainer} />
       </Route>
     </Router>
   </Provider>,

@@ -2,12 +2,12 @@ import React from 'react'
 import {connect} from 'react-redux'
 
 import Modal from './Modal'
-import Login from '../components/Login'
+import Cart from '../components/Cart'
 
 import { login, signup } from 'APP/app/reducers/auth'
 import { hideModal } from '../../reducers/modals'
 
-class LoginModal extends React.Component {
+class CartModal extends React.Component {
 
     constructor(props){
         super(props)
@@ -21,9 +21,11 @@ class LoginModal extends React.Component {
 
     render(){
         return (
-            <Modal onClose={this.onClose}>\
-                <div className="login-modal">
-                    <Login />
+            <Modal
+                onClose={this.onClose}
+            >
+                <div className="cart-modal">
+                    <Cart />
                 </div>
             </Modal>
         )
@@ -39,4 +41,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps
-)(LoginModal)
+)(CartModal)
