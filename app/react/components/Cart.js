@@ -44,7 +44,7 @@ export const Cart = (props) => (
               item={item}
               product={item.product}
               handleSubmit={props.updateCart}
-              userId={props.user.id}
+              userId={props.user && props.user.id}
           />
         </div>
       ))}

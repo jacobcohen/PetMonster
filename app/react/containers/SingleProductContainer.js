@@ -27,10 +27,13 @@ function formatPrice(price) {
 
 export const Product = (props) => {
   return (
-      props.product && props.user &&
+      props.product &&
       <div className="container">
         <h3>{props.product && props.product.name}</h3>
-        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.user.id} />
+        <ProductButton
+          product={props.product}
+          handleSubmit={props.addToCart}
+          userId={props.user && props.user.id} />
         <hr />
         <p>{props.product && props.product.description}</p>
         <hr />

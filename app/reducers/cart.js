@@ -62,8 +62,7 @@ export const getCartItems = userId => {
     axios.get(`/api/orders/cart/${userId}`)
     .then(response => {
       const cart = response.data
-      const items = cart.products
-      console.log(JSON.parse(localStorage.cart))
+      const items = cart ? cart.products : JSON.parse(localStorage.cart)
 
       let repackagedTransactions = items.map(item => {
         let transactionObj = {

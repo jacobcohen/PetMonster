@@ -38,8 +38,16 @@ class Nav extends React.Component {
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                     <li>
-
-                    { this.props.isLoggedIn ?
+                    { 
+                        this.props.isAdmin &&
+                        <Link to="/admin">
+                            <span>Admin</span>
+                        </Link>
+                    }
+                    </li>
+                    <li>
+                    { 
+                        this.props.isLoggedIn ?
                         <a href="#" onClick={this.props.logout}>
                             <span className="glyphicon glyphicon-log-out" />&nbsp;&nbsp;Logout
                         </a>
@@ -48,7 +56,6 @@ class Nav extends React.Component {
                             <span className="glyphicon glyphicon-log-in" />&nbsp;&nbsp;Login / Signup
                         </a>
                     }
-
                     </li>
                     </ul>
                 </div>
@@ -59,7 +66,8 @@ class Nav extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    isLoggedIn: Boolean(state.auth)
+    isLoggedIn: Boolean(state.auth),
+    isAdmin: Boolean(state.auth ? state.auth.isAdmin : false)
 })
 
 const mapDispatchToProps = dispatch => ({
