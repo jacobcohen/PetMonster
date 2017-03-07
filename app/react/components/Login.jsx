@@ -1,11 +1,10 @@
 import React from 'react'
 
 export const Login = ({ login, signup }) => (
-  <div>
+  <div id='login-modal'>
     <h3>Login</h3>
-    <form onSubmit={evt => {
+    <form onSubmit={ evt => {
       evt.preventDefault()
-      console.log(evt.target.email.value, evt.target.password.value)
       login(evt.target.email.value, evt.target.password.value)
     } }>
       <input name="email" type="email" placeholder="email" />
