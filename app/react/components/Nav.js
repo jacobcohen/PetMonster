@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 
 import { showModal } from '../../reducers/modals'
 
+import { logout } from '../../reducers/auth'
+
+
 class Nav extends React.Component {
 
     constructor(props) {
@@ -12,7 +15,6 @@ class Nav extends React.Component {
     }
 
     showLogin(event){
-        console.log(event)
         event.preventDefault()
         this.props.showModal('LOGIN')
     }    
@@ -32,15 +34,25 @@ class Nav extends React.Component {
                 </div>
                 <div id="nav-items" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
+
+                    <li><Link to="/">Home</Link></li>
+
                     <li><Link to="products">Products</Link></li>
                     <li><Link to="cart">Cart</Link></li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                     <li>
+
+                    { this.props.isLoggedIn ?
+                        <a href="#" onClick={this.props.logout}>
+                            <span className="glyphicon glyphicon-log-out" />&nbsp;&nbsp;Logout
+                        </a>
+                        :
                         <a href="#" onClick={this.showLogin}>
                             <span className="glyphicon glyphicon-log-in" />&nbsp;&nbsp;Login / Signup
                         </a>
+                    }
+
                     </li>
                     </ul>
                 </div>
@@ -50,8 +62,15 @@ class Nav extends React.Component {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    showModal: modalType => dispatch(showModal(modalType))
+
+const mapStateToProps = state => ({
+    isLoggedIn: Boolean(state.auth)
 })
 
-export default connect(null, mapDispatchToProps)(Nav)
+const mapDispatchToProps = dispatch => ({
+    showModal: modalType => dispatch(showModal(modalType)),
+    logout: () => dispatch(logout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav)
+
