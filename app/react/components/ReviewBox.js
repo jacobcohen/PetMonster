@@ -8,7 +8,6 @@ class ReviewBox extends Component {
   constructor(props){
 
     super(props)
-    console.log("props is ",props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
       user_id: null,
@@ -18,7 +17,6 @@ class ReviewBox extends Component {
   }
 
   componentDidMount(){
-    console.log()
     this.setState({
       prod_id: this.props.product.id
     })
@@ -30,7 +28,6 @@ class ReviewBox extends Component {
       user_id: nextProps.auth ? nextProps.auth.id : null,
       validUser: nextProps.reviews ? nextProps.reviews.validUser : true
     })
-    console.log(nextProps)
   }
 
 
@@ -40,7 +37,6 @@ class ReviewBox extends Component {
     let description = evt.target.description.value
     let userId = this.state.user_id
     let prodId = this.state.prod_id
-    console.log('user id is', userId)
     this.props.addTheReview(userId, prodId, rating, description)
     this.setState({
       notValidUser: true

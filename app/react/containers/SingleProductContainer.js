@@ -34,7 +34,6 @@ function getAvgReviews(reviews) {
   });
   avg /= reviews.list.length;
 
-  console.log(avg)
   if(isNaN(avg))
     return "Product has no reviews yet!"
   else
