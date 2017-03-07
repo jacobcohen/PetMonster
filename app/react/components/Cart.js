@@ -16,7 +16,7 @@ export const Cart = (props) => {
   <div>
     <h3>Cart</h3>
     <div>
-      {}
+      total: {props.cart && props.cart.total}
     </div>
     <div>
       {props.cart && props.cart.map(item => (

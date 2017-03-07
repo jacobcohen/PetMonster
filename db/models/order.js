@@ -69,9 +69,7 @@ const Order = db.define('orders', {
                     if (quantity === 0){
                         return this.removeProduct(foundProducts[0])
                     } else {
-                        foundProducts[0].transactions.quantity = quantity
-                        console.log('>>>>>seq: after quantity update', foundProducts[0].transactions.dataValues)
-                        return foundProducts[0].transactions.save()
+                        return foundProducts[0].transactions.updateAttributes({quantity: quantity})
                     }
                 }
             })
