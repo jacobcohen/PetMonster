@@ -68,11 +68,19 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         include: [Product]
       })
       .then(foundOrder => {
-        console.log('HI FRIEND', foundOrder.products[0].transactions)
+        console.log('===exp: cart transactions before change: ', foundOrder.products[0].transactions.dataValues)
         return foundOrder.updateCart(productId, quantity)
       })
       .then(updatedCart => {
-        console.log('HEY PAL', updatedCart.products[0].transactions)
+        console.log('===exp: cart transactions after change: ', updatedCart.products[0].transactions.dataValues)
+        return Order
+          .scope('cart')
+          .findOne({
+            where: { user_id: userId },
+            include: [Product]
+          })
+      })
+      .then((updatedCart) => {
         res.json(updatedCart)
       })
       .catch(next)
@@ -95,7 +103,18 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         include: [Product]
       })
       .then(foundOrder => foundOrder.addToCart(productId, quantity))
-      .then(updatedCart => res.json(updatedCart))
+      .then(updatedCart => {
+        console.log('===exp: cart transactions after change: ', updatedCart.products[0].transactions.dataValues)
+        return Order
+          .scope('cart')
+          .findOne({
+            where: { user_id: userId },
+            include: [Product]
+          })
+      })
+      .then((updatedCart) => {
+        res.json(updatedCart)
+      })
       .catch(next)
     })
   .put('/cart/:userId/emptyCart', mustBeLoggedIn, (req, res, next) => //empties current cart

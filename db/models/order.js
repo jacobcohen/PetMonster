@@ -17,6 +17,7 @@ function getTotal(order) {
         })
         .then(total => {
             order.total = total
+            return order
         })
     }
 }
@@ -61,7 +62,7 @@ const Order = db.define('orders', {
                 where: { id: productId }
             })
             .then(foundProducts => {
-                console.log('its over here', foundProducts, quantity)
+                console.log('>>>>>>seq: trying to update to', quantity, '\n>>>>>>seq: foundProduct is', foundProducts[0].transactions.dataValues)
                 if (!foundProducts.length) {
                     return this.addProduct(productId, {quantity})
                 } else {
@@ -69,7 +70,7 @@ const Order = db.define('orders', {
                         return this.removeProduct(foundProducts[0])
                     } else {
                         foundProducts[0].transactions.quantity = quantity
-                        console.log('boop', foundProducts[0].transactions)
+                        console.log('>>>>>seq: after quantity update', foundProducts[0].transactions.dataValues)
                         return foundProducts[0].transactions.save()
                     }
                 }
@@ -79,6 +80,9 @@ const Order = db.define('orders', {
                  * @return the updated transaction (NOT PRODUCT)
                  *         to be consistent with Sequelize addAssociation.
                 */
+                // console.log('>>>>>>>seq:', newOrUpdatedTransaction.dataValues)
+                // console.log('>>>>>in order, transaction is:', this.products.filter(product => product.id === productId).map(product => product.transactions.dataValues))
+                // TODO: this doesn't save transaction changes on the order instance.
                 return this.save()
             })
         },
