@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import numeral from 'numeral'
 
 import { getCartItems, receiveCartItems } from '../../reducers/cart'
 import { CartProductButton } from './CartProductButton'
@@ -7,30 +8,30 @@ import { updateCart } from '../../reducers/cart'
 
 import axios from 'axios'
 
-function formatPrice(price) {
-  let dPrice = price / 100
-  let sdPrice = '' + dPrice
+// function formatPrice(price) {
+//   let dPrice = price / 100
+//   let sdPrice = '' + dPrice
 
-  if (dPrice > 1000000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
-  } else if (dPrice > 100000) {
-    sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
-  } else if (dPrice > 10000) {
-    sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
-  } else if (dPrice > 1000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
-  }
+//   if (dPrice > 1000000) {
+//     sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
+//   } else if (dPrice > 100000) {
+//     sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
+//   } else if (dPrice > 10000) {
+//     sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
+//   } else if (dPrice > 1000) {
+//     sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
+//   }
 
-  if (dPrice % 1 === 0) {
-    return sdPrice + '.00'
-  } else {
-    return sdPrice
-  }
-}
+//   if (dPrice % 1 === 0) {
+//     return sdPrice + '.00'
+//   } else {
+//     return sdPrice
+//   }
+// }
 
 function calcAndFormat(q, p) {
-  let newP = q * p
-  return formatPrice(newP)
+  let newP = (q * p) / 100
+  return numeral(newP).format('$0,0.00')
 }
 
 export const Cart = (props) => (
@@ -46,11 +47,17 @@ export const Cart = (props) => (
           <CartProductButton
               item={item}
               product={item.product}
+              cart={props.cart}
               handleSubmit={props.updateCart}
-              userId={props.user.id}
+              userId={props.user && props.user.id}
+              format={calcAndFormat}
           />
         </div>
       ))}
+    </div>
+    <br />
+    <div>
+      {props.cart.length ? <button type="button" className="btn btn-success">Place Order</button> : <p>There are no items in your cart :(</p> }
     </div>
   </div>
 )
@@ -61,54 +68,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateCart: function(productId, quantity, userId){
-    dispatch(updateCart(+productId, +quantity, +userId))
-  },
-  addProdToCart: (product, user, currentCart) => {
-    let foundProduct = currentCart.filter(item => item.product_id === product.id)
-    let otherProducts = currentCart.filter(item => item.product_id !== product.id)
-    let newCart
-
-    let updatedProduct = foundProduct[0]
-    updatedProduct.quantity++
-    newCart = otherProducts.concat([updatedProduct])
-
-    console.log(newCart)
-    dispatch(receiveCartItems(newCart))
-    localStorage.cart = JSON.stringify(newCart)
-  },
-  removeProdFromCart: (product, user, currentCart) => {
-    let foundProduct = currentCart.filter(item => item.product_id === product.id)
-    let otherProducts = currentCart.filter(item => item.product_id !== product.id)
-    let newCart
-
-    let updatedProduct = foundProduct[0]
-    updatedProduct.quantity--
-    if (updatedProduct.quantity === 0) {
-      newCart = otherProducts
-    } else {
-      newCart = otherProducts.concat([updatedProduct])
-      console.log(newCart)
-    }
-    dispatch(receiveCartItems(newCart))
-    localStorage.cart = JSON.stringify(newCart)
+  updateCart: function(productId, quantity, userId, cart, product){
+    dispatch(updateCart(productId, quantity, userId, cart, product))
   }
 })
-
-// const mapDispatchToProps = dispatch => ({
-//   getCart: (user) => {
-//     const isLoggedIn = user.email ? true : false
-
-//     if (isLoggedIn) {
-//       getCartItems(user.id)
-//     } else {
-//       let cart = localStorage.cart
-//       let jsCart = JSON.parse(cart)
-
-
-//     }
-
-//   }
-// })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)

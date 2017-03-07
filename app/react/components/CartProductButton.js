@@ -7,6 +7,8 @@ export const CartProductButton = props => {
     const product = props.product
     const userId = props.userId
     const handleSubmit = props.handleSubmit
+    const cart = props.cart
+    const format = props.format
 
     return (
         <div id='product-button'>
@@ -20,15 +22,15 @@ export const CartProductButton = props => {
                 <br />
                 Quantity: { item.quantity }
                 <br />
-                <p>${ product.price / 100 }</p>
+                <p>{ format(item.quantity, product.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId)
+                    handleSubmit(product.id, event.target.quantity.value, userId, cart, product)
                 }}>
                     #: <input type="text" name="quantity" maxLength="3" size="3" />
-                    <input 
-                        type="submit" 
-                        value="Update Quantity" 
+                    <input
+                        type="submit"
+                        value="Update Quantity"
                         className="btn btn-secondary"
                     />
                 </form>
