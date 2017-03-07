@@ -1,11 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-import { getCartItems, receiveCartItems } from '../../reducers/cart'
+import { getCartItems, receiveCartItems, updateCart } from '../../reducers/cart'
 import { CartProductButton } from './CartProductButton'
-import { updateCart } from '../../reducers/cart'
-
-import axios from 'axios'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -35,13 +32,10 @@ function calcAndFormat(q, p) {
 
 export const Cart = (props) => (
   <div>
-    <h3>Cart</h3>
-    <div>
-      {}
-    </div>
+    <h2>Cart</h2>
     <div>
       {props.cart && props.cart.map(item => (
-        <div key={item.product_id}>
+        <div key={item.product_id} className="row">
           <h3>{item.product.name}</h3>
           <CartProductButton
               item={item}

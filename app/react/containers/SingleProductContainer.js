@@ -39,8 +39,10 @@ export const Product = (props) => {
   return (
       props.product && 
       <div className="container">
-        <h3>{props.product && props.product.name}</h3>
-        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.auth && props.auth.id} />
+        <ProductButton
+          product={props.product}
+          handleSubmit={props.addToCart}
+          userId={props.auth && props.auth.id} />
         <hr />
         <h1>Average review score: { getAvgReviews(props.reviews) } out of 5! </h1>
         <p>{props.product && props.product.description}</p>

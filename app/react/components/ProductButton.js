@@ -8,28 +8,33 @@ export const ProductButton = props => {
     const handleSubmit = props.handleSubmit
 
     return (
-        <div id='product-button'>
+        <div id="product-button">
             <Link to={`/products/${product.id}`}>
-            <div className="imgthumb img-responsive">
-                <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
-            </div>
+              <div
+                  style={{
+                      backgroundImage: `url(${product.imageURLs ? product.imageURLs[0] : ''})`,
+                      backgroundPosition: 'center',
+                      width: 300,
+                      height: 300
+                  }}
+              />
             </Link>
             <div className="caption">
-                { product.name }
-                <br />
-                Stock: { product.stock }
-                <br />
+                <h4>{ product.name }</h4>
+                <p>Stock: { product.stock }</p>
                 <p>${ product.price / 100 }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
                     handleSubmit(product.id, event.target.quantity.value, userId)
                 }}>
-                    #: <input type="text" name="quantity" maxLength="3" size="3" />
-                    <input 
-                        type="submit" 
-                        value="Add To Cart" 
-                        className="btn btn-secondary"
-                    />
+                    Quantity:
+                    <input type="text" name="quantity" maxLength="3" size="3" />
+                    <button
+                        type="submit"
+                        value="Add"
+                        className="btn btn-primary">
+                        Add
+                    </button>
                 </form>
             </div>
         </div>

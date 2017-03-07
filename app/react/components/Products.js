@@ -46,8 +46,13 @@ export const Products = (props) => (
                       backgroundPosition: 'center',
                       width: 300,
                       height: 300
-                  }}
-              />
+                  }}>
+                  <div className="landing-image-overlay">
+                    <h4>{product.name}</h4>
+                    <p>Stock: { product.stock }</p>
+                    <p>${ product.price / 100 }</p>
+                  </div>
+               </div>
             </Link>
             )
           )

@@ -6,8 +6,8 @@ chai.use(chaiAsPromised)
 const expect = chai.expect
 
 const db = require('APP/db')
-const Product = require('./product')
-const User = require('./user')
+const Product = require('../product')
+const User = require('../user')
 
 describe('Product', () => {
   before('wait for the db', () => db.didSync)

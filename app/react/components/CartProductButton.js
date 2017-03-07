@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 
+// make this smart, and control the form input button
 export const CartProductButton = props => {
 
     const item = props.item
@@ -9,7 +10,7 @@ export const CartProductButton = props => {
     const handleSubmit = props.handleSubmit
 
     return (
-        <div className="cart-item row">
+        <div className={`${props.isModal ? 'cart-modal-item' : 'cart-item'}`}>
             <div className="cart-picture-panel">
                 <Link to={`/products/${product.id}`}>
                     <div className="imgthumb img-responsive">
@@ -29,7 +30,7 @@ export const CartProductButton = props => {
                     event.preventDefault()
                     handleSubmit(product.id, event.target.quantity.value, userId)
                 }}>
-                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" value={ item.quantity } />
+                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" defaultValue={ item.quantity } />
                     <input
                         type="submit"
                         value="Update"
