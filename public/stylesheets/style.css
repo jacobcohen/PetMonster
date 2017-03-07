@@ -48,6 +48,19 @@ a {
     width: 150px;
 }
 
+img {
+    display: block;
+    max-width:160px;
+    max-height: 160px;
+    width: auto;
+    height: auto;
+}
+
+.imgthumb {
+    width: 160px;
+    height: 160px;
+}
+
 sidebar li {
     list-style-type: none;
     padding: 5px;

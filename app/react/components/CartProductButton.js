@@ -9,7 +9,7 @@ export const CartProductButton = props => {
     const handleSubmit = props.handleSubmit
 
     return (
-        <div className='cart-item row'>
+        <div className="cart-item row">
             <div className="cart-picture-panel">
                 <Link to={`/products/${product.id}`}>
                     <div className="imgthumb img-responsive">

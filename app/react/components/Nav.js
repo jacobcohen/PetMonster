@@ -15,7 +15,7 @@ class Nav extends React.Component {
     showLogin(event){
         event.preventDefault()
         this.props.showModal('LOGIN')
-    }    
+    }
 
     render(){
          return (
@@ -32,13 +32,12 @@ class Nav extends React.Component {
                 </div>
                 <div id="nav-items" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
-                    <li><Link to="/">Home</Link></li>
                     <li><Link to="products">Products</Link></li>
                     <li><Link to="cart">Cart</Link></li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                     <li>
-                    { 
+                    {
                         this.props.isAdmin &&
                         <Link to="/admin">
                             <span>Admin</span>
@@ -46,7 +45,7 @@ class Nav extends React.Component {
                     }
                     </li>
                     <li>
-                    { 
+                    {
                         this.props.isLoggedIn ?
                         <a href="#" onClick={this.props.logout}>
                             <span className="glyphicon glyphicon-log-out" />&nbsp;&nbsp;Logout

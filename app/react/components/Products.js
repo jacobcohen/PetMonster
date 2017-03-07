@@ -5,9 +5,7 @@ import axios from 'axios'
 
 import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
-
-import { receiveCartItems } from '../../reducers/cart'
-import {addToCart} from '../../reducers/cart'
+import { receiveCartItems, addToCart } from '../../reducers/cart'
 
 // TODO: move this function to the store. It's used in several places.
 // There's a native helper function for formatting currency
@@ -55,8 +53,9 @@ export const Products = (props) => (
           )
         }
     </div>
+
   </div>
-)
+  )
 
 const mapStateToProps = state => ({
   products: state.products.list,
@@ -80,6 +79,8 @@ const mapDispatchToProps = dispatch => ({
     // No nested Promise chaining
     // axios calls belong in thunked action creators, not here
     // a lot of this logic is implemented on the back-end
+
+
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
       updatedProduct.quantity++
