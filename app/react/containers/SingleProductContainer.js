@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Reviews} from '../components/Reviews.js'
-import ReviewBox from '../components/ReviewBox.js'
+import {Reviews} from '../../components/Reviews.js'
+import ReviewBox from '../../components/ReviewBox.js'
 
 function formatPrice(price) {
   let dPrice = price / 100
