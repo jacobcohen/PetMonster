@@ -1,12 +1,16 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { Link } from 'react-router'
-
-import Sidebar from './Sidebar'
 import axios from 'axios'
 
-import { receiveCartItems } from '../../reducers/cart'
+import Sidebar from './Sidebar'
+import { ProductButton } from './ProductButton'
 
+import { receiveCartItems } from '../../reducers/cart'
+import {addToCart} from '../../reducers/cart'
+
+// TODO: move this function to the store. It's used in several places.
+// There's a native helper function for formatting currency
 function formatPrice(price) {
   let dPrice = price / 100
   let sdPrice = '' + dPrice
@@ -38,18 +42,7 @@ export const Products = (props) => (
           props.products && props.products.map(product => (
             <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
               <div className="productbox">
-                <Link to={`/products/${product.id}`}>
-                  <div className="imgthumb img-responsive">
-                    <img src={product.imageURLs[0]} />
-                  </div>
-                  <div className="caption">
-                    {product.name}
-                  </div>
-                </Link>
-                <div className="caption">
-                  <Link to={`/products/${product.id}`}>${formatPrice(product.price)}</Link>
-                  <button type="button" className="btn btn-secondary" key={product.id} onClick={() => props.addProdToCart(product, props.user, props.cart)}>+</button>
-                </div>
+                  <ProductButton product={product} handleSubmit={props.addToCart} userId={props.user.id}/>
               </div>
             </div>
             )
@@ -66,6 +59,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  addToCart: function(productId, quantity, userId){
+    dispatch(addToCart(+productId, +quantity, +userId))
+  }
+/*
   addProdToCart: (product, user, currentCart) => {
     let foundProduct = currentCart.filter(item => item.product_id === product.id)
     let otherProducts = currentCart.filter(item => item.product_id !== product.id)
@@ -73,8 +70,10 @@ const mapDispatchToProps = dispatch => ({
 
     const isLoggedIn = user.email ? true : false
 
-
-
+    // TODO:
+    // No nested Promise chaining
+    // axios calls belong in thunked action creators, not here
+    // a lot of this logic is implemented on the back-end
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]
       updatedProduct.quantity++
@@ -82,12 +81,10 @@ const mapDispatchToProps = dispatch => ({
         return axios.get(`api/orders/cart/${user.id}`)
         .then(res => res.data)
         .then(cart => {
-          // console.log(cart)
           if (cart === null) {
             return axios.post(`api/orders/cart/${user.id}`)
             .then(res => res.data)
             .then(newOrder => {
-              // console.log(newOrder)
               return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
                 sellingPrice: null,
                 quantity: 1,
@@ -101,11 +98,9 @@ const mapDispatchToProps = dispatch => ({
               })
             })
           } else {
-            console.log('here')
             return axios.get(`api/transactions/${cart.id}/${product.id}`)
             .then(res => res.data)
             .then(transaction => {
-              console.log(transaction.quantity)
               transaction.quantity++
               return axios.put(`api/transactions/${cart.id}/${product.id}`, transaction)
               .then(() => {
@@ -122,7 +117,6 @@ const mapDispatchToProps = dispatch => ({
         localStorage.cart = JSON.stringify(newCart)
       }
     } else {
-      // console.log('reached')
       let item = {
         product: product,
         sellingPrice: null,
@@ -134,12 +128,10 @@ const mapDispatchToProps = dispatch => ({
         return axios.get(`api/orders/cart/${user.id}`)
         .then(res => res.data)
         .then(cart => {
-          // console.log(cart)
           if (cart === null) {
             return axios.post(`api/orders/cart/${user.id}`)
             .then(res => res.data)
             .then(newOrder => {
-              // console.log(newOrder)
               return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
                 sellingPrice: null,
                 quantity: 1,
@@ -153,7 +145,6 @@ const mapDispatchToProps = dispatch => ({
               })
             })
           } else {
-            // console.log('reached')
             return axios.post(`api/transactions/${cart.id}/${product.id}`, {
               sellingPrice: null,
               quantity: 1,
@@ -161,7 +152,6 @@ const mapDispatchToProps = dispatch => ({
               product_id: product.id
             })
             .then(() => {
-              // console.log('reached')
               newCart = otherProducts.concat([item])
               dispatch(receiveCartItems(newCart))
               localStorage.cart = JSON.stringify(newCart)
@@ -175,6 +165,7 @@ const mapDispatchToProps = dispatch => ({
       }
     }
   }
+  */
 })
 
 // if logged in

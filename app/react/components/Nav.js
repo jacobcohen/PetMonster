@@ -13,13 +13,11 @@ class Nav extends React.Component {
     }
 
     showLogin(event){
-        console.log(event)
         event.preventDefault()
         this.props.showModal('LOGIN')
     }    
 
     render(){
-        console.log('bool', this.props.isLoggedIn)
          return (
             <div className="navbar navbar-fixed-top navbar-inverse" role="navigation">
                 <div className="container">
@@ -34,7 +32,7 @@ class Nav extends React.Component {
                 </div>
                 <div id="nav-items" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
+                    <li><Link to="/">Home</Link></li>
                     <li><Link to="products">Products</Link></li>
                     <li><Link to="cart">Cart</Link></li>
                     </ul>
