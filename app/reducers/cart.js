@@ -2,13 +2,9 @@ import axios from 'axios'
 
 const RECEIVE_CART_ITEMS = 'RECEIVE_CART_ITEMS'
 const ADD_CART_ITEM = 'ADD_CART_ITEM'
-const INC_CART_ITEM_QUANT = 'INC_CART_ITEM_QUANT'
-const DEC_CART_ITEM_QUANT = 'DEC_CART_ITEM_QUANT'
-
-const fakeCartItems = []
 
 const initialCartState = {
-  list: fakeCartItems
+  list: []
 }
 
 const reducer = (state = initialCartState, action) => {
@@ -20,12 +16,6 @@ const reducer = (state = initialCartState, action) => {
       break
     case ADD_CART_ITEM:
       newState.list = action.item.concat(newState.list)
-      break
-    case INC_CART_ITEM_QUANT:
-      newState.list = action.item
-      break
-    case DEC_CART_ITEM_QUANT:
-      newState.list = action.item
       break
     default:
       return state
@@ -92,6 +82,65 @@ export const getCartItems = userId => {
       })
       dispatch(receiveCartItems(repackagedTransactions))
     })
+  }
+}
+
+export const updateCart = (productId, quantity, userId) => {
+  return dispatch => {
+    axios.put(`/api/orders/cart/${userId}/update`, {
+      prodId: productId,
+      quantity: quantity
+    })
+    .then(response => {
+      let items = response.data.products
+      let repackagedTransactions = items.map(item => {
+        return {
+          order_id: item.transactions.order_id,
+          product: {
+            description: item.description,
+            id: item.id,
+            imageURLs: item.imageURLs,
+            name: item.name,
+            price: item.price,
+            stock: item.stock
+          },
+          product_id: item.transactions.product_id,
+          quantity: item.transactions.quantity,
+          sellingPrice: item.transactions.sellingPrice
+        }
+      })
+      dispatch(receiveCartItems(repackagedTransactions))
+    })
+  }
+}
+
+export const addToCart = (productId, quantity, userId) => {
+  return dispatch => {
+    return axios.put(`/api/orders/cart/${userId}/add`, {
+      prodId: productId,
+      quantity: quantity
+    })
+    .then(response => {
+      let items = response.data.products
+      let repackagedTransactions = items.map(item => {
+        return {
+          order_id: item.transactions.order_id,
+          product: {
+            description: item.description,
+            id: item.id,
+            imageURLs: item.imageURLs,
+            name: item.name,
+            price: item.price,
+            stock: item.stock
+          },
+          product_id: item.transactions.product_id,
+          quantity: item.transactions.quantity,
+          sellingPrice: item.transactions.sellingPrice
+        }
+      })
+      return dispatch(receiveCartItems(repackagedTransactions))
+    })
+    .catch(console.error)
   }
 }
 

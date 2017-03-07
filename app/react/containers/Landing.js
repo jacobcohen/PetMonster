@@ -32,7 +32,8 @@ const Footer = () => (
 
 
 const mapStateToProps = state => ({
-  user: state.auth
+  user: state.auth,
+  cart: state.cart
 })
 
 export default connect(mapStateToProps)(Landing)

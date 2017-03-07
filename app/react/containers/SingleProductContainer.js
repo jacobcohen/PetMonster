@@ -2,6 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Reviews} from '../components/Reviews.js'
 import ReviewBox from '../components/ReviewBox.js'
+import {ProductButton} from '../components/ProductButton'
+import {addToCart} from '../../reducers/cart'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -33,26 +35,24 @@ function getAvgReviews(reviews) {
   return avg
 }
 
-
-export const Product = (props) => (
-  <div className="container">
-    <h3>{props.product && props.product.name}</h3>
-    <img src={props.product.imageURLs && props.product.imageURLs[0]} height="320" width="320" />
-    <div className="caption">
-      <h1>Average review score: { getAvgReviews(props.reviews) } out of 5! </h1>
-      <h4>${props.product && formatPrice(props.product.price)}</h4>
-      <button type="button" className="btn btn-secondary">+</button>
-    </div>
-    <hr />
-    <p>{props.product && props.product.description}</p>
-    <hr />
-    <h3>Add a review:</h3>
-    <ReviewBox />
-    <hr />
-    <h3>Reviews</h3>
-    <Reviews reviews={props.reviews} users={props.users}/>
-  </div>
-)
+export const Product = (props) => {
+  return (
+      props.product &&
+      <div className="container">
+        <h3>{props.product && props.product.name}</h3>
+        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.auth && props.auth.id} />
+        <hr />
+        <h1>Average review score: { getAvgReviews(props.reviews) } out of 5! </h1>
+        <p>{props.product && props.product.description}</p>
+        <hr />
+        <h3>Add a review:</h3>
+        <ReviewBox />
+        <hr />
+        <h3>Reviews</h3>
+        <Reviews reviews={props.reviews} users={props.users}/>
+      </div>
+  )
+}
 
 const mapStateToProps = state => ({
   auth: state.auth,
@@ -63,5 +63,10 @@ const mapStateToProps = state => ({
   validReviewer: state.reviews.validReviewer
 })
 
+const mapDispatchToProps = dispatch => ({
+  addToCart: function(productId, quantity, userId){
+    dispatch(addToCart(productId, quantity, userId))
+  }
+})
 
-export default connect(mapStateToProps)(Product)
+export default connect(mapStateToProps, mapDispatchToProps)(Product)

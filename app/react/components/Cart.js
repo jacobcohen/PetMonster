@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { Link } from 'react-router'
+
 import { getCartItems, receiveCartItems } from '../../reducers/cart'
+import { CartProductButton } from './CartProductButton'
+import { updateCart } from '../../reducers/cart'
 
 import axios from 'axios'
 
@@ -41,11 +43,12 @@ export const Cart = (props) => (
       {props.cart && props.cart.map(item => (
         <div key={item.product_id}>
           <h3>{item.product.name}</h3>
-          <img src={item.product.imageURLs[0]} height="80" width="80" />
-          <p>quantity: {item.quantity}</p>
-          <p>${calcAndFormat(+item.quantity, +item.product.price)}</p>
-          <button type="button" className="btn btn-secondary" onClick={() => props.addProdToCart(item.product, props.user, props.cart)}>+</button>
-          <button type="button" className="btn btn-secondary" onClick={() => props.removeProdFromCart(item.product, props.user, props.cart)}>-</button>
+          <CartProductButton
+              item={item}
+              product={item.product}
+              handleSubmit={props.updateCart}
+              userId={props.user.id}
+          />
         </div>
       ))}
     </div>
@@ -58,6 +61,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  updateCart: function(productId, quantity, userId){
+    dispatch(updateCart(+productId, +quantity, +userId))
+  },
   addProdToCart: (product, user, currentCart) => {
     let foundProduct = currentCart.filter(item => item.product_id === product.id)
     let otherProducts = currentCart.filter(item => item.product_id !== product.id)
@@ -66,6 +72,7 @@ const mapDispatchToProps = dispatch => ({
     let updatedProduct = foundProduct[0]
     updatedProduct.quantity++
     newCart = otherProducts.concat([updatedProduct])
+
     console.log(newCart)
     dispatch(receiveCartItems(newCart))
     localStorage.cart = JSON.stringify(newCart)
