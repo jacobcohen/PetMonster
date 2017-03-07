@@ -25,9 +25,9 @@ export const ProductButton = props => {
                     handleSubmit(product.id, event.target.quantity.value, userId)
                 }}>
                     #: <input type="text" name="quantity" maxLength="3" size="3" />
-                    <input 
-                        type="submit" 
-                        value="Add To Cart" 
+                    <input
+                        type="submit"
+                        value="Add To Cart"
                         className="btn btn-secondary"
                     />
                 </form>
@@ -35,3 +35,4 @@ export const ProductButton = props => {
         </div>
     )
 }
+

@@ -1,19 +1,21 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Reviews} from '../components/Reviews.js'
-import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
+import {AdminProduct} from '../components/AdminProducts'
+import axios from 'axios'
+import {updateProd} from  '../../reducers/products'
 
 export const AdminContainer = (props) => {
-  return (      
+  return (
         <div id="admin-container">
         {
-            props.products.length && 
+            props.products.length &&
             props.products.map(product => (
-                <ProductButton
+                <AdminProduct
                     key={product.id}
                     product={product}
-                    handleSubmit={props.addToCart}
+                    handleSubmit={props.updateTheProd}
                     userId={props.user.id}
                     isAdmin={props.user.isAdmin} />
                 )
@@ -29,9 +31,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addToCart: function(productId, quantity, userId){
-    dispatch(addToCart(productId, quantity, userId))
+  updateTheProd: (prodId, newStock, newPrice) => {
+    return dispatch(updateProd(prodId, newStock, newPrice))
   }
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminContainer)

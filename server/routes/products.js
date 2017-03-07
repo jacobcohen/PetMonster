@@ -24,7 +24,15 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         next()
       }
     })
-    .catch(next))
+      .catch(next))
+  .put('/product/:productId/newStock/:newStock/price/:newPrice', (req, res, next) => {
+    req.product.update({stock: req.params.newStock, price: req.params.newPrice})
+      .then(result => {
+        console.log(result)
+        res.status(201).send(result)
+      })
+      .catch(next)
+})
   .get('/:productId', (req, res, next) => { //get specific product. anyone can do it
     res.send(req.product)
   })

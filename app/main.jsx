@@ -18,7 +18,7 @@ import { receiveProducts, getProductById, fetchProductsByCategory } from './redu
 import { receiveUsers } from './reducers/users'
 import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCartItems } from './reducers/cart'
-import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
+import { getReviewsByProdId } from './reducers/reviews'
 
 
 const onAppEnter = () => {

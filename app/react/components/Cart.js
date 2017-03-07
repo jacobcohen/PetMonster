@@ -73,7 +73,6 @@ const mapDispatchToProps = dispatch => ({
     updatedProduct.quantity++
     newCart = otherProducts.concat([updatedProduct])
 
-    console.log(newCart)
     dispatch(receiveCartItems(newCart))
     localStorage.cart = JSON.stringify(newCart)
   },
@@ -88,7 +87,6 @@ const mapDispatchToProps = dispatch => ({
       newCart = otherProducts
     } else {
       newCart = otherProducts.concat([updatedProduct])
-      console.log(newCart)
     }
     dispatch(receiveCartItems(newCart))
     localStorage.cart = JSON.stringify(newCart)

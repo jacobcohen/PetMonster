@@ -86,10 +86,14 @@ const seedTransactions = () => db.Promise.map([
 ], transaction => db.model('transactions').create(transaction))
 
 const seedCategories = () => db.Promise.map([
-  {name: "Scary"},
   {name: "Spooky"},
-  {name: "Pocket"},
-  {name: "Energy Drink"}
+  {name: "Tiny"},
+  {name: "Huge"},
+  {name: "Sticky"},
+  {name: "Swarm"},
+  {name: "Organic"},
+  {name: "Robotic"}
+
 ], category => db.model('categories').create(category))
 
 db.didSync
