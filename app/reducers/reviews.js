@@ -1,11 +1,13 @@
 import axios from 'axios'
 
 const RECEIVE_REVIEWS = 'RECEIVE_REVIEWS'
+const CHECK_VALID_REVIEWER = 'CHECK_VALID_REVIEWER'
 
-const fakeReviews = []
+const fakeReviews = [];
 
 const initialProductsState = {
-  list: fakeReviews
+  list: fakeReviews,
+  validReviewer: true
 }
 
 const reducer = (state = initialProductsState, action) => {
@@ -15,6 +17,11 @@ const reducer = (state = initialProductsState, action) => {
     case RECEIVE_REVIEWS:
       newState.list = action.reviews
       break
+
+    case CHECK_VALID_REVIEWER:
+      newState.validReviewer = action.validReviewer
+      break
+
     default:
       return state
   }
@@ -23,6 +30,9 @@ const reducer = (state = initialProductsState, action) => {
 
 export const receiveReviews = reviews => ({
   type: RECEIVE_REVIEWS, reviews
+})
+export const checkValidReviewer = validReviewer => ({
+  type: CHECK_VALID_REVIEWER, validReviewer
 })
 
 
@@ -34,5 +44,16 @@ export const getReviewsByProdId = id => {
       })
   }
 }
+
+// export const getValidReviewByUserAndProd = (userId, prodId) => {
+//   return dispatch => {
+//     axios.get(`/api/reviews/user/${userId}/product/${prodId}`)
+//       .then(res => {
+//         dispatch(checkValidReviewer(res.data))
+//       })
+//   }
+// }
+
+
 
 export default reducer

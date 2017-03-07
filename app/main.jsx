@@ -16,7 +16,7 @@ import Login from './components/Login'
 import { receiveProducts, getProductById } from './reducers/products'
 import { receiveUsers } from './reducers/users'
 import { receiveCartItems } from './reducers/cart'
-import { getReviewsByProdId } from './reducers/reviews'
+import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
 
 
 const onAppEnter = () => {
@@ -44,9 +44,12 @@ const onAppEnter = () => {
 }
 
 const onProductEnter = (nextRouterState) => {
+  //console.log(store.getState().auth)
   const id = nextRouterState.params.productId
+  //const userId = store.getState().auth ? store.getState().auth.id : null
   store.dispatch(getProductById(id))
   store.dispatch(getReviewsByProdId(id))
+  //if(userId) store.dispatch(getValidReviewByUserAndProd(userId, id))
 }
 
 const onCartEnter = (nextRouterState) => {
