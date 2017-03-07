@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Reviews} from './Reviews.js'
-import ReviewBox from './ReviewBox.js'
+import {Reviews} from '../components/Reviews.js'
+import ReviewBox from '../components/ReviewBox.js'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -62,5 +62,6 @@ const mapStateToProps = state => ({
   selectedUser: state.users.selected,
   validReviewer: state.reviews.validReviewer
 })
+
 
 export default connect(mapStateToProps)(Product)

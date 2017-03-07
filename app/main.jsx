@@ -6,15 +6,16 @@ import {Provider} from 'react-redux'
 import axios from 'axios'
 
 import store from './store'
-import Landing from './components/Landing'
-import Products from './components/Products'
-import Product from './components/Product'
-import Users from './components/Users'
-import Cart from './components/Cart'
-import Login from './components/Login'
+import Landing from './react/containers/Landing'
+import Products from './react/components/Products'
+import Product from './react/containers/SingleProductContainer'
+import Users from './react/components/Users'
+import Cart from './react/components/Cart'
+import Login from './react/components/Login'
 
-import { receiveProducts, getProductById } from './reducers/products'
+import { receiveProducts, getProductById, fetchProductsByCategory } from './reducers/products'
 import { receiveUsers } from './reducers/users'
+import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCartItems } from './reducers/cart'
 import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
 
@@ -22,6 +23,7 @@ import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/revi
 const onAppEnter = () => {
 
   const pProducts = axios.get('/api/products')
+  const pCategories = axios.get('/api/categories/all')
   const pUsers = axios.get('/api/users')
   // const pOrder = axios.get('api/orders')
   let cart
@@ -34,10 +36,11 @@ const onAppEnter = () => {
   }
 
   return Promise
-    .all([pProducts, pUsers])
-    .then(responses => responses.map(r => r.data))
-    .then(([products, users]) => {
+    .all([pProducts, pCategories, pUsers])
+    .then(responses => responses.map(res => res.data))
+    .then(([products, categories, users]) => {
       store.dispatch(receiveProducts(products))
+      store.dispatch(receiveCategories(categories))
       store.dispatch(receiveUsers(users))
       store.dispatch(receiveCartItems(cart))
     })
@@ -49,7 +52,12 @@ const onProductEnter = (nextRouterState) => {
   //const userId = store.getState().auth ? store.getState().auth.id : null
   store.dispatch(getProductById(id))
   store.dispatch(getReviewsByProdId(id))
-  //if(userId) store.dispatch(getValidReviewByUserAndProd(userId, id))
+}
+
+const onCategoryEnter = (nextRouterState) => {
+  const id = nextRouterState.params.categoryId
+  store.dispatch(fetchCategory(id))
+  store.dispatch(fetchProductsByCategory(id))
 }
 
 const onCartEnter = (nextRouterState) => {
@@ -65,7 +73,8 @@ render(
     <Router history={browserHistory}>
       <Route path="/" component={Landing} onEnter={onAppEnter} >
         <IndexRedirect to="/products" />
-        <Route path="/products" component={Products} />
+        <Route path="/products" component={Products} onEnter={onAppEnter} />
+          <Route path="/products/category/:categoryId" component={Products} onEnter={onCategoryEnter} />
         <Route path="/products/:productId" component={Product} onEnter={onProductEnter} />
         <Route path="/login" component={Login} />
         <Route path="/cart" component={Cart} onEnter={onCartEnter} />

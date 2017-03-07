@@ -55,5 +55,4 @@ export const getReviewsByProdId = id => {
 // }
 
 
-
 export default reducer

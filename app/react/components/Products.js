@@ -1,9 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { Link } from 'react-router'
+
+import Sidebar from './Sidebar'
 import axios from 'axios'
 
-import { receiveCartItems } from '../reducers/cart'
+import { receiveCartItems } from '../../reducers/cart'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -27,9 +29,12 @@ function formatPrice(price) {
 }
 
 export const Products = (props) => (
-    <div>
-      <div className="row">
-      {props.products && props.products.map(product => (
+  <div>
+
+    <Sidebar />
+
+    <div className="col-lg-9 col-sm-12">
+        {props.products && props.products.map(product => (
           <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
             <div className="productbox">
               <div className="imgthumb img-responsive">
@@ -65,7 +70,8 @@ const mapDispatchToProps = dispatch => ({
     let newCart, updatedProduct
 
     const isLoggedIn = user.email ? true : false
-    console.log('FUCK', foundProduct)
+
+
 
     if (foundProduct.length) {
       updatedProduct = foundProduct[0]

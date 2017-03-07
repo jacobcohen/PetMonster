@@ -3,6 +3,7 @@
 const db = require('APP/db')
 const Product = db.model('products')
 const Category = db.model('categories')
+const {mustBeAdmin} = require('../auth.filters')
 
 const {mustBeAdmin} = require('../auth.filters')
 
