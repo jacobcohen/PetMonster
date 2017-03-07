@@ -21,7 +21,9 @@ class CartModal extends React.Component {
 
     render(){
         return (
-            <Modal onClose={this.onClose}>
+            <Modal
+                onClose={this.onClose}
+            >
                 <div className="cart-modal">
                     <Cart />
                 </div>

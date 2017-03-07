@@ -117,3 +117,7 @@ sidebar li {
 input#login-modal {
     line-height: 18pt;
 }
+
+.cart-modal.modal-dialog-div {
+    width: 1200px
+}
