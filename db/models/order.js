@@ -61,6 +61,7 @@ const Order = db.define('orders', {
                 where: { id: productId }
             })
             .then(foundProducts => {
+                console.log('its over here', foundProducts, quantity)
                 if (!foundProducts.length) {
                     return this.addProduct(productId, {quantity})
                 } else {
@@ -68,6 +69,7 @@ const Order = db.define('orders', {
                         return this.removeProduct(foundProducts[0])
                     } else {
                         foundProducts[0].transactions.quantity = quantity
+                        console.log('boop', foundProducts[0].transactions)
                         return foundProducts[0].transactions.save()
                     }
                 }

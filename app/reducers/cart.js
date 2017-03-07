@@ -33,6 +33,8 @@ export const addCartItem = item => ({
   type: ADD_CART_ITEM, item
 })
 
+// helper functions
+
 function isInDB(localTransaction, dbCart) {
   let filtered = dbCart.filter(transaction => transaction.product_id === localTransaction.product_id)
 
@@ -63,6 +65,25 @@ function reconcileLocalCartWithDB(localCart, dbCart, userId) {
     return axios.get(`/api/orders/cart/${userId}`)
   }
 }
+
+function packageTransaction(orderId, description, prodId, imageURLs, name, price, stock, oProdId, q, sP) {
+  return {
+    order_id: item.transactions.order_id,
+    product: {
+      description: item.description,
+      id: item.id,
+      imageURLs: item.imageURLs,
+      name: item.name,
+      price: item.price,
+      stock: item.stock
+    },
+    product_id: item.transactions.product_id,
+    quantity: item.transactions.quantity,
+    sellingPrice: item.transactions.sellingPrice
+  }
+}
+
+// thunked actions
 
 export const getCartItems = userId => {
   return dispatch => {
@@ -123,6 +144,7 @@ export const updateCart = (productId, quantity, userId, cart, product) => {
             sellingPrice: item.transactions.sellingPrice
           }
         })
+        console.log('eh')
         dispatch(receiveCartItems(repackagedTransactions))
       })
     } else {
@@ -227,112 +249,3 @@ export const addToCart = (productId, quantity, userId, cart, product) => {
 }
 
 export default reducer
-
-/*
-  addProdToCart: (product, user, currentCart) => {
-    let foundProduct = currentCart.filter(item => item.product_id === product.id)
-    let otherProducts = currentCart.filter(item => item.product_id !== product.id)
-    let newCart, updatedProduct
-
-    const isLoggedIn = user.email ? true : false
-
-
-    // TODO:
-    // No nested Promise chaining
-    // axios calls belong in thunked action creators, not here
-    // a lot of this logic is implemented on the back-end
-
-    if (foundProduct.length) {
-      updatedProduct = foundProduct[0]
-      updatedProduct.quantity++
-      if (isLoggedIn) {
-        return axios.get(`api/orders/cart/${user.id}`)
-        .then(res => res.data)
-        .then(cart => {
-
-          if (cart === null) {
-            return axios.post(`api/orders/cart/${user.id}`)
-            .then(res => res.data)
-            .then(newOrder => {
-
-              return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
-                sellingPrice: null,
-                quantity: 1,
-                order_id: newOrder.id,
-                product_id: product.id
-              })
-              .then(() => {
-                newCart = otherProducts.concat([updatedProduct])
-                dispatch(receiveCartItems(newCart))
-                localStorage.cart = JSON.stringify(newCart)
-              })
-            })
-          } else {
-            return axios.get(`api/transactions/${cart.id}/${product.id}`)
-            .then(res => res.data)
-            .then(transaction => {
-              transaction.quantity++
-              return axios.put(`api/transactions/${cart.id}/${product.id}`, transaction)
-              .then(() => {
-                newCart = otherProducts.concat([updatedProduct])
-                dispatch(receiveCartItems(newCart))
-                localStorage.cart = JSON.stringify(newCart)
-              })
-            })
-          }
-        })
-      } else {
-        newCart = otherProducts.concat([updatedProduct])
-        dispatch(receiveCartItems(newCart))
-        localStorage.cart = JSON.stringify(newCart)
-      }
-    } else {
-      let item = {
-        product: product,
-        sellingPrice: null,
-        quantity: 1,
-        order_id: null,
-        product_id: product.id
-      }
-      if (isLoggedIn) {
-        return axios.get(`api/orders/cart/${user.id}`)
-        .then(res => res.data)
-        .then(cart => {
-          if (cart === null) {
-            return axios.post(`api/orders/cart/${user.id}`)
-            .then(res => res.data)
-            .then(newOrder => {
-              return axios.post(`api/transactions/${newOrder.id}/${product.id}`, {
-                sellingPrice: null,
-                quantity: 1,
-                order_id: newOrder.id,
-                product_id: product.id
-              })
-              .then(() => {
-                newCart = otherProducts.concat([item])
-                dispatch(receiveCartItems(newCart))
-                localStorage.cart = JSON.stringify(newCart)
-              })
-            })
-          } else {
-            return axios.post(`api/transactions/${cart.id}/${product.id}`, {
-              sellingPrice: null,
-              quantity: 1,
-              order_id: cart.id,
-              product_id: product.id
-            })
-            .then(() => {
-              newCart = otherProducts.concat([item])
-              dispatch(receiveCartItems(newCart))
-              localStorage.cart = JSON.stringify(newCart)
-            })
-          }
-        })
-      } else {
-        newCart = otherProducts.concat([item])
-        dispatch(receiveCartItems(newCart))
-        localStorage.cart = JSON.stringify(newCart)
-      }
-    }
-  }
-  */

@@ -1,13 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { Link } from 'react-router'
-import axios from 'axios'
 
 import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
-
-import { receiveCartItems } from '../../reducers/cart'
-import {addToCart} from '../../reducers/cart'
+import { addToCart } from '../../reducers/cart'
 
 export const Products = (props) => (
   <div>
@@ -40,12 +36,5 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addToCart(productId, quantity, userId, cart, product))
   }
 })
-
-// if logged in
-// find order with user id on state (get cart/:userId)
-// .then
-// post transaction to order using orderId and productId (post /:orderId/:productId)
-// OR
-// put updated transaction to order using orderId and productId (put /:orderId/:productId)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

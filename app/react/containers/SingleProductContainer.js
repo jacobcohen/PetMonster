@@ -4,27 +4,6 @@ import {Reviews} from '../components/Reviews.js'
 import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
 
-function formatPrice(price) {
-  let dPrice = price / 100
-  let sdPrice = '' + dPrice
-
-  if (dPrice > 1000000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
-  } else if (dPrice > 100000) {
-    sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
-  } else if (dPrice > 10000) {
-    sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
-  } else if (dPrice > 1000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
-  }
-
-  if (dPrice % 1 === 0) {
-    return sdPrice + '.00'
-  } else {
-    return sdPrice
-  }
-}
-
 export const Product = (props) => {
   console.log(props)
   return (
