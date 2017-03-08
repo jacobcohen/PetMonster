@@ -15,17 +15,14 @@ class CartModal extends React.Component {
     }
 
     onClose() {
-        console.log(this.props.hideModal.toString())
         this.props.hideModal()
     }
 
     render(){
         return (
-            <Modal
-                onClose={this.onClose}
-            >
+            <Modal onClose={this.onClose}>
                 <div className="cart-modal">
-                    <Cart />
+                    <Cart isModal={true} />
                 </div>
             </Modal>
         )

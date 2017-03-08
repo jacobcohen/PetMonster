@@ -27,7 +27,6 @@ class Modal extends React.Component {
     }
 
     onOverlayClick() {
-        console.log(this.props.onClose.toString())
         this.props.onClose()
     }
 
