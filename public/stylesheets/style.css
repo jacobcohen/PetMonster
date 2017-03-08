@@ -41,6 +41,10 @@ a {
     width: 80vw;
 }
 
+.cart-modal {
+    width: 800px;
+}
+
 .cart-modal-item {
     border: 1px solid dimgrey;
     padding: 10px;
@@ -113,7 +117,7 @@ sidebar li {
 }
 
 .modal-dialog-div {
-    background-color: #888;
+    background-color: #222222;
     padding: 25px 25px 40px 25px;
     position: relative;
     outline: 0;
