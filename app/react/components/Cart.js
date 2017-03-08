@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import numeral from 'numeral'
-
 import { CartProductButton } from './CartProductButton'
 import { updateCart } from '../../reducers/cart'
 
@@ -25,9 +24,9 @@ export const Cart = (props) => {
       Cart Total: {total && numeral(total).format('$0,0.00')}
     </div>
     <div>
-      {cart.products && cart.products.map(item => (
-        <div key={item.id}>
-          <h3>{item.name}</h3>
+      {props.cart && props.cart.map(item => (
+        <div key={item.product_id} className="row">
+          <h3>{item.product.name}</h3>
           <CartProductButton
               item={item}
               cart={props.cart}

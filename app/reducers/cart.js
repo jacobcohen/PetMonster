@@ -74,14 +74,30 @@ export const getCartItems = userId => {
   return dispatch => {
     axios.get(`/api/orders/cart/${userId}`)
     .then(response => {
-      const cart = response.data
+      const items = response.data.products
       const localCart = JSON.parse(localStorage.cart)
-
-      return reconcileLocalCartWithDB(localCart, cart, userId)
+      return reconcileLocalCartWithDB(localCart, items, userId)
     })
     .then(response => {
-      const newCart = response.data
-      dispatch(receiveCart(newCart))
+      const items = response.data.products
+      let repackagedTransactions = items.map(item => {
+        let transactionObj = {
+          order_id: item.transactions.order_id,
+          product: {
+            description: item.description,
+            id: item.id,
+            imageURLs: item.imageURLs,
+            name: item.name,
+            price: item.price,
+            stock: item.stock
+          },
+          product_id: item.transactions.product_id,
+          quantity: item.transactions.quantity,
+          sellingPrice: item.transactions.sellingPrice
+        }
+        return transactionObj
+      })
+      dispatch(receiveCartItems(repackagedTransactions))
     })
   }
 }

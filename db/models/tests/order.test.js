@@ -1,10 +1,10 @@
 'use strict'; // eslint-disable-line semi
 
 const db = require('APP/db')
-const Product = require('./product')
-const User = require('./user')
-const Order = require('./order')
-const Transaction = require('./transaction')
+const Product = require('../product')
+const User = require('../user')
+const Order = require('../order')
+const Transaction = require('../transaction')
 
 const Promise = require('bluebird')
 const chai = require('chai')

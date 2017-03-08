@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 
+// make this smart, and control the form input button
 export const CartProductButton = props => {
 
     const item = props.item
@@ -10,7 +11,7 @@ export const CartProductButton = props => {
     const format = props.format
 
     return (
-        <div className="cart-item row">
+        <div className={`${props.isModal ? 'cart-modal-item' : 'cart-item'}`}>
             <div className="cart-picture-panel">
                 <Link to={`/products/${product.id}`}>
                     <div className="imgthumb img-responsive">
@@ -19,21 +20,19 @@ export const CartProductButton = props => {
                 </Link>
             </div>
             <div className="cart-description-panel">
-                <h3>{ item.name }</h3>
-                <div className="caption">
-                    <em>{ item.description }</em>
-                </div>
-                <p>Quantity: { item.transactions.quantity }</p>
-                <p>Subtotal: { format(item.transactions.quantity, item.price) }</p>
+                <h3>{ product.name }</h3>
+                <em>{ product.description }</em>
+                <p>Quantity: { item.quantity }</p>
+                <p>{ format(item.quantity, product.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
                     handleSubmit(event.target.quantity.value, userId, cart, item)
                 }}>
-                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" value={ item.quantity } />
+                    Change quantity: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input
                         type="submit"
                         value="Update"
-                        className="btn btn-secondary"
+                        className="btn btn-custom btn-xs"
                     />
                 </form>
             </div>
