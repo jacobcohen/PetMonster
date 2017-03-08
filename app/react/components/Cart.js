@@ -12,6 +12,7 @@ function calcAndFormat(q, p) {
 export const Cart = (props) => {
 
   const cart = props.cart
+  console.log(cart)
   const total = props.cart.products ? props.cart.products.reduce((accum, current) => {
     return (+current.price * current.transactions.quantity) / 100 + accum
   }, 0) : 0

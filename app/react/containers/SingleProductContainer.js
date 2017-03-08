@@ -44,7 +44,7 @@ const mapStateToProps = state => ({
   reviews: state.reviews,
   users: state.users.list,
   validReviewer: state.reviews.validReviewer,
-  cart: state.cart.list
+  cart: state.orders.cart
 })
 
 const mapDispatchToProps = dispatch => ({

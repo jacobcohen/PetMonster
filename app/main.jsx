@@ -17,14 +17,8 @@ import Login from './react/components/Login'
 import { receiveProducts, getProductById, fetchProductsByCategory } from './reducers/products'
 import { receiveUsers } from './reducers/users'
 import { receiveCategories, fetchCategory } from './reducers/categories'
-<<<<<<< HEAD
-import { receiveCartItems } from './reducers/cart'
-import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
-=======
 import { receiveCart } from './reducers/cart'
-import { getReviewsByProdId } from './reducers/reviews'
->>>>>>> updatedCart
-
+import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
 
 const onAppEnter = () => {
 
