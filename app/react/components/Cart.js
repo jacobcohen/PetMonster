@@ -40,7 +40,7 @@ export const Cart = (props) => {
     </div>
     <br />
     <div>
-      {cart.products ? <button type="button" className="btn btn-success">Place Order</button> : <p>There are no items in your cart :(</p> }
+      {cart.products && cart.products.length ? <button type="button" className="btn btn-success">Place Order</button> : <p>There are no items in your cart :(</p> }
     </div>
   </div>
 )}
