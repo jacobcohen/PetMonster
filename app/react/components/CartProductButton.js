@@ -8,6 +8,8 @@ export const CartProductButton = props => {
     const product = props.product
     const userId = props.userId
     const handleSubmit = props.handleSubmit
+    const cart = props.cart
+    const format = props.format
 
     return (
         <div className={`${props.isModal ? 'cart-modal-item' : 'cart-item'}`}>
@@ -20,20 +22,17 @@ export const CartProductButton = props => {
             </div>
             <div className="cart-description-panel">
                 <h3>{ product.name }</h3>
-                <div className="caption">
-                    <em>{ product.description }</em>
-                </div>
-                <div className="price">
-                    <p>${ product.price / 100 }</p>
-                </div>
+                <em>{ product.description }</em>
+                <p>Quantity: { item.quantity }</p>
+                <p>{ format(item.quantity, product.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId)
+                    handleSubmit(product.id, event.target.quantity.value, userId, cart, product)
                 }}>
-                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" defaultValue={ item.quantity } />
+                    Update quantity: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input
                         type="submit"
-                        value="Update"
+                        value="Change"
                         className="btn btn-secondary"
                     />
                 </form>

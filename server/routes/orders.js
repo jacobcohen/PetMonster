@@ -44,13 +44,17 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
 	.catch(next))
   .put('/cart/:userId/purchased', mustBeLoggedIn, (req, res, next) => //purchasing current transactions in cart -> changes order status and then creates a new cart
   //must be logged in
-    Order.scope('cart').findOne({where: {user_id: req.params.userId}})
+    Order
+      .scope('cart')
+      .findOne({
+        where: { user_id: req.params.userId }
+      })
     .then(order => order.purchase())
     .then(archivedCart => res.json(archivedCart))
     .then(() => User.findById(req.params.userId))
     .then(user => user.createOrder({}))
 	.catch(next))
-  .put('/cart/:userId/update', mustBeLoggedIn, (req, res, next) => { 
+  .put('/cart/:userId/update', mustBeLoggedIn, (req, res, next) => {
     //TEST ME ONCE WE GET LOGGING IN AND CART DONE
     // Use this to add things to cart.
     // Needs req.body which is {prodId, quantity}
@@ -67,11 +71,23 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         where: { user_id: userId },
         include: [Product]
       })
-      .then(foundOrder => foundOrder.updateCart(productId, quantity))
-      .then(updatedCart => res.json(updatedCart))
+      .then(foundOrder => {
+        return foundOrder.updateCart(productId, quantity)
+      })
+      .then(updatedCart => {
+        return Order
+          .scope('cart')
+          .findOne({
+            where: { user_id: userId },
+            include: [Product]
+          })
+      })
+      .then((updatedCart) => {
+        res.json(updatedCart)
+      })
       .catch(next)
     })
-  .put('/cart/:userId/add', mustBeLoggedIn, (req, res, next) => { 
+  .put('/cart/:userId/add', mustBeLoggedIn, (req, res, next) => {
     //TEST ME ONCE WE GET LOGGING IN AND CART DONE
     // Use this to add things to cart.
     // Needs req.body which is {prodId, quantity}
@@ -80,7 +96,6 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     let userId = +req.params.userId
     let productId = +req.body.prodId
     let quantity = +req.body.quantity
-    console.log(userId, productId, quantity)
 
     Order
       .scope('cart')
@@ -89,15 +104,29 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         include: [Product]
       })
       .then(foundOrder => foundOrder.addToCart(productId, quantity))
-      .then(updatedCart => res.json(updatedCart))
+      .then(() => {
+        return Order
+          .scope('cart')
+          .findOne({
+            where: { user_id: userId },
+            include: [Product]
+          })
+      })
+      .then((updatedCart) => {
+        res.json(updatedCart)
+      })
       .catch(next)
     })
   .put('/cart/:userId/emptyCart', mustBeLoggedIn, (req, res, next) => //empties current cart
   // mustBeLoggedIn
-  	Order.scope('cart').findOne({where: {user_id: req.params.userId}})
-	.then(order => {
-		return order.setProducts([])
-		.then(() => order.update({'total': 0}))
-	})
+    Order
+      .scope('cart')
+      .findOne({
+        where: { user_id: req.params.userId }
+      })
+    .then(order => {
+      return order.setProducts([])
+      .then(() => order.update({total: 0}))
+    })
 	.then(emptiedCart => res.json(emptiedCart))
 	.catch(next))
