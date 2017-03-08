@@ -32,10 +32,9 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     Order.findAll({where: {user_id: req.params.userId}})
     .then(order => res.json(order))
     .catch(next))
-  .post('/cart/:userId', mustBeLoggedIn, (req, res, next) => // creates a new cart (new order with status 'active')
+  .post('/cart/:userId', (req, res, next) => // creates a new cart (new order with status 'active')
     // only use for new account creation
     // does not expect req.body
-    // mustBeLoggedIn
     User.findById(req.params.userId)
     .then(user => user.createOrder({}))
     .then(cart => {
