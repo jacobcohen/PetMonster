@@ -6,7 +6,7 @@ body {
 }
 
 a {
-    color: lightskyblue;
+    color: lightcyan;
 }
 
 .landing-display {
@@ -53,8 +53,7 @@ a {
 }
 
 .cart-description-panel {
-    float: left;
-    width: 60%; 
+    width: 100%; 
 }
 
 .imgthumb {
@@ -63,11 +62,8 @@ a {
 }
 
 img {
-    display: block;
-    max-width:400px;
-    max-height: 400px;
-    width: auto;
-    height: auto;
+    max-width:100%;
+    max-height: 100%;
 }
 
 .imgthumb {
@@ -132,10 +128,15 @@ input#login-modal {
 }
 
 .cart-modal.modal-dialog-div {
-    width: 1200px
-
+    width: 600px
 }
 
 .product-button {
     float: right;
+}
+
+.btn-custom {
+    background-color: darkslategray;
+    color: white;
+    border: 1px solid lightslategray;
 }

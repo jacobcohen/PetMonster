@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
+import numeral from 'numeral'
 import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
 import { addToCart } from '../../reducers/cart'
@@ -24,7 +25,7 @@ export const Products = (props) => (
                   }}>
                 <div className="landing-image-overlay">
                   <h4>{product.name}</h4>
-                  <p>{product.price}</p>
+                  <p>{numeral(product.price / 100).format('$0,0.00')}</p>
                 </div>
               </div>
             </Link>

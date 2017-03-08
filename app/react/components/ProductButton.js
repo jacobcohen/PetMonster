@@ -34,7 +34,7 @@ export const ProductButton = props => {
                     <button
                         type="submit"
                         value="Add"
-                        className="btn btn-primary">
+                        className="btn btn-custom btn-xs">
                         Add
                     </button>
                 </form>

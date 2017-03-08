@@ -4,7 +4,8 @@ import {Reviews} from '../components/Reviews.js'
 import ReviewBox from '../components/ReviewBox.js'
 import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
-import {addReview} from '../../reducers/reviews.js'
+import {addReview} from '../../reducers/reviews'
+import {showModal} from '../../reducers/modals'
 
 function getAvgReviews(reviews) {
   let avg = 0;
@@ -58,6 +59,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addToCart: function(quantity, userId, cart, product){
     dispatch(addToCart(quantity, userId, cart, product))
+    dispatch(showModal('CART'))
   },
   addTheReview: (userId, prodId, rating, desc) => {
     dispatch(addReview(userId, prodId, rating, desc))
