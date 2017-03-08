@@ -32,13 +32,12 @@ export const Product = (props) => {
           userId={props.auth && props.auth.id}
           cart={props.cart} />
         <hr />
-        <h1>{ getAvgReviews(props.reviews) }</h1>
-        <p>{props.product && props.product.description}</p>
+        <h3>{ getAvgReviews(props.reviews) }</h3>
         <hr />
-        <h3>Add a review:</h3>
+        <h4>Add a review:</h4>
         <ReviewBox  addTheReview={props.addTheReview} />
         <hr />
-        <h3>Reviews</h3>
+        <h4>Reviews</h4>
         <Reviews reviews={props.reviews} users={props.users} />
       </div>
   )

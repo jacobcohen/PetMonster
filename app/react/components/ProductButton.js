@@ -22,7 +22,8 @@ export const ProductButton = props => {
               />
             </Link>
             <div className="caption">
-                <h4>{ product.name }</h4>
+                <h3>{ product.name }</h3>
+                <p><em>{ product.description }</em></p>
                 <p>Stock: { product.stock }</p>
                 <p>{ numeral(product.price / 100).format('$0,0.00') }</p>
                 <form onSubmit={(event) => {
