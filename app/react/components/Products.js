@@ -5,6 +5,8 @@ import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
 import { addToCart } from '../../reducers/cart'
 
+import { Link } from 'react-router'
+
 export const Products = (props) => (
   <div>
 
