@@ -90,8 +90,8 @@ describe('Order model', () => {
             order = updatedOrder
             return order.getProducts()
         })
-        .then(transactions => {
-            transaction = transactions[0]
+        .then(products => {
+            transaction = products[0].transactions
         })
         .catch(console.error)
     })
@@ -117,9 +117,7 @@ describe('Order model', () => {
     describe('increasing the quantity of a product you already have', () => {
         it('should update the transaction quantity', () => {
             return order.updateCart(cookieMonster.id, 1)
-                .then(updatedCart => {
-                    return updatedCart.getProducts()
-                })
+                .then(updatedCart => updatedCart.getProducts())
                 .then(products => {
                     expect(products[0].transactions.quantity).to.equal(1)
                 })
@@ -130,8 +128,9 @@ describe('Order model', () => {
     describe('removing the quantity of a product you already have', () => {
         it('should delete the product', () => {
             return order.updateCart(cookieMonster.id, 0)
-                .then(deleted => {
-                    expect(deleted).to.equal(1)
+                .then(updatedCart => updatedCart.getProducts())
+                .then(products => {
+                    expect(products.length).to.equal(0)
                 })
                 .catch(console.error)
         })
@@ -183,7 +182,7 @@ describe('Order model', () => {
     })
 
     it('sets the selling price on a transaction', () => {
-        expect(purchasedProducts.transactions.sellingPrice).to.equal(20000)
+        expect(purchasedProducts.transactions.sellingPrice).to.equal(200)
     })
 
     it('decreases the product stock by the amount purchased', () => {
