@@ -6,27 +6,6 @@ import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
 import {addReview} from '../../reducers/reviews.js'
 
-function formatPrice(price) {
-  let dPrice = price / 100
-  let sdPrice = '' + dPrice
-
-  if (dPrice > 1000000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1, 4) + ',' + sdPrice.slice(4)
-  } else if (dPrice > 100000) {
-    sdPrice = sdPrice.slice(0, 3) + ',' + sdPrice.slice(3)
-  } else if (dPrice > 10000) {
-    sdPrice = sdPrice.slice(0, 2) + ',' + sdPrice.slice(2)
-  } else if (dPrice > 1000) {
-    sdPrice = sdPrice.slice(0, 1) + ',' + sdPrice.slice(1)
-  }
-
-  if (dPrice % 1 === 0) {
-    return sdPrice + '.00'
-  } else {
-    return sdPrice
-  }
-}
-
 function getAvgReviews(reviews) {
   let avg = 0;
   reviews.list.forEach(review => {
@@ -45,7 +24,7 @@ export const Product = (props) => {
       props.product &&
       <div className="container">
         <h3>{props.product && props.product.name}</h3>
-        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.auth && props.auth.id} />
+        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.user && props.user.id} cart={props.cart} />
         <hr />
         <h1>{ getAvgReviews(props.reviews) }</h1>
         <p>{props.product && props.product.description}</p>
@@ -63,6 +42,8 @@ const mapStateToProps = state => ({
   auth: state.auth,
   product: state.products.selected,
   reviews: state.reviews,
+  user: state.auth,
+  cart: state.orders.cart,
   users: state.users.list,
   selectedUser: state.users.selected,
   validReviewer: state.reviews.validReviewer,
@@ -70,8 +51,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addToCart: function(productId, quantity, userId){
-    dispatch(addToCart(productId, quantity, userId))
+  addToCart: function(quantity, userId, cart, product){
+    dispatch(addToCart(quantity, userId, cart, product))
   },
   addTheReview: (userId, prodId, rating, desc) => {
     dispatch(addReview(userId, prodId, rating, desc))

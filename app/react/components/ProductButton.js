@@ -1,11 +1,13 @@
 import React from 'react'
 import {Link} from 'react-router'
+import numeral from 'numeral'
 
 export const ProductButton = props => {
 
     const product = props.product
     const userId = props.userId
     const handleSubmit = props.handleSubmit
+    const cart = props.cart
 
     return (
         <div id='product-button'>
@@ -19,10 +21,10 @@ export const ProductButton = props => {
                 <br />
                 Stock: { product.stock }
                 <br />
-                <p>${ product.price / 100 }</p>
+                <p>{ numeral(product.price / 100).format('$0,0.00') }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId)
+                    handleSubmit(event.target.quantity.value, userId, cart, product)
                 }}>
                     #: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input
@@ -35,4 +37,3 @@ export const ProductButton = props => {
         </div>
     )
 }
-
