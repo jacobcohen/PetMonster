@@ -1,18 +1,19 @@
 import React from 'react'
 
 export const Login = ({ login, signup }) => (
-  <div>
+  <div id='login-modal'>
     <h3>Login</h3>
-    <form onSubmit={evt => {
+    <form onSubmit={ evt => {
       evt.preventDefault()
-      console.log(evt.target.email.value, evt.target.password.value)
       login(evt.target.email.value, evt.target.password.value)
     } }>
       <input name="email" type="email" placeholder="email" />
+      <br />
       <input name="password" type="password" placeholder="password" />
+      <br />
       <input type="submit" value="Login" />
     <hr />
-    <h3>Or, Sign Up!</h3>
+    <h3>Sign Up</h3>
     </form>
     <form onSubmit={evt => {
       evt.preventDefault()
@@ -20,9 +21,13 @@ export const Login = ({ login, signup }) => (
       signup(evt.target.firstName.value, evt.target.lastName.value, evt.target.email.value, evt.target.password.value)
     } }>
       <input name="firstName" type="firstName" placeholder="first name" />
+      <br />
       <input name="lastName" type="lastName" placeholder="last name" />
+      <br />
       <input name="email" type="email" placeholder="email" />
+      <br />
       <input name="password" type="password" placeholder="password" />
+      <br />
       <input type="submit" value="Submit" />
     </form>
     <hr />

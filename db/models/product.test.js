@@ -19,7 +19,7 @@ describe('Product', () => {
       name: 'Frankenstein',
       imageURLs: ['one', 'two'],
       price: 100.00,
-      description: 'Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster. Here is a description of Frankenstein. Highly modular monster. Will stalk you to the ends of the earth. Technically his name is Frankensteins monster.',
+      description: 'Here is a description of Frankenstein. Highly modular monster. Highly stalkative. Here is a description of Frankenstein. Highly modular monster. Highly stalkative. Here is a description of Frankenstein. Highly modular monster. Highly stalkative. Here is a description of Frankenstein. Highly modular monster. Highly stalkative. Here is a description of Frankenstein. Highly modular monster. Highly stalkative.',
       stock: 1
     })
 
@@ -27,7 +27,7 @@ describe('Product', () => {
       name: 'Dracula',
       imageURLs: ['one', 'two'],
       price: 200.00,
-      description: 'dracula description.',
+      description: 'I vant to suck ur blood.',
       stock: 0
     })
 
@@ -50,7 +50,7 @@ describe('Product', () => {
     })
   })
 
-  afterEach(function(){
+  afterEach(() => {
     return Promise.all([
       Product.truncate({cascade: true}),
       User.truncate({cascade: true})
@@ -76,12 +76,12 @@ describe('Product', () => {
   describe('instance methods', () => {
 
     describe('addPicture', () => {
-        it('adds a new picture', () => {
-          return frankenstein.addPicture('three').then(function(updatedFrank){
-            expect(updatedFrank.imageURLs[2]).to.equal('three')
-          })
+      it('adds a new picture', () => {
+        return frankenstein.addPicture('three').then(function(updatedFrank){
+          expect(updatedFrank.imageURLs[2]).to.equal('three')
         })
       })
+    })
 
     describe('setDefaultPicture', () => {
       it('moves the nth picture to the front', () => {
@@ -94,18 +94,10 @@ describe('Product', () => {
     describe('getAverageRating', () => {
       it('returns the average rating of all reviews on the product', () => {
         return frankenstein.save()
-        .then(() => {
-          return happyUser.addProductReview(frankenstein, { rating: 5, description: 'loved it' })
-        })
-        .then(() => {
-          return grumpyUser.addProductReview(frankenstein, { rating: 1, description: 'hated it' })
-        })
-        .then(() => {
-          expect(frankenstein.getAverageRating()).to.eventually.equal(3)
-        })
+        .then(() => happyUser.addProductReview(frankenstein, { rating: 5, description: 'loved it' }))
+        .then(() => grumpyUser.addProductReview(frankenstein, { rating: 1, description: 'hated it' }))
+        .then(() => expect(frankenstein.getAverageRating()).to.eventually.equal(3))
       })
     })
-
   })
-
 })
