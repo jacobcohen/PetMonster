@@ -10,31 +10,28 @@ export const CartProductButton = props => {
     const format = props.format
 
     return (
-        <div className="cart-item row">
+        <div className={`${props.isModal ? 'cart-modal-item' : 'cart-item'}`}>
             <div className="cart-picture-panel">
                 <Link to={`/products/${item.id}`}>
                     <div className="imgthumb img-responsive">
-                        <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
+                        <img src={ item.imageURLs ? item.imageURLs[0] : '' } />
                     </div>
                 </Link>
             </div>
             <div className="cart-description-panel">
                 <h3>{ item.name }</h3>
-                <div className="caption">
-                    <em>{ item.description }</em>
-                </div>
-                <div className="price">
-                    <p>${ format(item.transactions.quantity, item.price) }</p>
-                </div>
+                <p><em>{ item.description }</em></p>
+                <p>Quantity: { item.transactions.quantity }</p>
+                <p>{ format(item.transactions.quantity, item.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
                     handleSubmit(event.target.quantity.value, userId, cart, item)
                 }}>
-                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" value={ item.transactions.quantity } />
+                    Change quantity: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input
                         type="submit"
                         value="Update"
-                        className="btn btn-secondary"
+                        className="btn btn-custom btn-xs"
                     />
                 </form>
             </div>
