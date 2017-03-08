@@ -36,6 +36,8 @@ export const receiveOrders = orders => ({
 // helper functions
 
 function isInDB(localProduct, dbCart) {
+  if (!dbCart) return false
+
   let filtered = dbCart.products.filter(product => product.id === localProduct.id)
 
   if (filtered.length) {

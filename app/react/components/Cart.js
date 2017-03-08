@@ -47,8 +47,7 @@ export const Cart = (props) => {
 
 const mapStateToProps = state => ({
   cart: state.orders.cart,
-  user: state.auth,
-  isLoggedIn: Boolean(state.auth)
+  user: state.auth
 })
 
 const mapDispatchToProps = dispatch => ({
