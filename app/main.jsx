@@ -17,8 +17,13 @@ import Login from './react/components/Login'
 import { receiveProducts, getProductById, fetchProductsByCategory } from './reducers/products'
 import { receiveUsers } from './reducers/users'
 import { receiveCategories, fetchCategory } from './reducers/categories'
+<<<<<<< HEAD
 import { receiveCartItems } from './reducers/cart'
 import { getReviewsByProdId, getValidReviewByUserAndProd } from './reducers/reviews'
+=======
+import { receiveCart } from './reducers/cart'
+import { getReviewsByProdId } from './reducers/reviews'
+>>>>>>> updatedCart
 
 
 const onAppEnter = () => {
@@ -30,8 +35,10 @@ const onAppEnter = () => {
   let cart
 
   if (!localStorage.cart) {
-    localStorage.cart = JSON.stringify([])
-    cart = []
+    cart = {
+      products: []
+    }
+    localStorage.cart = JSON.stringify({ products: [] })
   } else {
     cart = JSON.parse(localStorage.cart)
   }
@@ -43,7 +50,7 @@ const onAppEnter = () => {
       store.dispatch(receiveProducts(products))
       store.dispatch(receiveCategories(categories))
       store.dispatch(receiveUsers(users))
-      store.dispatch(receiveCartItems(cart))
+      store.dispatch(receiveCart(cart))
     })
 }
 

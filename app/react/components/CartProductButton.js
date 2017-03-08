@@ -4,30 +4,30 @@ import {Link} from 'react-router'
 export const CartProductButton = props => {
 
     const item = props.item
-    const product = props.product
     const userId = props.userId
     const handleSubmit = props.handleSubmit
+    const cart = props.cart
+    const format = props.format
 
     return (
         <div className="cart-item row">
             <div className="cart-picture-panel">
                 <Link to={`/products/${product.id}`}>
                     <div className="imgthumb img-responsive">
-                        <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
+                        <img src={ item.imageURLs ? item.imageURLs[0] : '' } />
                     </div>
                 </Link>
             </div>
             <div className="cart-description-panel">
-                <h3>{ product.name }</h3>
+                <h3>{ item.name }</h3>
                 <div className="caption">
-                    <em>{ product.description }</em>
+                    <em>{ item.description }</em>
                 </div>
-                <div className="price">
-                    <p>${ product.price / 100 }</p>
-                </div>
+                <p>Quantity: { item.transactions.quantity }</p>
+                <p>Subtotal: { format(item.transactions.quantity, item.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId)
+                    handleSubmit(event.target.quantity.value, userId, cart, item)
                 }}>
                     Quantity: <input type="text" name="quantity" maxLength="3" size="3" value={ item.quantity } />
                     <input
