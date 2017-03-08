@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import LoginModal from '../Modals/LoginModal'
 
 const MODAL_COMPONENTS = {
-    LOGIN: LoginModal,
+    LOGIN: LoginModal
 }
 
 const ModalRoot = ({ modalType, modalProps }) => {

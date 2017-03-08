@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Reviews} from '../components/Reviews.js'
 import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
+import {showModal} from '../../reducers/modals'
 
 export const Product = (props) => {
   return (
@@ -29,6 +30,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addToCart: function(quantity, userId, cart, product){
     dispatch(addToCart(quantity, userId, cart, product))
+    dispatch(showModal('CART'))
   }
 })
 

@@ -48,14 +48,13 @@ function isInDB(localProduct, dbCart) {
 }
 
 function reconcileLocalCartWithDB(localCart, dbCart, userId) {
-  if (!localCart.products.length) return axios.get(`/api/orders/cart/${userId}`)
+  if (!localCart.length) return axios.get(`/api/orders/cart/${userId}`)
 
-  let onlyLocalProducts = localCart.products.filter(product => !isInDB(product, dbCart))
-
+  let onlyLocalProducts = localCart.filter(product => !isInDB(product, dbCart))
   let postedTransactions = onlyLocalProducts.map(lP =>
     axios.put(`/api/orders/cart/${userId}/add`, {
-      prodId: lP.id,
-      quantity: lP.transactions.quantity
+      prodId: lP.product_id,
+      quantity: lP.quantity
     })
   )
 
@@ -77,7 +76,6 @@ export const getCartItems = userId => {
     .then(response => {
       const cart = response.data
       const localCart = JSON.parse(localStorage.cart)
-
       return reconcileLocalCartWithDB(localCart, cart, userId)
     })
     .then(response => {
