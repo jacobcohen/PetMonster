@@ -4,6 +4,7 @@ import {Reviews} from '../components/Reviews.js'
 import ReviewBox from '../components/ReviewBox.js'
 import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
+import {addReview} from '../../reducers/reviews.js'
 
 function formatPrice(price) {
   let dPrice = price / 100
@@ -32,24 +33,28 @@ function getAvgReviews(reviews) {
     avg += +review.rating
   });
   avg /= reviews.list.length;
-  return avg
+
+  if(isNaN(avg))
+    return "Product has no reviews yet!"
+  else
+    return "Average Review Score: " + avg + " out of 5"
 }
 
 export const Product = (props) => {
   return (
-      props.product && 
+      props.product &&
       <div className="container">
         <h3>{props.product && props.product.name}</h3>
         <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.auth && props.auth.id} />
         <hr />
-        <h1>Average review score: { getAvgReviews(props.reviews) } out of 5! </h1>
+        <h1>{ getAvgReviews(props.reviews) }</h1>
         <p>{props.product && props.product.description}</p>
         <hr />
         <h3>Add a review:</h3>
-        <ReviewBox />
+        <ReviewBox  addTheReview={props.addTheReview} />
         <hr />
         <h3>Reviews</h3>
-        <Reviews reviews={props.reviews} users={props.users}/>
+        <Reviews reviews={props.reviews} users={props.users} />
       </div>
   )
 }
@@ -59,12 +64,17 @@ const mapStateToProps = state => ({
   product: state.products.selected,
   reviews: state.reviews,
   users: state.users.list,
-  validReviewer: state.reviews.validReviewer
+  selectedUser: state.users.selected,
+  validReviewer: state.reviews.validReviewer,
+  isAdmin: Boolean(state.auth ? state.auth.isAdmin : false)
 })
 
 const mapDispatchToProps = dispatch => ({
   addToCart: function(productId, quantity, userId){
     dispatch(addToCart(productId, quantity, userId))
+  },
+  addTheReview: (userId, prodId, rating, desc) => {
+    dispatch(addReview(userId, prodId, rating, desc))
   }
 })
 

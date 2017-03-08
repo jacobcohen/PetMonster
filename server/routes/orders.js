@@ -50,8 +50,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(() => User.findById(req.params.userId))
     .then(user => user.createOrder({}))
 	.catch(next))
-  .put('/cart/:userId/update', mustBeLoggedIn, (req, res, next) => { 
-    //TEST ME ONCE WE GET LOGGING IN AND CART DONE
+  .put('/cart/:userId/update', mustBeLoggedIn, (req, res, next) => {
     // Use this to add things to cart.
     // Needs req.body which is {prodId, quantity}
     // must be logged in
@@ -71,7 +70,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
       .then(updatedCart => res.json(updatedCart))
       .catch(next)
     })
-  .put('/cart/:userId/add', mustBeLoggedIn, (req, res, next) => { 
+  .put('/cart/:userId/add', mustBeLoggedIn, (req, res, next) => {
     //TEST ME ONCE WE GET LOGGING IN AND CART DONE
     // Use this to add things to cart.
     // Needs req.body which is {prodId, quantity}

@@ -21,7 +21,7 @@ class LoginModal extends React.Component {
 
     render(){
         return (
-            <Modal onClose={this.onClose}>\
+            <Modal onClose={this.onClose}>
                 <div className="login-modal">
                     <Login />
                 </div>

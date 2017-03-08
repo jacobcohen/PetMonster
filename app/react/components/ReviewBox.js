@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
-import {checkValidReviewer} from '../../reducers/reviews.js'
+import {addReview} from '../../reducers/reviews.js'
 
 class ReviewBox extends Component {
 
   constructor(props){
 
     super(props)
-    console.log(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
       user_id: null,
@@ -18,7 +17,6 @@ class ReviewBox extends Component {
   }
 
   componentDidMount(){
-    console.log()
     this.setState({
       prod_id: this.props.product.id
     })
@@ -30,7 +28,6 @@ class ReviewBox extends Component {
       user_id: nextProps.auth ? nextProps.auth.id : null,
       validUser: nextProps.reviews ? nextProps.reviews.validUser : true
     })
-    console.log(nextProps)
   }
 
 
@@ -40,9 +37,9 @@ class ReviewBox extends Component {
     let description = evt.target.description.value
     let userId = this.state.user_id
     let prodId = this.state.prod_id
-    this.props.addReview(userId, prodId, rating, description)
+    this.props.addTheReview(userId, prodId, rating, description)
     this.setState({
-      notValidUser: this.props.newThing
+      notValidUser: true
     })
 
   }
@@ -54,9 +51,16 @@ class ReviewBox extends Component {
       <div>
         { this.state.validUser ?
           <form onSubmit={this.handleSubmit}>
-            <input name="rating" type="rating" />
-            <input name="description" type="description" />
-            <button name="Submit" value="Submit">Submit</button>
+            <b>Rate the item out of 5: </b>
+            <select name="rating">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select><br />
+            <textarea name="description" type="description" rows="6" cols="50" /><br />
+            <button name="Submit" value="Submit">Add Review</button>
           </form>
         :null
         }
@@ -75,22 +79,6 @@ const mapStateToProps = state => ({
   validUser: state.reviews.validReviewer
 })
 
-const mapDispatchToProps = dispatch =>  ({
-    addReview: (userId, prodId, rating, desc) => {
-      axios.post(`/api/reviews/user/${userId}/product/${prodId}`, {rating: rating, description: desc})
-        .then(success => {
-            if(success.data === false)
-              dispatch(checkValidReviewer(false))
-            else{
-              dispatch(checkValidReviewer(true))
-            }
-        })
-        .catch(failure => {
-          console.log('howd we get herr')
-        })
-    }
-  })
 
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewBox)
+export default connect(mapStateToProps)(ReviewBox)
