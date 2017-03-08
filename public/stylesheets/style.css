@@ -1,23 +1,64 @@
 body {
+    background-color: #262723;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: lightgray;
 }
 
 a {
-    color: #00B7FF;
+    color: lightskyblue;
+}
+
+.landing-display {
+    float: right;
+}
+
+.landing-image {
+    margin: 2px;
+    float: right;
+    position: right;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition:.5s;
+}
+
+.landing-image:hover {
+    border: 5px solid black;
+}
+
+.cart-item {
+    border-bottom: 1px solid black;
+    padding: 10px;
+}
+
+.cart-picture-panel {
+    float: left;
+    width: 25%;
+}
+
+.cart-description-panel {
+    float: left;
+    width: 60%; 
+}
+
+.imgthumb {
+    height: 150px;
+    width: 150px;
 }
 
 img {
     display: block;
-    max-width:160px;
-    max-height: 160px;
+    max-width:400px;
+    max-height: 400px;
     width: auto;
     height: auto;
 }
 
 .imgthumb {
-    width: 160px;
-    height: 160px;
+    width: 400px;
+    height: 400px;
 }
 
 sidebar li {
@@ -60,7 +101,7 @@ sidebar li {
 }
 
 .modal-dialog-div {
-    background-color: white;
+    background-color: #888;
     padding: 25px 25px 40px 25px;
     position: relative;
     outline: 0;
@@ -71,4 +112,12 @@ sidebar li {
     max-width: 520px;
     cursor: default;
     border-radius: 4px;
+}
+
+input#login-modal {
+    line-height: 18pt;
+}
+
+.cart-modal.modal-dialog-div {
+    width: 1200px
 }

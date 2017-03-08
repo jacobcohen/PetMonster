@@ -12,7 +12,23 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     Review.findAll()
     .then(reviews => res.json(reviews))
     .catch(next))
-  .post('/user/:userId/product/:prodId', mustBeLoggedIn, (req, res, next) => {
+  .get('/user/:userId/product/:prodId', mustBeLoggedIn, (req, res, next) => {
+      User.findById(req.params.userId)
+      .then(user => {
+
+        return user.verifyPurchase(+req.params.prodId)
+      })
+      .then(verified => {
+        if (verified){
+          res.json({"value":true})
+        }
+        else {
+          res.json({"value":false})
+        }
+      })
+      .catch(next)
+  })
+  .post('/user/:userId/product/:prodId', (req, res, next) => {
     // Post a new review.
     // Expects req.body json object to be {"rating": INTEGER, "description": "STRING"}
     // Checks to see if user is a verified purchaser.
@@ -25,15 +41,28 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
         return user.verifyPurchase(+req.params.prodId)
         .then(verified => {
           if (verified){
+            console.log('VERYFIEID', user, prod)
             return [user, prod]
           }
-          else {return Promise.reject(new Error('the user is an unverified purchaser'))}
+          else {
+            return [false, false]
+            //return Promise.reject(new Error('the user is an unverified purchaser'))
+          }
         })
       })
       .then(([user, prod]) => {
-        console.log([user, prod])
+        if(!user) {
+          return [false]
+        }
+        req.body.returning = true
         return user.addProductReviews(prod, req.body)})
-      .then(([review]) => res.status(201).json(review))
+      .then(([review]) => {
+        if(!review[1]) {
+          return res.status(201).send(false)
+        }
+        res.status(201).json(review[1])
+        return review[1]
+      })
       .catch(next)
     })
   .param('reviewId', (req, res, next, reviewId) =>  // this is a param

@@ -1,8 +1,8 @@
 import axios from 'axios'
+import { showModal } from './modals'
 
 const RECEIVE_CART = 'RECEIVE_CART'
 const RECEIVE_ALL_ORDERS = 'RECEIVE_ALL_ORDERS'
-
 
 const initialCartState = {
   cart: {},

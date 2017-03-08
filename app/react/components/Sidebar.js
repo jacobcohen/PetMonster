@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 export const Sidebar = ({ categories }) => {
 
     return (    
-        <sidebar className="col-lg-3 col-sm-12">
+        <sidebar className="col-lg-2">
             <h3>Monsters</h3>
             <ul id="categories">
                 <li><Link to={`/`}>All</Link></li>

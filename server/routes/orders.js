@@ -33,6 +33,7 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(order => res.json(order))
     .catch(next))
   .post('/cart/:userId', (req, res, next) => // creates a new cart (new order with status 'active')
+    // for now DO NOT REQUIRE LOGIN, breaks creation of new order when a user signs up
     // only use for new account creation
     // does not expect req.body
     User.findById(req.params.userId)
@@ -54,7 +55,6 @@ module.exports = require('express').Router() // eslint-disable-line new-cap
     .then(user => user.createOrder({}))
 	.catch(next))
   .put('/cart/:userId/update', mustBeLoggedIn, (req, res, next) => {
-    //TEST ME ONCE WE GET LOGGING IN AND CART DONE
     // Use this to add things to cart.
     // Needs req.body which is {prodId, quantity}
     // must be logged in

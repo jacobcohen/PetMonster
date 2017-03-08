@@ -10,26 +10,30 @@ export const CartProductButton = props => {
     const format = props.format
 
     return (
-        <div id='product-button'>
-            <Link to={`/products/${item.id}`}>
-            <div className="imgthumb img-responsive">
-                <img src={ item.imageURLs ? item.imageURLs[0] : '' } />
+        <div className="cart-item row">
+            <div className="cart-picture-panel">
+                <Link to={`/products/${item.id}`}>
+                    <div className="imgthumb img-responsive">
+                        <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
+                    </div>
+                </Link>
             </div>
-            </Link>
-            <div className="caption">
-                { item.name }
-                <br />
-                Quantity: { item.transactions.quantity }
-                <br />
-                <p>{ format(item.transactions.quantity, item.price) }</p>
+            <div className="cart-description-panel">
+                <h3>{ item.name }</h3>
+                <div className="caption">
+                    <em>{ item.description }</em>
+                </div>
+                <div className="price">
+                    <p>${ format(item.transactions.quantity, item.price) }</p>
+                </div>
                 <form onSubmit={(event) => {
                     event.preventDefault()
                     handleSubmit(event.target.quantity.value, userId, cart, item)
                 }}>
-                    #: <input type="text" name="quantity" maxLength="3" size="3" />
+                    Quantity: <input type="text" name="quantity" maxLength="3" size="3" value={ item.transactions.quantity } />
                     <input
                         type="submit"
-                        value="Update Quantity"
+                        value="Update"
                         className="btn btn-secondary"
                     />
                 </form>

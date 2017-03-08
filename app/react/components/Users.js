@@ -14,7 +14,7 @@ export const Users = (props) => (
   </div>
 )
 
-const mapStateToProps = state => { console.log(state)
+const mapStateToProps = state => {
   return ({
   users: state.users.list
 })}
