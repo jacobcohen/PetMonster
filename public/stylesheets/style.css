@@ -6,7 +6,7 @@ body {
 }
 
 a {
-    color: lightcyan;
+    color: lightskyblue;
 }
 
 .landing-display {
@@ -53,7 +53,7 @@ a {
 }
 
 .cart-description-panel {
-    width: 100%; 
+    width: 60%;
 }
 
 .imgthumb {
@@ -62,13 +62,16 @@ a {
 }
 
 img {
-    max-width:150px;
-    max-height: 150px;
+    display: block;
+    max-width:160px;
+    max-height: 160px;
+    width: auto;
+    height: auto;
 }
 
 .imgthumb {
-    width: 400px;
-    height: 400px;
+    width: 160px;
+    height: 160px;
 }
 
 sidebar li {
@@ -128,7 +131,7 @@ input#login-modal {
 }
 
 .cart-modal.modal-dialog-div {
-    width: 600px
+    width: 1200px
 }
 
 .product-button {
