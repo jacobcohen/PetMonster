@@ -24,7 +24,7 @@ export const ProductButton = props => {
                 <p>{ numeral(product.price / 100).format('$0,0.00') }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId, cart, product)
+                    handleSubmit(event.target.quantity.value, userId, cart, product)
                 }}>
                     #: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input

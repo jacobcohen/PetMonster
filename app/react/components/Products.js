@@ -27,13 +27,13 @@ export const Products = (props) => (
 
 const mapStateToProps = state => ({
   products: state.products.list,
-  cart: state.cart.list,
+  cart: state.orders.cart,
   user: state.auth
 })
 
 const mapDispatchToProps = dispatch => ({
-  addToCart: function(productId, quantity, userId, cart, product){
-    dispatch(addToCart(productId, quantity, userId, cart, product))
+  addToCart: function(quantity, userId, cart, product){
+    dispatch(addToCart(quantity, userId, cart, product))
   }
 })
 

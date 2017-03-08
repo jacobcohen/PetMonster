@@ -5,7 +5,6 @@ import {ProductButton} from '../components/ProductButton'
 import {addToCart} from '../../reducers/cart'
 
 export const Product = (props) => {
-  console.log(props)
   return (
       props.product &&
       <div className="container">
@@ -24,12 +23,12 @@ const mapStateToProps = state => ({
   product: state.products.selected,
   reviews: state.reviews,
   user: state.auth,
-  cart: state.cart.list
+  cart: state.orders.cart
 })
 
 const mapDispatchToProps = dispatch => ({
-  addToCart: function(productId, quantity, userId, cart, product){
-    dispatch(addToCart(productId, quantity, userId, cart, product))
+  addToCart: function(quantity, userId, cart, product){
+    dispatch(addToCart(quantity, userId, cart, product))
   }
 })
 

@@ -11,20 +11,25 @@ function calcAndFormat(q, p) {
 }
 
 export const Cart = (props) => {
+
+  const cart = props.cart
+  const total = props.cart.products ? props.cart.products.reduce((accum, current) => {
+    return (+current.price * current.transactions.quantity) / 100 + accum
+  }, 0) : 0
+
   return (
 
   <div>
     <h3>Cart</h3>
     <div>
-      total: {props.cart && props.cart.total}
+      Cart Total: {total && numeral(total).format('$0,0.00')}
     </div>
     <div>
-      {props.cart && props.cart.map(item => (
-        <div key={item.product_id}>
-          <h3>{item.product.name}</h3>
+      {cart.products && cart.products.map(item => (
+        <div key={item.id}>
+          <h3>{item.name}</h3>
           <CartProductButton
               item={item}
-              product={item.product}
               cart={props.cart}
               handleSubmit={props.updateCart}
               userId={props.user && props.user.id}
@@ -35,19 +40,20 @@ export const Cart = (props) => {
     </div>
     <br />
     <div>
-      {props.cart.length ? <button type="button" className="btn btn-success">Place Order</button> : <p>There are no items in your cart :(</p> }
+      {cart.products ? <button type="button" className="btn btn-success">Place Order</button> : <p>There are no items in your cart :(</p> }
     </div>
   </div>
 )}
 
 const mapStateToProps = state => ({
-  cart: state.cart.list,
-  user: state.auth
+  cart: state.orders.cart,
+  user: state.auth,
+  isLoggedIn: Boolean(state.auth)
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateCart: function(productId, quantity, userId, cart, product){
-    dispatch(updateCart(productId, quantity, userId, cart, product))
+  updateCart: function(quantity, userId, cart, product){
+    dispatch(updateCart(quantity, userId, cart, product))
   }
 })
 

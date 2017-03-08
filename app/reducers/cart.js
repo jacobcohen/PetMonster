@@ -1,22 +1,23 @@
 import axios from 'axios'
 
-const RECEIVE_CART_ITEMS = 'RECEIVE_CART_ITEMS'
-const ADD_CART_ITEM = 'ADD_CART_ITEM'
+const RECEIVE_CART = 'RECEIVE_CART'
+const RECEIVE_ALL_ORDERS = 'RECEIVE_ALL_ORDERS'
 
 
 const initialCartState = {
-  list: []
+  cart: {},
+  allOrders: []
 }
 
 const reducer = (state = initialCartState, action) => {
   const newState = Object.assign({}, state)
 
   switch (action.type) {
-    case RECEIVE_CART_ITEMS:
-      newState.list = action.items
+    case RECEIVE_CART:
+      newState.cart = action.cart
       break
-    case ADD_CART_ITEM:
-      newState.list = action.item.concat(newState.list)
+    case RECEIVE_ALL_ORDERS:
+      newState.allOrders = action.item.concat(newState.list)
       break
     default:
       return state
@@ -25,18 +26,18 @@ const reducer = (state = initialCartState, action) => {
   return newState
 }
 
-export const receiveCartItems = items => ({
-  type: RECEIVE_CART_ITEMS, items
+export const receiveCart = cart => ({
+  type: RECEIVE_CART, cart
 })
 
-export const addCartItem = item => ({
-  type: ADD_CART_ITEM, item
+export const receiveOrders = orders => ({
+  type: RECEIVE_ALL_ORDERS, orders
 })
 
 // helper functions
 
-function isInDB(localTransaction, dbCart) {
-  let filtered = dbCart.filter(transaction => transaction.product_id === localTransaction.product_id)
+function isInDB(localProduct, dbCart) {
+  let filtered = dbCart.products.filter(product => product.id === localProduct.id)
 
   if (filtered.length) {
     return true
@@ -45,14 +46,14 @@ function isInDB(localTransaction, dbCart) {
 }
 
 function reconcileLocalCartWithDB(localCart, dbCart, userId) {
-  if (!localCart.length) return axios.get(`/api/orders/cart/${userId}`)
+  if (!localCart.products.length) return axios.get(`/api/orders/cart/${userId}`)
 
-  let onlyLocalTransactions = localCart.filter(transaction => !isInDB(transaction, dbCart))
+  let onlyLocalProducts = localCart.products.filter(product => !isInDB(product, dbCart))
 
-  let postedTransactions = onlyLocalTransactions.map(lT =>
+  let postedTransactions = onlyLocalProducts.map(lP =>
     axios.put(`/api/orders/cart/${userId}/add`, {
-      prodId: lT.product_id,
-      quantity: lT.quantity
+      prodId: lP.id,
+      quantity: lP.transactions.quantity
     })
   )
 
@@ -66,183 +67,103 @@ function reconcileLocalCartWithDB(localCart, dbCart, userId) {
   }
 }
 
-function packageTransaction(orderId, description, prodId, imageURLs, name, price, stock, oProdId, q, sP) {
-  return {
-    order_id: item.transactions.order_id,
-    product: {
-      description: item.description,
-      id: item.id,
-      imageURLs: item.imageURLs,
-      name: item.name,
-      price: item.price,
-      stock: item.stock
-    },
-    product_id: item.transactions.product_id,
-    quantity: item.transactions.quantity,
-    sellingPrice: item.transactions.sellingPrice
-  }
-}
-
 // thunked actions
 
 export const getCartItems = userId => {
   return dispatch => {
     axios.get(`/api/orders/cart/${userId}`)
     .then(response => {
-      const items = response.data.products
+      const cart = response.data
       const localCart = JSON.parse(localStorage.cart)
 
-      return reconcileLocalCartWithDB(localCart, items, userId)
+      return reconcileLocalCartWithDB(localCart, cart, userId)
     })
     .then(response => {
-      const items = response.data.products
-
-      let repackagedTransactions = items.map(item => {
-        let transactionObj = {
-          order_id: item.transactions.order_id,
-          product: {
-            description: item.description,
-            id: item.id,
-            imageURLs: item.imageURLs,
-            name: item.name,
-            price: item.price,
-            stock: item.stock
-          },
-          product_id: item.transactions.product_id,
-          quantity: item.transactions.quantity,
-          sellingPrice: item.transactions.sellingPrice
-        }
-        return transactionObj
-      })
-      dispatch(receiveCartItems(repackagedTransactions))
+      const newCart = response.data
+      dispatch(receiveCart(newCart))
     })
   }
 }
 
-export const updateCart = (productId, quantity, userId, cart, product) => {
+export const updateCart = (quantity, userId, cart, product) => {
   return dispatch => {
     if (userId) {
-      axios.put(`/api/orders/cart/${userId}/update`, {
-        prodId: productId,
+      return axios.put(`/api/orders/cart/${userId}/update`, {
+        prodId: product.id,
         quantity: quantity
       })
       .then(response => {
-        let items = response.data.products
-        let repackagedTransactions = items.map(item => {
-          return {
-            order_id: item.transactions.order_id,
-            product: {
-              description: item.description,
-              id: item.id,
-              imageURLs: item.imageURLs,
-              name: item.name,
-              price: item.price,
-              stock: item.stock
-            },
-            product_id: item.transactions.product_id,
-            quantity: item.transactions.quantity,
-            sellingPrice: item.transactions.sellingPrice
-          }
-        })
-        console.log('eh')
-        dispatch(receiveCartItems(repackagedTransactions))
+        const foundCart = response.data
+        dispatch(receiveCart(foundCart))
       })
     } else {
-      let foundProduct = cart.filter(item => item.product_id === product.id)
-      let otherProducts = cart.filter(item => item.product_id !== product.id)
-      let newCart, updatedProduct
+      let foundProduct = cart.products.filter(item => item.id === product.id)
+      let otherProducts = cart.products.filter(item => item.id !== product.id)
+      let newCart = Object.assign({}, cart),
+      updatedProduct
 
       // if (quantity > product.stock) alert('Quantity exceeds item stock. Please lower quantity!')
 
       if (foundProduct.length) {
         updatedProduct = Object.assign({}, foundProduct[0])
-        updatedProduct.quantity = quantity
-
+        updatedProduct.transactions.quantity = quantity
         if (+quantity === 0) {
-          newCart = otherProducts
-          dispatch(receiveCartItems(newCart))
+          newCart.products = otherProducts
           localStorage.cart = JSON.stringify(newCart)
+          dispatch(receiveCart(newCart))
         } else {
-          newCart = otherProducts.concat(updatedProduct)
-          dispatch(receiveCartItems(newCart))
+          newCart.products = otherProducts.concat(updatedProduct)
           localStorage.cart = JSON.stringify(newCart)
+          dispatch(receiveCart(newCart))
         }
       } else {
-        let item = {
-          product: product,
-          sellingPrice: null,
-          quantity: quantity,
-          order_id: null,
-          product_id: product.id
-        }
-
-        newCart = otherProducts.concat(item)
-        dispatch(receiveCartItems(newCart))
+        let item = product
+        item.transactions = { quantity: quantity }
+        newCart.products = otherProducts.concat(item)
         localStorage.cart = JSON.stringify(newCart)
+        dispatch(receiveCart(newCart))
       }
     }
   }
 }
 
-export const addToCart = (productId, quantity, userId, cart, product) => {
+export const addToCart = (quantity, userId, cart, product) => {
   return dispatch => {
     if (userId) {
       return axios.put(`/api/orders/cart/${userId}/add`, {
-        prodId: productId,
+        prodId: product.id,
         quantity: quantity
       })
       .then(response => {
-        let items = response.data.products
-        let repackagedTransactions = items.map(item => {
-          return {
-            order_id: item.transactions.order_id,
-            product: {
-              description: item.description,
-              id: item.id,
-              imageURLs: item.imageURLs,
-              name: item.name,
-              price: item.price,
-              stock: item.stock
-            },
-            product_id: item.transactions.product_id,
-            quantity: item.transactions.quantity,
-            sellingPrice: item.transactions.sellingPrice
-          }
-        })
-        dispatch(receiveCartItems(repackagedTransactions))
+        const foundCart = response.data
+        dispatch(receiveCart(foundCart))
       })
     } else {
-      let foundProduct = cart.filter(item => item.product_id === product.id)
-      let otherProducts = cart.filter(item => item.product_id !== product.id)
-      let newCart, updatedProduct
+      let foundProduct = cart.products.filter(item => item.id === product.id)
+      let otherProducts = cart.products.filter(item => item.id !== product.id)
+      let newCart = Object.assign({}, cart),
+      updatedProduct
 
       // if (quantity > product.stock) alert('Quantity exceeds item stock. Please lower quantity!')
 
       if (foundProduct.length) {
         updatedProduct = Object.assign({}, foundProduct[0])
-        updatedProduct.quantity = quantity
-
+        updatedProduct.transactions.quantity = quantity
         if (+quantity === 0) {
-          newCart = otherProducts
-          dispatch(receiveCartItems(newCart))
+          newCart.products = otherProducts
           localStorage.cart = JSON.stringify(newCart)
+          dispatch(receiveCart(newCart))
         } else {
-          newCart = otherProducts.concat(updatedProduct)
-          dispatch(receiveCartItems(newCart))
+          newCart.products = otherProducts.concat(updatedProduct)
           localStorage.cart = JSON.stringify(newCart)
+          dispatch(receiveCart(newCart))
         }
       } else {
-        let item = {
-          product: product,
-          sellingPrice: null,
-          quantity: quantity,
-          order_id: null,
-          product_id: product.id
-        }
-
-        newCart = otherProducts.concat(item)
-        dispatch(receiveCartItems(newCart))
+        let item = product
+        item.transactions = { quantity: quantity }
+        newCart.products = otherProducts.concat(item)
         localStorage.cart = JSON.stringify(newCart)
+        dispatch(receiveCart(newCart))
       }
     }
   }

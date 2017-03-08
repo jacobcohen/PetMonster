@@ -4,7 +4,6 @@ import {Link} from 'react-router'
 export const CartProductButton = props => {
 
     const item = props.item
-    const product = props.product
     const userId = props.userId
     const handleSubmit = props.handleSubmit
     const cart = props.cart
@@ -12,20 +11,20 @@ export const CartProductButton = props => {
 
     return (
         <div id='product-button'>
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/products/${item.id}`}>
             <div className="imgthumb img-responsive">
-                <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
+                <img src={ item.imageURLs ? item.imageURLs[0] : '' } />
             </div>
             </Link>
             <div className="caption">
-                { product.name }
+                { item.name }
                 <br />
-                Quantity: { item.quantity }
+                Quantity: { item.transactions.quantity }
                 <br />
-                <p>{ format(item.quantity, product.price) }</p>
+                <p>{ format(item.transactions.quantity, item.price) }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(product.id, event.target.quantity.value, userId, cart, product)
+                    handleSubmit(event.target.quantity.value, userId, cart, item)
                 }}>
                     #: <input type="text" name="quantity" maxLength="3" size="3" />
                     <input
