@@ -33,11 +33,5 @@ describe('Category', () => {
         expect(result.message).to.contain('notNull Violation')
       })
     })
-    it('has a getter method that trims the decimal to two places', () => {
-      frankenstein.price = 12
-      return frankenstein.save().then(function(result){
-        expect(result.price).to.equal('12.00')
-      })
-    })
   })
 })

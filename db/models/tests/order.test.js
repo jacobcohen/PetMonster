@@ -86,8 +86,12 @@ describe('Order model', () => {
             return user.addOrder(order)
         })
         .then(updatedUser => order.updateCart(cookieMonster.id, 2))
-        .then(([createdTransaction]) => {
-            transaction = createdTransaction[0]
+        .then((updatedOrder) => {
+            order = updatedOrder
+            return order.getProducts()
+        })
+        .then(transactions => {
+            transaction = transactions[0]
         })
         .catch(console.error)
     })
@@ -113,8 +117,11 @@ describe('Order model', () => {
     describe('increasing the quantity of a product you already have', () => {
         it('should update the transaction quantity', () => {
             return order.updateCart(cookieMonster.id, 1)
-                .then(updatedTransaction => {
-                    expect(updatedTransaction.quantity).to.equal(1)
+                .then(updatedCart => {
+                    return updatedCart.getProducts()
+                })
+                .then(products => {
+                    expect(products[0].transactions.quantity).to.equal(1)
                 })
                 .catch(console.error)
         })
@@ -176,7 +183,7 @@ describe('Order model', () => {
     })
 
     it('sets the selling price on a transaction', () => {
-        expect(purchasedProducts.transactions.sellingPrice).to.equal('200.00')
+        expect(purchasedProducts.transactions.sellingPrice).to.equal(20000)
     })
 
     it('decreases the product stock by the amount purchased', () => {
