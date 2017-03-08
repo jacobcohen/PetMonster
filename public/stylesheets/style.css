@@ -24,23 +24,36 @@ a {
     transition:.5s;
 }
 
+.landing-image-overlay {
+    text-align: center;
+    background-color: black;
+    padding: 5px;
+    opacity: 0.7;
+}
+
 .landing-image:hover {
     border: 5px solid black;
 }
 
 .cart-item {
-    border-bottom: 1px solid black;
+    border: 1px solid dimgrey;
     padding: 10px;
+    width: 80vw;
+}
+
+.cart-modal-item {
+    border: 1px solid dimgrey;
+    padding: 10px;
+    width: 200px;
 }
 
 .cart-picture-panel {
     float: left;
-    width: 25%;
+    padding: 20px;
 }
 
 .cart-description-panel {
-    float: left;
-    width: 60%; 
+    width: 60%;
 }
 
 .imgthumb {
@@ -50,21 +63,20 @@ a {
 
 img {
     display: block;
-    max-width:400px;
-    max-height: 400px;
+    max-width:160px;
+    max-height: 160px;
     width: auto;
     height: auto;
 }
 
 .imgthumb {
-    width: 400px;
-    height: 400px;
+    width: 160px;
+    height: 160px;
 }
 
 sidebar li {
     list-style-type: none;
     padding: 5px;
-    border-bottom: 1px solid lightgray
 }
 
 .modal-overlay-div {
@@ -120,4 +132,14 @@ input#login-modal {
 
 .cart-modal.modal-dialog-div {
     width: 1200px
+}
+
+.product-button {
+    float: right;
+}
+
+.btn-custom {
+    background-color: darkslategray;
+    color: white;
+    border: 1px solid lightslategray;
 }

@@ -52,7 +52,7 @@ const Order = db.define('orders', {
          * If it's not there, it is added as a new transaction associated to the order
          * @param product id
          * @param an object with a property 'quantity'
-         * @return the new or updated transaction OR the number of items deleted (should always be 1)
+         * @return the updated cart
          */
         updateCart: function(productId, quantity){
             if (this.status !== 'active') {

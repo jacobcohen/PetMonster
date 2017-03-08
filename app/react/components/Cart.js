@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import numeral from 'numeral'
-
 import { CartProductButton } from './CartProductButton'
 import { updateCart } from '../../reducers/cart'
 

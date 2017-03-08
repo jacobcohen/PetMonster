@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 
+// make this smart, and control the form input button
 export const CartProductButton = props => {
 
     const item = props.item

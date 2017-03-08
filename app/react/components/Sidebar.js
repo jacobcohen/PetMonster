@@ -13,7 +13,7 @@ export const Sidebar = ({ categories }) => {
                 categories.all && categories.all.map(category => 
                     (
                         <li key={ category.id }>
-                            <Link  to={`/products/category/${category.id}`}>
+                            <Link to={`/products/category/${category.id}`}>
                                 {category.name}
                             </Link>
                         </li>
