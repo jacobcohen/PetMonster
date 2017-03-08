@@ -1,10 +1,64 @@
 body {
+    background-color: #262723;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: lightgray;
 }
 
 a {
-    color: #00B7FF;
+    color: lightskyblue;
+}
+
+.landing-display {
+    float: right;
+}
+
+.landing-image {
+    margin: 2px;
+    float: right;
+    position: right;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition:.5s;
+}
+
+.landing-image-overlay {
+    text-align: center;
+    background-color: black;
+    padding: 5px;
+    opacity: 0.7;
+}
+
+.landing-image:hover {
+    border: 5px solid black;
+}
+
+.cart-item {
+    border: 1px solid dimgrey;
+    padding: 10px;
+    width: 80vw;
+}
+
+.cart-modal-item {
+    border: 1px solid dimgrey;
+    padding: 10px;
+    width: 200px;
+}
+
+.cart-picture-panel {
+    float: left;
+    padding: 20px;
+}
+
+.cart-description-panel {
+    width: 100%;
+}
+
+.imgthumb {
+    height: 150px;
+    width: 150px;
 }
 
 img {
@@ -23,7 +77,6 @@ img {
 sidebar li {
     list-style-type: none;
     padding: 5px;
-    border-bottom: 1px solid lightgray
 }
 
 .modal-overlay-div {
@@ -60,7 +113,7 @@ sidebar li {
 }
 
 .modal-dialog-div {
-    background-color: white;
+    background-color: #888;
     padding: 25px 25px 40px 25px;
     position: relative;
     outline: 0;
@@ -71,4 +124,22 @@ sidebar li {
     max-width: 520px;
     cursor: default;
     border-radius: 4px;
+}
+
+input#login-modal {
+    line-height: 18pt;
+}
+
+.cart-modal.modal-dialog-div {
+    width: 1200px
+}
+
+.product-button {
+    float: right;
+}
+
+.btn-custom {
+    background-color: darkslategray;
+    border: 1px solid lightslategray;
+    color: white;
 }

@@ -8,30 +8,36 @@ export const ProductButton = props => {
     const userId = props.userId
     const handleSubmit = props.handleSubmit
     const cart = props.cart
-
+console.log('cart is', cart) // when not logged in, this is an array. when logged in, this is an object
     return (
-        <div id='product-button'>
+        <div id="product-button">
             <Link to={`/products/${product.id}`}>
-            <div className="imgthumb img-responsive">
-                <img src={ product.imageURLs ? product.imageURLs[0] : '' } />
-            </div>
+              <div
+                  style={{
+                      backgroundImage: `url(${product.imageURLs ? product.imageURLs[0] : ''})`,
+                      backgroundPosition: 'center',
+                      width: 300,
+                      height: 300
+                  }}
+              />
             </Link>
             <div className="caption">
-                { product.name }
-                <br />
-                Stock: { product.stock }
-                <br />
+                <h4>{ product.name }</h4>
+                <p><em>{ product.description }</em></p>
+                <p>Stock: { product.stock }</p>
                 <p>{ numeral(product.price / 100).format('$0,0.00') }</p>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    handleSubmit(event.target.quantity.value, userId, cart, product)
+                    handleSubmit(event.target.quantity.value, userId, {products: cart}, product)
                 }}>
-                    #: <input type="text" name="quantity" maxLength="3" size="3" />
-                    <input
+                    Quantity:&nbsp;
+                    <input type="text" name="quantity" maxLength="3" size="3" />
+                    <button
                         type="submit"
-                        value="Add To Cart"
-                        className="btn btn-secondary"
-                    />
+                        value="Add"
+                        className="btn btn-custom btn-xs">
+                        Add
+                    </button>
                 </form>
             </div>
         </div>

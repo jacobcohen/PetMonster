@@ -1,9 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import LoginModal from '../Modals/LoginModal'
+import CartModal from '../Modals/CartModal'
 
 const MODAL_COMPONENTS = {
-    LOGIN: LoginModal
+    LOGIN: LoginModal,
+    CART: CartModal
 }
 
 const ModalRoot = ({ modalType, modalProps }) => {

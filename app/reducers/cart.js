@@ -3,7 +3,6 @@ import axios from 'axios'
 const RECEIVE_CART = 'RECEIVE_CART'
 const RECEIVE_ALL_ORDERS = 'RECEIVE_ALL_ORDERS'
 
-
 const initialCartState = {
   cart: {},
   allOrders: []
@@ -38,7 +37,7 @@ export const receiveOrders = orders => ({
 
 function isInDB(localProduct, dbCart) {
   if (!dbCart) return false
-
+  console.log('cart.js:40 expects an array, but gets', dbCart.products)
   let filtered = dbCart.products.filter(product => product.id === localProduct.id)
 
   if (filtered.length) {
@@ -48,13 +47,13 @@ function isInDB(localProduct, dbCart) {
 }
 
 function reconcileLocalCartWithDB(localCart, dbCart, userId) {
-  if (!localCart.length) return axios.get(`/api/orders/cart/${userId}`)
-
-  let onlyLocalProducts = localCart.filter(product => !isInDB(product, dbCart))
+  if (!localCart.products.length) return axios.get(`/api/orders/cart/${userId}`)
+  console.log(localCart)
+  let onlyLocalProducts = localCart.products.filter(product => !isInDB(product, dbCart))
   let postedTransactions = onlyLocalProducts.map(lP =>
     axios.put(`/api/orders/cart/${userId}/add`, {
-      prodId: lP.product_id,
-      quantity: lP.quantity
+      prodId: lP.id,
+      quantity: lP.transactions.quantity
     })
   )
 
@@ -74,13 +73,30 @@ export const getCartItems = userId => {
   return dispatch => {
     axios.get(`/api/orders/cart/${userId}`)
     .then(response => {
-      const cart = response.data
+      const items = response.data.products
       const localCart = JSON.parse(localStorage.cart)
-      return reconcileLocalCartWithDB(localCart, cart, userId)
+      return reconcileLocalCartWithDB(localCart, items, userId)
     })
     .then(response => {
-      const newCart = response.data
-      dispatch(receiveCart(newCart))
+      const items = response.data.products
+      let repackagedTransactions = items.map(item => {
+        let transactionObj = {
+          order_id: item.transactions.order_id,
+          product: {
+            description: item.description,
+            id: item.id,
+            imageURLs: item.imageURLs,
+            name: item.name,
+            price: item.price,
+            stock: item.stock
+          },
+          product_id: item.transactions.product_id,
+          quantity: item.transactions.quantity,
+          sellingPrice: item.transactions.sellingPrice
+        }
+        return transactionObj
+      })
+      dispatch(receiveCartItems(repackagedTransactions))
     })
   }
 }
@@ -139,6 +155,7 @@ export const addToCart = (quantity, userId, cart, product) => {
         dispatch(receiveCart(foundCart))
       })
     } else {
+      console.log('cart at cart.js:158', cart)
       let foundProduct = cart.products.filter(item => item.id === product.id)
       let otherProducts = cart.products.filter(item => item.id !== product.id)
       let newCart = Object.assign({}, cart),
