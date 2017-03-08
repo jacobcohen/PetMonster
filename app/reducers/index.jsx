@@ -3,7 +3,7 @@ import auth from './auth'
 import products from './products'
 import categories from './categories'
 import users from './users'
-import cart from './cart'
+import orders from './cart'
 import reviews from './reviews'
 import modals from './modals'
 
@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   products: products,
   categories: categories,
   users: users,
-  cart: cart,
+  orders: orders,
   reviews: reviews,
   modals: modals
 })
