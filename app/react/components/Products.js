@@ -1,11 +1,9 @@
 import React from 'react'
+import {Link} from 'react-router'
 import {connect} from 'react-redux'
-
 import Sidebar from './Sidebar'
 import { ProductButton } from './ProductButton'
 import { addToCart } from '../../reducers/cart'
-
-import { Link } from 'react-router'
 
 export const Products = (props) => (
   <div>
@@ -23,11 +21,24 @@ export const Products = (props) => (
                       backgroundPosition: 'center',
                       width: 300,
                       height: 300
-                  }}
-              />
+                  }}>
+                <div className="landing-image-overlay">
+                  <h4>{product.name}</h4>
+                  <p>{product.price}</p>
+                </div>
+              </div>
             </Link>
             )
           )
+        }
+
+        {
+          false &&
+          <div key={product.id} className="col-xs-18 col-sm-4 col-md-3">
+            <div className="productbox">
+                <ProductButton product={product} handleSubmit={props.addToCart} userId={props.user.id} cart={props.cart} />
+            </div>
+          </div>
         }
     </div>
   </div>
@@ -39,10 +50,4 @@ const mapStateToProps = state => ({
   user: state.auth
 })
 
-const mapDispatchToProps = dispatch => ({
-  addToCart: function(quantity, userId, cart, product){
-    dispatch(addToCart(quantity, userId, cart, product))
-  }
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Products)
+export default connect(mapStateToProps)(Products)

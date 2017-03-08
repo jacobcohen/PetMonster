@@ -20,13 +20,11 @@ import { receiveCategories, fetchCategory } from './reducers/categories'
 import { receiveCart } from './reducers/cart'
 import { getReviewsByProdId } from './reducers/reviews'
 
-
 const onAppEnter = () => {
 
   const pProducts = axios.get('/api/products')
   const pCategories = axios.get('/api/categories/all')
   const pUsers = axios.get('/api/users')
-  // const pOrder = axios.get('api/orders')
   let cart
 
   if (!localStorage.cart) {
@@ -50,9 +48,7 @@ const onAppEnter = () => {
 }
 
 const onProductEnter = (nextRouterState) => {
-  //console.log(store.getState().auth)
   const id = nextRouterState.params.productId
-  //const userId = store.getState().auth ? store.getState().auth.id : null
   store.dispatch(getProductById(id))
   store.dispatch(getReviewsByProdId(id))
 }
@@ -61,12 +57,6 @@ const onCategoryEnter = (nextRouterState) => {
   const id = nextRouterState.params.categoryId
   store.dispatch(fetchCategory(id))
   store.dispatch(fetchProductsByCategory(id))
-}
-
-const onCartEnter = (nextRouterState) => {
-  // const id = nextRouterState.params.productId
-  // store.dispatch(getProductById(id))
-  // console.log(nextRouterState.params)
 }
 
 render(
@@ -78,7 +68,7 @@ render(
           <Route path="/products/category/:categoryId" component={Products} onEnter={onCategoryEnter} />
         <Route path="/products/:productId" component={SingleProductContainer} onEnter={onProductEnter} />
         <Route path="/login" component={Login} />
-        <Route path="/cart" component={Cart} onEnter={onCartEnter} />
+        <Route path="/cart" component={Cart} />
         <Route path="/users" component={Users} />
         <Route path="/admin" component={AdminContainer} />
       </Route>

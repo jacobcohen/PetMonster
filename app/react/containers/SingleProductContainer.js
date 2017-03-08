@@ -13,18 +13,23 @@ function getAvgReviews(reviews) {
   });
   avg /= reviews.list.length;
 
-  if(isNaN(avg))
+  if(isNaN(avg)){
     return "Product has no reviews yet!"
-  else
+  } else {
     return "Average Review Score: " + avg + " out of 5"
+  }
 }
+
 
 export const Product = (props) => {
   return (
       props.product &&
       <div className="container">
-        <h3>{props.product && props.product.name}</h3>
-        <ProductButton product={props.product} handleSubmit={props.addToCart} userId={props.user && props.user.id} cart={props.cart} />
+        <ProductButton
+          product={props.product}
+          handleSubmit={props.addToCart}
+          userId={props.auth && props.auth.id}
+          cart={props.cart} />
         <hr />
         <h1>{ getAvgReviews(props.reviews) }</h1>
         <p>{props.product && props.product.description}</p>

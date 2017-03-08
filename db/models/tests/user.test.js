@@ -1,9 +1,9 @@
 'use strict'; // eslint-disable-line semi
 
 const db = require('APP/db')
-const User = require('./user')
-const Product = require('./product')
-const Order = require('./order')
+const User = require('../user')
+const Product = require('../product')
+const Order = require('../order')
 const {expect} = require('chai')
 
 describe('User', () => {
